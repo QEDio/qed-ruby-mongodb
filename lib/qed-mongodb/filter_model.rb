@@ -28,6 +28,9 @@ module Qed
       PARAM_STRING = "s_"
       PARAM_FLOAT = "f_"
 
+      ATTRIBUTES = [:filter, :drilldown_level_current, :action_name, :mongodb, :frontend]
+
+
       def self.clone(filter_model)
         cloned_filter = FilterModel.new
         cloned_filter.filter = filter_model.filter.clone
@@ -46,24 +49,28 @@ module Qed
         @frontend = {}
 
         unless params.blank?
-          from_date = params[FROM_DATE] || (Date.today - 1).to_s
-          till_date = params[TILL_DATE] || Date.today.to_s
-
-          replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
-          replace_frontend({FROM_DATE => from_date})
-          replace_frontend({TILL_DATE => till_date})
-
-          params.each_pair do |k,v|
-            # don't use params we know we don't want
-            next if PARAM_REJECTS.include?(k.to_sym)
-
-            if k.starts_with?(MONGODB_PARAMS_PRE)
-              set_mongodb_param(k[2..-1],v)
-            else
-              set_normal_param(k,v)
-            end
+          if params.is_a?(Hash)
+            from_hash(params)
+          elsif params.is_a?(String)
+            from_string(params)
           end
         end
+
+        convert_to_utc
+      end
+
+      def hash
+        {
+          :filter                         => @filter,
+          :drilldown_level_current        => @drilldown_level_current,
+          :mongodb                        => @mongodb,
+          :action_name                    => @action_name,
+          :frontend                       => @frontend
+        }
+      end
+
+      def json
+        Yajl::Encoder.encode(hash)
       end
 
       def set_mongodb_param(key, value)
@@ -92,7 +99,7 @@ module Qed
       end
 
       def sanitize_mongo_param(key, value)
-        return key, value
+        return key.to_sym, value
       end
 
       def sanitize_normal_param(key, value)
@@ -201,9 +208,75 @@ module Qed
         VALUE
       end
 
+      def eql?(other)
+        hash == other.hash
+      end
+
+      def ==(other)
+        eql?(other)
+      end
+
       def log
         puts ("FilterModel: #{self.inspect}")
       end
+
+      def symbolize_keys(obj)
+        if obj.is_a?(Hash)
+          obj.inject({}) do |options, (key, value)|
+            options[(key.to_sym rescue key) || key] = (value.is_a?(Hash)||value.is_a?(Array)) ? symbolize_keys(value) : value
+            options
+          end
+        elsif obj.is_a?(Array)
+          obj.inject([]) do |options, value|
+            options << ((value.is_a?(Hash)||value.is_a?(Array)) ? symbolize_keys(value) : value)
+            options
+          end
+        else
+          raise Exception("Can't do that!")
+        end
+      end
+
+      private
+        # original method, takes the params from rails and converts it to an internal represenation
+        # those params are the params provided by the browser
+        def from_hash(params)
+          from_date = params[FROM_DATE] || (Date.today - 1).to_s
+          till_date = params[TILL_DATE] || Date.today.to_s
+
+          replace_filter({CREATED_AT => {FROM_DATE => DateTime.parse(from_date).utc, TILL_DATE => DateTime.parse(till_date).utc}})
+          replace_frontend({FROM_DATE => from_date})
+          replace_frontend({TILL_DATE => till_date})
+
+          params.each_pair do |k,v|
+            # don't use params we know we don't want
+            next if PARAM_REJECTS.include?(k.to_sym)
+
+            if k.starts_with?(MONGODB_PARAMS_PRE)
+              set_mongodb_param(k[2..-1],v)
+            else
+              set_normal_param(k,v)
+            end
+          end
+        end
+
+        # currently we expect only to have a string if it's in json format
+        def from_string(params)
+          tmp_hsh = symbolize_keys(Yajl::Parser.parse(params))
+
+          ATTRIBUTES.each do |att|
+             send("#{att}=".to_sym, tmp_hsh[att])
+          end
+        end
+
+        def convert_to_utc
+          if( @filter[:created_at][:from_date].is_a?(String) )
+            @filter[:created_at][:from_date] = DateTime.parse(@filter[:created_at][:from_date]).utc
+          end
+
+          if( @filter[:created_at][:till_date].is_a?(String))
+            @filter[:created_at][:till_date] = DateTime.parse(@filter[:created_at][:till_date]).utc
+          end
+        end
     end
   end
 end
