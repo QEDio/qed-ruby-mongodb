@@ -1,7 +1,8 @@
 module Qed
   module Mongodb
-    class MapReduceConfig
-       KP_CBP_1 =
+    module MapReduce
+      class Config
+        KP_CBP_1 =
             {
                 :key => {:name => "inquiry_id", :function => "NumberLong(value.inquiry_id)"},
                 :mapreduce_values =>  [
@@ -106,6 +107,7 @@ module Qed
                 :reduce     => Qed::Mongodb::MapReduceStore::KP_CBP_REDUCE2,
                 :finalize   => Qed::Mongodb::MapReduceStore::KP_CBP_FINALIZE2
             }
+      end
     end
   end
 end

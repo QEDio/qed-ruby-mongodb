@@ -4,7 +4,7 @@ module Qed
       def self.create_config(user, action, fm, level)
         config = Qed::Mongodb::StatisticViewConfigStore.get_config(user, action)[level]
         config[:query] = fm.mongodb_query
-        Qed::Mongodb::MapReduceBuilder.new(config)
+        Qed::Mongodb::MapReduce::Builder.new(config)
       end
     end
   end
