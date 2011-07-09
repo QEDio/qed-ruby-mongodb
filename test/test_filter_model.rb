@@ -4,6 +4,8 @@ class TestFilterModel < Test::Unit::TestCase
   should "should create filter model from params" do
     fm = FilterModel.new(PARAMS)
 
+    # this test will fail until we handle mongo variables and filter variables in a consistent manner
+    # maybe they are even the same, and the distinction is superflous
     assert_equal fm.mongodb["product_name"][:value], M_S_PRODUCT_NAME
   end
 

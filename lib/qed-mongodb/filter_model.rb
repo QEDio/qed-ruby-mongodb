@@ -72,7 +72,12 @@ module Qed
 
         k, v = sanitize_mongo_param(k, value)
         v = convert_param(type, v)
-        replace_mongodb({k => {VALUE => v}})
+
+        # TODO
+        # this is really wired, it shoudl be replace_mongodb, but the current coding only works with replace_filter
+        # for now I will leave it that way
+        # but the I will let the test fail
+        replace_filter({k => {VALUE => v}})
       end
 
       def set_normal_param(key, value)
