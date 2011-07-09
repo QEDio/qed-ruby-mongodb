@@ -8,7 +8,7 @@ require 'shoulda'
 require 'qed-mongodb'
 
 FROM_DATE                             = "2011-06-05 22:00:00 UTC"
-TILL_DATE                             = "2011-07-08 22:00:00 UTC"
+TILL_DATE                             = "2011-12-09 22:00:00 UTC"
 USER                                  = :kp
 M_S_PRODUCT_NAME                      = "Elektromobil"
 PARAMS =
@@ -21,7 +21,7 @@ PARAMS =
     "controller"                      =>  "dashboard"
   }
 
-PARAMS_RESULTING_MONGODB_QUERY = '{:"value.created_at"=>{"$gte"=>Fri, 08 Jul 2011 00:00:00 +0000, "$lt"=>Sat, 09 Jul 2011 00:00:00 +0000}, "value.product_name"=>"Elektromobil"}'
+PARAMS_RESULTING_MONGODB_QUERY = '{:"value.created_at"=>{"$gte"=>2011-06-05 22:00:00 UTC, "$lt"=>2011-12-09 22:00:00 UTC}, "value.product_name"=>"Elektromobil"}'
 
 class Test::Unit::TestCase
   include Qed::Mongodb

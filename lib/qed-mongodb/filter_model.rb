@@ -50,7 +50,7 @@ module Qed
 
         unless params.blank?
           if params.is_a?(Hash)
-            from_hash(params)
+            from_hash(symbolize_keys(params))
           elsif params.is_a?(String)
             from_string(params)
           end
@@ -243,11 +243,12 @@ module Qed
           from_date = params[FROM_DATE] || (Date.today - 1).to_s
           till_date = params[TILL_DATE] || Date.today.to_s
 
-          replace_filter({CREATED_AT => {FROM_DATE => DateTime.parse(from_date).utc, TILL_DATE => DateTime.parse(till_date).utc}})
+          replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
           replace_frontend({FROM_DATE => from_date})
           replace_frontend({TILL_DATE => till_date})
 
-          params.each_pair do |k,v|
+          params.each_pair do |k_sym,v|
+            k = k_sym.to_s
             # don't use params we know we don't want
             next if PARAM_REJECTS.include?(k.to_sym)
 
@@ -270,11 +271,11 @@ module Qed
 
         def convert_to_utc
           if( @filter[:created_at][:from_date].is_a?(String) )
-            @filter[:created_at][:from_date] = DateTime.parse(@filter[:created_at][:from_date]).utc
+            @filter[:created_at][:from_date] = Time.parse(@filter[:created_at][:from_date]).utc
           end
 
           if( @filter[:created_at][:till_date].is_a?(String))
-            @filter[:created_at][:till_date] = DateTime.parse(@filter[:created_at][:till_date]).utc
+            @filter[:created_at][:till_date] = Time.parse(@filter[:created_at][:till_date]).utc
           end
         end
     end
