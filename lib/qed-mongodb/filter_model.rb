@@ -21,12 +21,14 @@ module Qed
       ROW_ID = :_id
       ROW_VALUE = :value
 
-      PARAM_REJECTS = [:utf8, :authenticitiy_token, :commit, :action, :controller]
+      PARAM_REJECTS = [:utf8, :authenticitiy_token, :action, :commit, :controller]
 
       MONGODB_PARAMS_PRE = "m_"
       PARAM_INTEGER = "i_"
       PARAM_STRING = "s_"
       PARAM_FLOAT = "f_"
+
+      PARAM_PRE = [MONGODB_PARAMS_PRE, PARAM_INTEGER, PARAM_STRING, PARAM_FLOAT]
 
       ATTRIBUTES = [:filter, :drilldown_level_current, :action_name, :mongodb, :frontend]
 
@@ -88,14 +90,20 @@ module Qed
       end
 
       def set_normal_param(key, value)
-        type = key[0..1]
-        k = key[2..-1]
+        if PARAM_PRE.include?(key[0..1])
+          type = key[0..1]
+          k = key[2..-1]
+        else
+          k = key
+          type = nil
+        end
 
         if self.respond_to?(k)
           k, v = sanitize_normal_param(k, value)
           v = convert_param(type,v)
           send("#{k}=".to_sym, v)
         end
+
       end
 
       def sanitize_mongo_param(key, value)
@@ -192,22 +200,6 @@ module Qed
         Qed::Mongodb::QueryBuilder.selector(self, clasz)
       end
 
-      def offset
-        DOCUMENT_OFFSET
-      end
-
-      def from_date
-        FROM_DATE
-      end
-
-      def till_date
-        TILL_DATE
-      end
-
-      def value
-        VALUE
-      end
-
       def eql?(other)
         hash == other.hash
       end
@@ -270,12 +262,16 @@ module Qed
         end
 
         def convert_to_utc
-          if( @filter[:created_at][:from_date].is_a?(String) )
-            @filter[:created_at][:from_date] = Time.parse(@filter[:created_at][:from_date]).utc
-          end
+          if( @filter)
+            if( @filter[:created_at] )
+              if( @filter[:created_at][:from_date].is_a?(String) )
+                @filter[:created_at][:from_date] = Time.parse(@filter[:created_at][:from_date]).utc
+              end
 
-          if( @filter[:created_at][:till_date].is_a?(String))
-            @filter[:created_at][:till_date] = Time.parse(@filter[:created_at][:till_date]).utc
+              if( @filter[:created_at][:till_date].is_a?(String))
+                @filter[:created_at][:till_date] = Time.parse(@filter[:created_at][:till_date]).utc
+              end
+            end
           end
         end
     end

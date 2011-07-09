@@ -7,13 +7,13 @@ module Qed
 
         if filter.any?
           filter.each_pair do |k,v|
-            att = (fm.offset+k.to_s).to_sym
-            if v[fm.from_date] and v[fm.till_date]
-              cursor = cursor.between(att, v[fm.from_date], v[fm.till_date])
-            elsif v[fm.value].is_a?(Array)
-              cursor = cursor.where(att.in => v[fm.value])
+            att = (Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
+            if v[Qed::Mongodb::FilterModel::FROM_DATE] and v[Qed::Mongodb::FilterModel::TILL_DATE]
+              cursor = cursor.between(att, v[Qed::Mongodb::FilterModel::FROM_DATE], v[Qed::Mongodb::FilterModel::TILL_DATE])
+            elsif v[Qed::Mongodb::FilterModel::VALUE].is_a?(Array)
+              cursor = cursor.where(att.in => v[Qed::Mongodb::FilterModel::VALUE])
             else
-              cursor = cursor.where(att.to_s => v[fm.value])
+              cursor = cursor.where(att.to_s => v[Qed::Mongodb::FilterModel::VALUE])
             end
           end
         end
