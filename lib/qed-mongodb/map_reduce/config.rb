@@ -34,9 +34,9 @@ module Qed
                 :base_collection      => "inquiries",
                 :mr_collection        => "mr_inquiries_jak4",
                 :query                => nil,
-                :map                  => Qed::Mongodb::MapReduceStore::KP_CBP_MAP1,
-                :reduce               => Qed::Mongodb::MapReduceStore::KP_CBP_REDUCE1,
-                :finalize             => Qed::Mongodb::MapReduceStore::KP_CBP_FINALIZE1
+                :map                  => Qed::Mongodb::MapReduce::Store::KP_CBP_MAP1,
+                :reduce               => Qed::Mongodb::MapReduce::Store::KP_CBP_REDUCE1,
+                :finalize             => Qed::Mongodb::MapReduce::Store::KP_CBP_FINALIZE1
             }
 
 
@@ -69,9 +69,9 @@ module Qed
                 :base_collection      => "mr_inquiries_jak4",
                 :mr_collection        => "mr_suppa_jak4",
                 :query      => nil,
-                :map        => Qed::Mongodb::MapReduceStore::KP_CBP_MAP2,
-                :reduce     => Qed::Mongodb::MapReduceStore::KP_CBP_REDUCE2,
-                :finalize   => Qed::Mongodb::MapReduceStore::KP_CBP_FINALIZE2
+                :map        => Qed::Mongodb::MapReduce::Store::KP_CBP_MAP2,
+                :reduce     => Qed::Mongodb::MapReduce::Store::KP_CBP_REDUCE2,
+                :finalize   => Qed::Mongodb::MapReduce::Store::KP_CBP_FINALIZE2
             }
 
            KP_CBC_2 =
@@ -103,9 +103,9 @@ module Qed
                 :base_collection      => "mr_inquiries_jak4",
                 :mr_collection        => "mr_suppa_jak4",
                 :query      => nil,
-                :map        => Qed::Mongodb::MapReduceStore::KP_CBP_MAP2,
-                :reduce     => Qed::Mongodb::MapReduceStore::KP_CBP_REDUCE2,
-                :finalize   => Qed::Mongodb::MapReduceStore::KP_CBP_FINALIZE2
+                :map        => Qed::Mongodb::MapReduce::Store::KP_CBP_MAP2,
+                :reduce     => Qed::Mongodb::MapReduce::Store::KP_CBP_REDUCE2,
+                :finalize   => Qed::Mongodb::MapReduce::Store::KP_CBP_FINALIZE2
             }
       end
     end
