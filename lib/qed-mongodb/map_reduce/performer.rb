@@ -42,6 +42,7 @@ module Qed
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Options has to be a hash") unless options.is_a?(Hash)
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Option needs to have at least :filter set") unless options[:filter]
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless options[:filter].is_a?(Qed::Mongodb::FilterModel)
+            options[:params] = convert_options(options[:params])
 
             @filter_model = options[:filter]
             @mrm = Qed::Mongodb::StatisticViewConfig.create_config(user, options[:params][:action].to_sym, @filter_model, level)
@@ -68,6 +69,11 @@ module Qed
           # returns data, therefore from API
           def self.int_mapreduce
             @collection.map_reduce(@mrm.map, @mrm.reduce, {:query => @mrm.query, :out => {:replace => @mr_collection }, :finalize => @mrm.finalize})
+          end
+
+          # make sure we have symbols as keys, not strings
+          def self.convert_options(params)
+            FilterModel.symbolize_keys(params)
           end
       end
     end

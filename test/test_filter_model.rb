@@ -31,6 +31,13 @@ class TestFilterModel < Test::Unit::TestCase
 
     fm.url(row, key, field)
   end
+
+  should "symbolize hash keys" do
+    hsh1 = {"a" => "b"}
+    hsh2 = {:a => "b"}
+
+    assert_equal FilterModel.symbolize_keys(hsh1), hsh2
+  end
 end
 
 

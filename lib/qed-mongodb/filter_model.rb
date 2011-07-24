@@ -52,7 +52,7 @@ module Qed
 
         unless params.blank?
           if params.is_a?(Hash)
-            from_hash(symbolize_keys(params))
+            from_hash(FilterModel.symbolize_keys(params))
           elsif params.is_a?(String)
             from_string(params)
           end
@@ -212,7 +212,7 @@ module Qed
         puts ("FilterModel: #{self.inspect}")
       end
 
-      def symbolize_keys(obj)
+      def self.symbolize_keys(obj)
         if obj.is_a?(Hash)
           obj.inject({}) do |options, (key, value)|
             options[(key.to_sym rescue key) || key] = (value.is_a?(Hash)||value.is_a?(Array)) ? symbolize_keys(value) : value
@@ -254,7 +254,7 @@ module Qed
 
         # currently we expect only to have a string if it's in json format
         def from_string(params)
-          tmp_hsh = symbolize_keys(Yajl::Parser.parse(params))
+          tmp_hsh = FilterModel.symbolize_keys(Yajl::Parser.parse(params))
 
           ATTRIBUTES.each do |att|
              send("#{att}=".to_sym, tmp_hsh[att])
