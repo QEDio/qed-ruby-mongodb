@@ -1,6 +1,7 @@
 require 'mongoid'
 require 'yajl'
 
+require 'qed-mongodb/exceptions'
 require 'qed-mongodb/map_reduce/store'
 require 'qed-mongodb/map_reduce/config'
 require 'qed-mongodb/map_reduce/builder'

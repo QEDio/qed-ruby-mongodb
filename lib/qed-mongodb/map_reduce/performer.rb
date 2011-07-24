@@ -39,6 +39,10 @@ module Qed
 
         private
           def self.init(user, options, level)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Options has to be a hash") unless options.is_a?(Hash)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Option needs to have at least :filter set") unless options[:filter]
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless options[:filter].is_a?(Qed::Mongodb::FilterModel)
+
             @filter_model = options[:filter]
             @mrm = Qed::Mongodb::StatisticViewConfig.create_config(user, options[:params][:action].to_sym, @filter_model, level)
 
