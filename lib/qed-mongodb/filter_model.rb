@@ -28,6 +28,11 @@ module Qed
       PARAM_STRING = "s_"
       PARAM_FLOAT = "f_"
 
+      URI_PARAMS_START = "?"
+      URI_PARAMS_SEPARATOR = "&"
+      URI_PARAMS_ASSIGN = "="
+      VIEW = "view"
+
       PARAM_PRE = [MONGODB_PARAMS_PRE, PARAM_INTEGER, PARAM_STRING, PARAM_FLOAT]
 
       ATTRIBUTES = [:filter, :drilldown_level_current, :action_name, :mongodb, :frontend]
@@ -141,27 +146,15 @@ module Qed
         @drilldown_level_current+1
       end
 
-      def url(row, column_key, column_value)
-        cloned = FilterModel.clone(self)
-        cloned.set_params(row, column_key, column_value)
+      def url(row=nil, column_key=nil, column_value=nil)
+        cloned = self
 
-        url = action_name + "?i_drilldown_level_current=#{drilldown_level_next}&"
-
-        if cloned.filter.any?
-          cloned.filter.each_pair do |k,v|
-            if v.is_a?(Hash)
-              if v[FROM_DATE].present? and v[TILL_DATE].present?
-                url += "from_date=#{v[FROM_DATE]}&till_date=#{v[TILL_DATE]}"
-              else
-                url += "&#{MONGODB_PARAMS_PRE}#{get_type(v[VALUE])}#{k.to_s}=#{v[VALUE]}"
-              end
-            else
-              raise Exception.new("Only Hash supported!")
-            end
-          end
+        if( !row.nil? && !column_key.nil? && !column_value.nil?)
+          cloned = FilterModel.clone(self)
+          cloned.set_params(row, column_key, column_value)
         end
 
-        return url
+        int_url(cloned)
       end
 
       def get_type(value)
@@ -179,7 +172,7 @@ module Qed
 
       # here we decide what keys and values we use for the drilldown, this will be a major piece of code if
       # it's able to handle what we need
-      # hell this needs to be probably more intelligent than the whole business department by KP put together
+      # hell this needs to be probably more intelligent than the whole business department at KP put together
 
       # for now we make it stupid but functional
       # providing row here is maybe a little bit overkill, but what shells
@@ -272,6 +265,38 @@ module Qed
                 @filter[:created_at][:till_date] = Time.parse(@filter[:created_at][:till_date]).utc
               end
             end
+          end
+        end
+
+        def int_url(filter_model = self)
+          url = "#{URI_PARAMS_START}#{VIEW}#{URI_PARAMS_ASSIGN}#{action_name}"
+          url += "#{URI_PARAMS_SEPARATOR}#{parameter_url(DRILLDOWN_LEVEL_CURRENT)}#{URI_PARAMS_ASSIGN}#{drilldown_level_next}#{URI_PARAMS_SEPARATOR}"
+
+          if filter_model.filter.any?
+            filter_model.filter.each_pair do |k,v|
+              if v.is_a?(Hash)
+                if v[FROM_DATE].present? and v[TILL_DATE].present?
+                  url += "#{parameter_url(FROM_DATE)}#{URI_PARAMS_ASSIGN}#{v[FROM_DATE]}#{URI_PARAMS_SEPARATOR}#{parameter_url(TILL_DATE)}#{URI_PARAMS_ASSIGN}#{v[TILL_DATE]}"
+                else
+                  url += "#{URI_PARAMS_SEPARATOR}#{MONGODB_PARAMS_PRE}#{get_type(v[VALUE])}#{k.to_s}#{URI_PARAMS_ASSIGN}#{v[VALUE]}"
+                end
+              else
+                raise Exception.new("Only Hash supported!")
+              end
+            end
+          end
+
+          return url
+        end
+
+        def parameter_url(param)
+           parameter_type(param) + param.to_s
+        end
+
+        def parameter_type(param)
+          case param
+            when DRILLDOWN_LEVEL_CURRENT then PARAM_INTEGER
+            else ''
           end
         end
     end
