@@ -294,7 +294,7 @@ module Qed
             end
           end
 
-          return url
+          return url.gsub(" ", "%20")
         end
 
         def parameter_url(param)
