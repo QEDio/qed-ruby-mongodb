@@ -4,7 +4,7 @@ class TestFilterModel < Test::Unit::TestCase
   should "should create filter model from params" do
     fm = FilterModel.new(PARAMS)
 
-    assert_equal ACTION_NAME_VALUE, fm.action_name
+    assert_equal ACTION_NAME_VALUE, fm.view
     assert_equal M_S_PRODUCT_NAME_VALUE, fm.filter[:product_name][:value]
   end
 
