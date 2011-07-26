@@ -1,7 +1,9 @@
 module Qed
   module Mongodb
     class FilterModel
-      attr_accessor :filter, :drilldown_level_current, :action_name, :mongodb, :frontend
+      VIEW = :view
+
+      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user
 
       FROM_DATE = :from_date
       TILL_DATE = :till_date
@@ -21,7 +23,7 @@ module Qed
       ROW_ID = :_id
       ROW_VALUE = :value
 
-      PARAM_REJECTS = [:utf8, :authenticitiy_token, :action, :commit, :controller]
+      PARAM_REJECTS = [:utf8, :authenticitiy_token, :action, :commit, :controller, :user]
 
       MONGODB_PARAMS_PRE = "m_"
       PARAM_INTEGER = "i_"
@@ -31,20 +33,21 @@ module Qed
       URI_PARAMS_START = "?"
       URI_PARAMS_SEPARATOR = "&"
       URI_PARAMS_ASSIGN = "="
-      VIEW = "view"
+
 
       PARAM_PRE = [MONGODB_PARAMS_PRE, PARAM_INTEGER, PARAM_STRING, PARAM_FLOAT]
 
-      ATTRIBUTES = [:filter, :drilldown_level_current, :action_name, :mongodb, :frontend]
+      ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user]
 
 
       def self.clone(filter_model)
-        cloned_filter = FilterModel.new
-        cloned_filter.filter = filter_model.filter.clone
-        cloned_filter.drilldown_level_current = filter_model.drilldown_level_current
-        cloned_filter.action_name = filter_model.action_name.clone
-        cloned_filter.mongodb = filter_model.mongodb.clone
-        cloned_filter.frontend = filter_model.frontend.clone
+        cloned_filter                               = FilterModel.new
+        cloned_filter.filter                        = filter_model.filter.clone
+        cloned_filter.drilldown_level_current       = filter_model.drilldown_level_current
+        cloned_filter.view                          = filter_model.view.clone
+        cloned_filter.mongodb                       = filter_model.mongodb.clone
+        cloned_filter.frontend                      = filter_model.frontend.clone
+        cloned_filter.user                          = filter_model.user.clone unless filter_model.user.nil?
         return cloned_filter
       end
 
@@ -52,8 +55,9 @@ module Qed
         @filter = {}
         @drilldown_level_current = 0
         @mongodb = {}
-        @action_name = nil
+        @view = nil
         @frontend = {}
+        @user = nil
 
         unless params.blank?
           if params.is_a?(Hash)
@@ -71,7 +75,7 @@ module Qed
           :filter                         => @filter,
           :drilldown_level_current        => @drilldown_level_current,
           :mongodb                        => @mongodb,
-          :action_name                    => @action_name,
+          :view                           => @view,
           :frontend                       => @frontend
         }
       end
@@ -232,6 +236,8 @@ module Qed
           replace_frontend({FROM_DATE => from_date})
           replace_frontend({TILL_DATE => till_date})
 
+          self.view = params[:action]
+
           params.each_pair do |k_sym,v|
             k = k_sym.to_s
             # don't use params we know we don't want
@@ -249,6 +255,8 @@ module Qed
         def from_string(params)
           tmp_hsh = FilterModel.symbolize_keys(Yajl::Parser.parse(params))
 
+          # TODO: reject params here
+          # TODO: unify with from_hash
           ATTRIBUTES.each do |att|
              send("#{att}=".to_sym, tmp_hsh[att])
           end
@@ -269,7 +277,7 @@ module Qed
         end
 
         def int_url(filter_model = self)
-          url = "#{URI_PARAMS_START}#{VIEW}#{URI_PARAMS_ASSIGN}#{action_name}"
+          url = "#{URI_PARAMS_START}#{VIEW}#{URI_PARAMS_ASSIGN}#{view}"
           url += "#{URI_PARAMS_SEPARATOR}#{parameter_url(DRILLDOWN_LEVEL_CURRENT)}#{URI_PARAMS_ASSIGN}#{drilldown_level_next}#{URI_PARAMS_SEPARATOR}"
 
           if filter_model.filter.any?
