@@ -40,13 +40,13 @@ PARAMS =
 
 PARAMS1 =
   {
-    "i_drilldown_level_current"       =>  "1",
-    "from_date"                       =>  FROM_DATE,
-    "till_date"                       =>  TILL_DATE,
-    "m_s_product_name"                =>  M_S_PRODUCT_NAME,
-    "action"                          =>  ACTION_NAME,
-    "action_name"                     =>  ACTION_NAME,
-    "controller"                      =>  "dashboard"
+    DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
+    FROM_DATE                         =>  FROM_DATE_VALUE,
+    TILL_DATE                         =>  TILL_DATE_VALUE,
+    M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
+    ACTION                            =>  ACTION_NAME_VALUE,
+    ACTION_NAME                       =>  ACTION_NAME_VALUE,
+    CONTROLLER                        =>  CONTROLLER_VALUE
   }
 
 FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS =

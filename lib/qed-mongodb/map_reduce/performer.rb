@@ -5,47 +5,43 @@ module Qed
         MONGO_HOST = '127.0.0.1'
         MONGO_PORT = 27017
 
-        def self.mapreduce(user, options)
+        def self.mapreduce(filter_model)
           # goes out to the api
           # the second mapreduce goes out to the api as well, in one single api call
-          mapreduce1(user, options)
-          mapreduce2(user, options)
+          mapreduce1(filter_model)
+          mapreduce2(filter_model)
         end
 
-        def self.conversion_by_channel_drilldown1(user, options)
+        def self.conversion_by_channel_drilldown1(filter_model)
           # this should be a query on the mapreduced table from mapreduce2
           # goes out to the api
-          mapreduce1(user, options)
+          mapreduce1(filter_model)
         end
 
         # API
-        def self.atomic(user, options)
-          filter_model = options[:filter]
+        def self.atomic(filter_model)
           filter_model.mongoid_condition(Qed::Mongodb::MongoidModel)
         end
 
         # API
-        def self.mapreduce1(user, options)
-          init(user, options, 0)
+        def self.mapreduce1(filter_model)
+          init(filter_model, 0)
           int_mapreduce()
         end
 
         # API
-        def self.mapreduce2(user, options)
-          init(user, options, 1)
+        def self.mapreduce2(filter_model)
+          init(filter_model, 1)
           int_mapreduce()
         end
 
 
         private
-          def self.init(user, options, level)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Options has to be a hash") unless options.is_a?(Hash)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Option needs to have at least :filter set") unless options[:filter]
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless options[:filter].is_a?(Qed::Mongodb::FilterModel)
-            options[:params] = convert_options(options[:params])
+          def self.init(filter_model, level)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Mongodb::FilterModel)
 
-            @filter_model = options[:filter]
-            @mrm = Qed::Mongodb::StatisticViewConfig.create_config(user, options[:params][:action].to_sym, @filter_model, level)
+            @filter_model = filter_model
+            @mrm = Qed::Mongodb::StatisticViewConfig.create_config(@filter_model, level)
 
             # security, use only correct collection/db-names, a little bit weired, gerade ziehen
             set_filter_model
@@ -71,10 +67,10 @@ module Qed
             @collection.map_reduce(@mrm.map, @mrm.reduce, {:query => @mrm.query, :out => {:replace => @mr_collection }, :finalize => @mrm.finalize})
           end
 
-          # make sure we have symbols as keys, not strings
-          def self.convert_options(params)
-            FilterModel.symbolize_keys(params)
-          end
+          ## make sure we have symbols as keys, not strings
+          #def self.convert_options(params)
+          #  FilterModel.symbolize_keys(params)
+          #end
       end
     end
   end
