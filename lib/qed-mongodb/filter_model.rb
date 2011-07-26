@@ -217,7 +217,7 @@ module Qed
             options
           end
         else
-          raise Exception("Can't do that!")
+          raise Exception.new("Can't do that!")
         end
       end
 
