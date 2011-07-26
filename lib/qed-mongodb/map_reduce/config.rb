@@ -107,6 +107,40 @@ module Qed
                 :reduce     => Qed::Mongodb::MapReduce::Store::KP_CBP_REDUCE2,
                 :finalize   => Qed::Mongodb::MapReduce::Store::KP_CBP_FINALIZE2
             }
+
+          KP_TRA_2 =
+            {
+                :key => {:name => "ag", :function => "value.tracking_ag"},
+                :mapreduce_values =>  [
+                    {:name => "tracking_ag",                   :function => "value.tracking_ag"},
+                    {:name => "count"},
+                    {:name => "worked_on"},
+                    {:name => "qualified"},
+                    {:name => "test"},
+                    {:name => "turnover"},
+                    {:name => "payed"},
+                    {:name => "product_uuid",         :function => "value.product_uuid"},
+                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                  ],
+                :finalize_values => [
+                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
+                    {:name => "count",                :function => "value.count"},
+                    {:name => "worked_on",            :function => "value.worked_on"},
+                    {:name => "qualified",            :function => "value.qualified"},
+                    {:name => "test",                 :function => "value.test"},
+                    {:name => "turnover",             :function => "value.turnover"},
+                    {:name => "payed",                :function => "value.payed"},
+                    {:name => "product_uuid",         :function => "value.product_uuid"},
+                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                ],
+                :database             => "qed_production",
+                :base_collection      => "mr_inquiries_jak4",
+                :mr_collection        => "mr_suppa_jak4",
+                :query      => nil,
+                :map        => Qed::Mongodb::MapReduce::Store::KP_TRA_MAP2,
+                :reduce     => Qed::Mongodb::MapReduce::Store::KP_TRA_REDUCE2,
+                :finalize   => Qed::Mongodb::MapReduce::Store::KP_TRA_FINALIZE2
+            }
       end
     end
   end
