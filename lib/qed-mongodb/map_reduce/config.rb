@@ -14,10 +14,11 @@ module Qed
                     {:name => "created_at",           :function => "value.created_at"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
                     {:name => "inquiry_id",           :function => "value.inquiry_id"},
-                    {:name => "tracking_ag",          :function => "value.tracking_ag"}
+                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
+                    {:name => "partner",              :function => "value.partner"}
                   ],
                 :finalize_values => [
-                    {:name => "inquiry_id", :function => "NumberLong(value.inquiry_id)"},
+                    {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
                     {:name => "status_id",            :function => "value.status_id"},
                     {:name => "worked"},
                     {:name => "test"},
@@ -28,7 +29,8 @@ module Qed
                     {:name => "created_at",           :function => "value.created_at"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
                     {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
-                    {:name => "tracking_ag",          :function => "value.tracking_ag"}
+                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
+                    {:name => "partner",              :function => "value.partner"}
                 ],
                 :database             => "qed_production",
                 :base_collection      => "inquiries",
@@ -39,10 +41,9 @@ module Qed
                 :finalize             => Qed::Mongodb::MapReduce::Store::KP_CBP_FINALIZE1
             }
 
-
            KP_CBP_2 =
             {
-                :key => {:name => "product_name", :function => "value.product_name"},
+                :key => {:name => "product_name",     :function => "value.product_name"},
                 :mapreduce_values =>  [
                     {:name => "product_name",         :function => "value.product_name"},
                     {:name => "count"},
@@ -76,9 +77,9 @@ module Qed
 
            KP_CBC_2 =
             {
-                :key => {:name => "ag", :function => "value.tracking_ag"},
+                :key => {:name => "ag",               :function => "value.tracking_ag"},
                 :mapreduce_values =>  [
-                    {:name => "tracking_ag",                   :function => "value.tracking_ag"},
+                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
                     {:name => "count"},
                     {:name => "worked_on"},
                     {:name => "qualified"},
@@ -110,9 +111,9 @@ module Qed
 
           KP_TRA_2 =
             {
-                :key => {:name => "ag", :function => "value.tracking_ag"},
+                :key => {:name => nil,                :function => "(value.product_name+value.partner)"},
                 :mapreduce_values =>  [
-                    {:name => "tracking_ag",                   :function => "value.tracking_ag"},
+                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
                     {:name => "count"},
                     {:name => "worked_on"},
                     {:name => "qualified"},
@@ -120,7 +121,8 @@ module Qed
                     {:name => "turnover"},
                     {:name => "payed"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                    {:name => "inquiry_id",           :function => "value.inquiry_id"},
+                    {:name => "partner",              :function => "value.partner"}
                   ],
                 :finalize_values => [
                     {:name => "tracking_ag",          :function => "value.tracking_ag"},
@@ -131,7 +133,8 @@ module Qed
                     {:name => "turnover",             :function => "value.turnover"},
                     {:name => "payed",                :function => "value.payed"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                    {:name => "inquiry_id",           :function => "value.inquiry_id"},
+                    {:name => "partner",              :function => "value.partner"}
                 ],
                 :database             => "qed_production",
                 :base_collection      => "mr_inquiries_jak4",

@@ -43,8 +43,6 @@ class TestFilterModel < Test::Unit::TestCase
 
     assert_equal FilterModel.symbolize_keys(hsh1), hsh2
   end
-
-
 end
 
 

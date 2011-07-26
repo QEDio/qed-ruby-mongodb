@@ -25,11 +25,27 @@ class TestMapReducePerformer < Test::Unit::TestCase
       end
     end
 
-    should "return bla" do
-      fm = FilterModel.new(PARAMS1)
+    should "return one mapreduced result" do
+      fm = FilterModel.new(PARAMS)
       fm.user = USER
-      puts Qed::Mongodb::MapReduce::Performer.
-        mapreduce(fm).find().count().inspect
+
+      data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm).find().to_a
+
+      assert_equal 1, data.size
+
+      data = data.first
+      assert_equal fm.filter[PRODUCT_NAME.to_sym][:value], data["_id"]
+      # assert many more things, like numbers etc
+    end
+
+    should "return many mapreduced trackings" do
+      fm = FilterModel.new(PARAMS_TRACKING)
+      fm.user = USER
+
+      data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm).find().to_a
+
+      puts data.inspect
+
     end
   end
 end

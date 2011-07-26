@@ -73,17 +73,14 @@ module Qed
 
         KP_TRA_MAP2 =
               <<-JS
-                worked_on = 1;
-                qualified = 1;
-                test = 0;
+                worked_on = value.worked_on;
+                qualified = value.qualified;
+                test = value.test;
                 count = 1;
                 turnover = value.turnover;
                 payed = value.payed;
 
-                if(value.status_id == 0){worked_on=0};
-                if(value.status_id == 4){test=1};
-                if(value.status_id != 1){qualified=0};
-              JS
+        JS
 
         KP_TRA_REDUCE2 =
               <<-JS

@@ -9,11 +9,14 @@ require 'qed-mongodb'
 
 FROM_DATE                             = "from_date"
 FROM_DATE_VALUE                       = "2011-06-05 22:00:00 UTC"
+FROM_DATE_TRACKING_VALUE              = "2011-06-05 22:00:00 UTC"
 TILL_DATE                             = "till_date"
 TILL_DATE_VALUE                       = "2011-12-09 22:00:00 UTC"
+TILL_DATE_TRACKING_VALUE              = "2011-06-06 22:00:00 UTC"
 USER                                  = :kp
 
-M_S_PRODUCT_NAME                      = "m_s_product_name"
+PRODUCT_NAME                          = "product_name"
+M_S_PRODUCT_NAME                      = "m_s_#{PRODUCT_NAME}"
 M_S_PRODUCT_NAME_VALUE                = "Elektromobil"
 M_S_PRODUCT_NAME_VALUE_GARAGE         = "Garage"
 
@@ -24,6 +27,7 @@ VIEW                                  = "view"
 ACTION                                = "action"
 ACTION_NAME                           = "action_name"
 ACTION_NAME_VALUE                     = "conversion_by_product"
+ACTION_NAME_TRACKING_VALUE            = "tracking"
 CONTROLLER                            = "controller"
 CONTROLLER_VALUE                      = "dashboard"
 
@@ -38,14 +42,13 @@ PARAMS =
     CONTROLLER                        =>  CONTROLLER_VALUE
   }
 
-PARAMS1 =
+PARAMS_TRACKING =
   {
     DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
-    FROM_DATE                         =>  FROM_DATE_VALUE,
-    TILL_DATE                         =>  TILL_DATE_VALUE,
-    M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
-    ACTION                            =>  ACTION_NAME_VALUE,
-    ACTION_NAME                       =>  ACTION_NAME_VALUE,
+    FROM_DATE                         =>  FROM_DATE_TRACKING_VALUE,
+    TILL_DATE                         =>  TILL_DATE_TRACKING_VALUE,
+    ACTION                            =>  ACTION_NAME_TRACKING_VALUE,
+    ACTION_NAME                       =>  ACTION_NAME_TRACKING_VALUE,
     CONTROLLER                        =>  CONTROLLER_VALUE
   }
 
