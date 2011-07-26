@@ -32,6 +32,16 @@ class TestFilterModel < Test::Unit::TestCase
     assert_equal FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS, fm.url(row, key, field)
   end
 
+  should "generate a correct URL with the provided params (next drilldown_level) despite having to clone a symbol" do
+    fm = FilterModel.new(PARAMS)
+    fm.user = USER
+    row = URL_ROW
+    key = URL_KEY
+    field = URL_FIELD
+
+    assert_equal FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS, fm.url(row, key, field)
+  end
+
   should "generate a correct URL for itself (same drilldown_level)" do
     fm = FilterModel.new(PARAMS)
     assert_equal FM_GENERATED_PARAMS_URL, fm.url

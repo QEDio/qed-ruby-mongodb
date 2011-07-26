@@ -47,7 +47,14 @@ module Qed
         cloned_filter.view                          = filter_model.view.clone
         cloned_filter.mongodb                       = filter_model.mongodb.clone
         cloned_filter.frontend                      = filter_model.frontend.clone
-        cloned_filter.user                          = filter_model.user.clone unless filter_model.user.nil?
+
+        unless filter_model.user.nil?
+          if filter_model.user.is_a?(Symbol)
+            cloned_filter.user = filter_model.user
+          else
+            cloned_filter.user                          = filter_model.user.clone
+          end
+        end
         return cloned_filter
       end
 
