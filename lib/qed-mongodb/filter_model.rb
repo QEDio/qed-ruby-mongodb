@@ -277,16 +277,16 @@ module Qed
         end
 
         def int_url(filter_model = self)
-          url = "#{URI_PARAMS_START}#{VIEW}#{URI_PARAMS_ASSIGN}#{view}"
-          url += "#{URI_PARAMS_SEPARATOR}#{parameter_url(DRILLDOWN_LEVEL_CURRENT)}#{URI_PARAMS_ASSIGN}#{drilldown_level_next}#{URI_PARAMS_SEPARATOR}"
+          url = URI_PARAMS_START + url_view
+          url += URI_PARAMS_SEPARATOR + url_drilldown(filter_model.eql?(self))
 
           if filter_model.filter.any?
             filter_model.filter.each_pair do |k,v|
               if v.is_a?(Hash)
                 if v[FROM_DATE].present? and v[TILL_DATE].present?
-                  url += "#{parameter_url(FROM_DATE)}#{URI_PARAMS_ASSIGN}#{v[FROM_DATE]}#{URI_PARAMS_SEPARATOR}#{parameter_url(TILL_DATE)}#{URI_PARAMS_ASSIGN}#{v[TILL_DATE]}"
+                  url += URI_PARAMS_SEPARATOR + url_date(v)
                 else
-                  url += "#{URI_PARAMS_SEPARATOR}#{MONGODB_PARAMS_PRE}#{get_type(v[VALUE])}#{k.to_s}#{URI_PARAMS_ASSIGN}#{v[VALUE]}"
+                  url += URI_PARAMS_SEPARATOR + url_mongo_param(k, v)
                 end
               else
                 raise Exception.new("Only Hash supported!")
@@ -306,6 +306,23 @@ module Qed
             when DRILLDOWN_LEVEL_CURRENT then PARAM_INTEGER
             else ''
           end
+        end
+
+        def url_view
+          "#{VIEW}#{URI_PARAMS_ASSIGN}#{view}"
+        end
+
+        def url_drilldown(current_level = true)
+          drilldown_level = current_level ? drilldown_level_current : drilldown_level_next
+          "#{parameter_url(DRILLDOWN_LEVEL_CURRENT)}#{URI_PARAMS_ASSIGN}#{drilldown_level}"
+        end
+
+        def url_date(hsh)
+          "#{parameter_url(FROM_DATE)}#{URI_PARAMS_ASSIGN}#{hsh[FROM_DATE]}#{URI_PARAMS_SEPARATOR}#{parameter_url(TILL_DATE)}#{URI_PARAMS_ASSIGN}#{hsh[TILL_DATE]}"
+        end
+
+        def url_mongo_param(key, hsh)
+          "#{MONGODB_PARAMS_PRE}#{get_type(hsh[VALUE])}#{key.to_s}#{URI_PARAMS_ASSIGN}#{hsh[VALUE]}"
         end
     end
   end

@@ -23,7 +23,7 @@ class TestFilterModel < Test::Unit::TestCase
     assert_equal fm, new_fm
   end
 
-  should "generate a correct URL with the provided params" do
+  should "generate a correct URL with the provided params (next drilldown_level)" do
     fm = FilterModel.new(PARAMS)
     row = URL_ROW
     key = URL_KEY
@@ -32,7 +32,7 @@ class TestFilterModel < Test::Unit::TestCase
     assert_equal FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS, fm.url(row, key, field)
   end
 
-  should "generate a correct URL for itself" do
+  should "generate a correct URL for itself (same drilldown_level)" do
     fm = FilterModel.new(PARAMS)
     assert_equal FM_GENERATED_PARAMS_URL, fm.url
   end
