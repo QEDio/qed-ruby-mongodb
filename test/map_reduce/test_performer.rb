@@ -24,5 +24,11 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Mongodb::MapReduce::Performer.mapreduce(nil,{:filter => "fm"})
       end
     end
+
+    should "return bla" do
+      fm = FilterModel.new(PARAMS1)
+      puts Qed::Mongodb::MapReduce::Performer.
+        mapreduce( USER, { :filter => fm, :params => PARAMS}).find().count().inspect
+    end
   end
 end
