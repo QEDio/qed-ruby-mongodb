@@ -60,6 +60,7 @@ module Qed
 
       def initialize(params = nil)
         @filter = {}
+        # 0 eqls top view (most reduced if you will)
         @drilldown_level_current = 0
         @mongodb = {}
         @view = nil
