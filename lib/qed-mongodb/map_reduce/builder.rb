@@ -44,6 +44,15 @@ module Qed
           end
         end
 
+        # return true if we have a map and a reduce function defined
+        def mapreduce?
+          !(@map.nil? && @reduce.nil?)
+        end
+
+        def query_only?
+          !mapreduce && !@query.nil?
+        end
+
         # sanatize JS in here
         def map=(m)
           @map = m
