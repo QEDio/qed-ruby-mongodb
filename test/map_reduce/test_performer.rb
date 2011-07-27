@@ -25,12 +25,11 @@ class TestMapReducePerformer < Test::Unit::TestCase
       end
     end
 
-    should "return one mapreduced result" do
+    should "return one mapreduced result for a drilldown level of 0 and a filter for Elektromobil" do
       fm = FilterModel.new(PARAMS)
       fm.user = USER
 
       data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm).find().to_a
-
       assert_equal 1, data.size
 
       data = data.first
