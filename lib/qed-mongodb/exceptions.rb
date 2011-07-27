@@ -20,6 +20,7 @@ module Qed
   module Mongodb
     class Exceptions
       class OptionMisformed < RuntimeError; end
+      class MapReduceConfigurationNotFound < RuntimeError; end
     end
   end
 end
