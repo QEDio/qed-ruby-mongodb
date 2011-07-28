@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/helper.rb'
+require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestFilterModel < Test::Unit::TestCase
   should "should create filter model from params" do
