@@ -57,10 +57,10 @@ require 'qed-mongodb'
 unless Kernel.const_defined?("FROM_DATE")
   FROM_DATE                             = "from_date"
   FROM_DATE_VALUE                       = "2011-06-05 22:00:00 UTC"
-  FROM_DATE_TRACKING_VALUE              = "2011-06-05 22:00:00 UTC"
+  FROM_DATE_TRACKING_VALUE              = "2011-07-10 22:00:00 UTC"
   TILL_DATE                             = "till_date"
   TILL_DATE_VALUE                       = "2011-12-09 22:00:00 UTC"
-  TILL_DATE_TRACKING_VALUE              = "2011-06-06 22:00:00 UTC"
+  TILL_DATE_TRACKING_VALUE              = "2011-07-20 22:00:00 UTC"
   USER                                  = :kp
 
   PRODUCT_NAME                          = "product_name"
