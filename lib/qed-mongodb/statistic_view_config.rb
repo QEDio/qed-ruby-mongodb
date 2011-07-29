@@ -12,7 +12,6 @@ module Qed
           # drilldown level == 0 is most reduced stats view
           # drilldown level == size of returned configuration is unreduced stats view (but almost certainly filtered!)
           mapreduce_configurations = mapreduce_configurations[0..mapreduce_configurations.size-(1+filter_model.drilldown_level_current)]
-          puts mapreduce_configurations.inspect
 
           [].tap do |arr|
             mapreduce_configurations.each_with_index do |config, i|
