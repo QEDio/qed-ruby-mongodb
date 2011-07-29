@@ -71,7 +71,7 @@ module Qed
               <<-JS
               JS
 
-        KP_TRA_MAP2 =
+      KP_TRA_MAP2 =
               <<-JS
                 worked_on = value.worked_on;
                 qualified = value.qualified;
@@ -79,7 +79,15 @@ module Qed
                 count = 1;
                 turnover = value.turnover;
                 payed = value.payed;
-
+                domain = value.partner;
+                verticals = [
+                  'DKB', 'GARACAR', 'GASTADE', 'SOLARDE', 'TLF', 'TREPEXDE',
+                  'TREPFADE', 'DTB', 'GABEDE', 'GARACOM', 'GARANET', 'GAVEDE',
+                  'SOPHONET', 'TORG', 'WAFA', 'WEBANCOM'
+                ]
+                if(verticals.indexOf(domain) == -1){
+                  domain = 'KP'
+                }
         JS
 
         KP_TRA_REDUCE2 =
@@ -90,6 +98,7 @@ module Qed
                 var test = 0;
                 var turnover = 0;
                 var payed = 0;
+                var domain = value.domain;
 
                 values.forEach(function(v){
                   count += v.count;
@@ -101,7 +110,7 @@ module Qed
                 });
               JS
 
-        KP_TRA_FINALIZE2=
+        KP_TRA_FINALIZE2 =
               <<-JS
               JS
 

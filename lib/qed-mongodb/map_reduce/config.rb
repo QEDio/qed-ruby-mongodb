@@ -113,7 +113,7 @@ module Qed
 
           KP_TRA_2 =
             {
-                :key => {:name => nil,                :function => "(value.product_name+value.partner+value.level)"},
+                :key => {:name => nil,                :function => "(value.product_name+domain+value.level)"},
                 :mapreduce_values =>  [
                     {:name => "tracking_ag",          :function => "value.tracking_ag"},
                     {:name => "count"},
@@ -124,7 +124,7 @@ module Qed
                     {:name => "payed"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
                     {:name => "inquiry_id",           :function => "value.inquiry_id"},
-                    {:name => "partner",              :function => "value.partner"},
+                    {:name => "domain"},
                     {:name => "level",                :function => "value.level"}
                   ],
                 :finalize_values => [
@@ -137,7 +137,7 @@ module Qed
                     {:name => "payed",                :function => "value.payed"},
                     {:name => "product_uuid",         :function => "value.product_uuid"},
                     {:name => "inquiry_id",           :function => "value.inquiry_id"},
-                    {:name => "partner",              :function => "value.partner"},
+                    {:name => "domain",               :function => "value.domain"},
                     {:name => "level",                :function => "value.level"}
                 ],
                 :database             => "qed_production",
