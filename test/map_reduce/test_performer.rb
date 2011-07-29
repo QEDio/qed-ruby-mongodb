@@ -43,7 +43,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
       data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm).find().to_a
 
-      #puts data.inspect
+      puts data.inspect
 
     end
   end
