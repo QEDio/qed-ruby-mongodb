@@ -237,12 +237,19 @@ module Qed
         # original method, takes the params from rails and converts it to an internal represenation
         # those params are the params provided by the browser
         def from_hash(params)
-          from_date = params[FROM_DATE] || (Date.today - 1).to_s
-          till_date = params[TILL_DATE] || Date.today.to_s
+          # TODO: we should set a default date range here
+          # we should set one, because otherwise we will mapreduce everything, but the default parameters should be
+          # set somewhere else
 
-          replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
-          replace_frontend({FROM_DATE => from_date})
-          replace_frontend({TILL_DATE => till_date})
+          # hack, for now
+          if !params[FROM_DATE].nil?
+            from_date = params[FROM_DATE] || (Date.today - 1).to_s
+            till_date = params[TILL_DATE] || Date.today.to_s
+
+            replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
+            replace_frontend({FROM_DATE => from_date})
+            replace_frontend({TILL_DATE => till_date})
+          end
 
           self.view = params[:action]
 
