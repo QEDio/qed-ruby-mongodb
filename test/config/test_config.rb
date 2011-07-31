@@ -1,74 +1,151 @@
-MAPREDUCE1 =
+require 'config/test_store'
+
+MAPREDUCE_DIM4 =
             {
-                :key => {:name => "inquiry_id", :function => "NumberLong(value.inquiry_id)"},
+                :key => {:name => "dim_4", :function => "value.dim_4"},
                 :mapreduce_values =>  [
-                    {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
-                    {:name => "status_id",            :function => "value.status_id"},
-                    {:name => "turnover"},
-                    {:name => "payed"},
-                    {:name => "product_name",         :function => "value.product_name"},
-                    {:name => "created_at",           :function => "value.created_at"},
-                    {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "value.inquiry_id"},
-                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
-                    {:name => "partner",              :function => "value.partner"},
-                    {:name => "level",              :function => "value.level"}
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
                   ],
                 :finalize_values => [
-                    {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
-                    {:name => "status_id",            :function => "value.status_id"},
-                    {:name => "worked"},
-                    {:name => "test"},
-                    {:name => "qualified"},
-                    {:name => "turnover",             :function => "value.turnover"},
-                    {:name => "payed",                :function => "value.payed"},
-                    {:name => "product_name",         :function => "value.product_name"},
-                    {:name => "created_at",           :function => "value.created_at"},
-                    {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
-                    {:name => "tracking_ag",          :function => "value.tracking_ag"},
-                    {:name => "partner",              :function => "value.partner"},
-                    {:name => "level",                :function => "value.level"}
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_production",
-                :base_collection      => "inquiries",
-                :mr_collection        => "mr_inquiries_jak4",
+                :database             => "qed_test",
+                :base_collection      => "scale_of_universe",
+                :mr_collection        => "mr_dim4",
                 :query                => nil,
-                :map                  => MAP1,
-                :reduce               => REDUCE1,
-                :finalize             => FINALIZE1
+                :map                  => MAP_DIM4,
+                :reduce               => REDUCE_DIM4,
+                :finalize             => FINALIZE_DIM4
             }
 
-MAPREDUCE2 =
+MAPREDUCE_DIM3 =
             {
-                :key => {:name => "product_name",     :function => "value.product_name"},
+                :key => {:name => "dim_3", :function => "value.dim_3"},
                 :mapreduce_values =>  [
-                    {:name => "product_name",         :function => "value.product_name"},
-                    {:name => "count"},
-                    {:name => "worked_on"},
-                    {:name => "qualified"},
-                    {:name => "test"},
-                    {:name => "turnover"},
-                    {:name => "payed"},
-                    {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
                   ],
                 :finalize_values => [
-                    {:name => "product_name",         :function => "value.product_name"},
-                    {:name => "count",                :function => "value.count"},
-                    {:name => "worked_on",            :function => "value.worked_on"},
-                    {:name => "qualified",            :function => "value.qualified"},
-                    {:name => "test",                 :function => "value.test"},
-                    {:name => "turnover",             :function => "value.turnover"},
-                    {:name => "payed",                :function => "value.payed"},
-                    {:name => "product_uuid",         :function => "value.product_uuid"},
-                    {:name => "inquiry_id",           :function => "value.inquiry_id"}
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_production",
-                :base_collection      => "mr_inquiries_jak4",
-                :mr_collection        => "mr_suppa_jak4",
+                :database             => "qed_test",
+                :base_collection      => "mr_dim4",
+                :mr_collection        => "mr_dim3",
                 :query      => nil,
-                :map        => MAP2,
-                :reduce     => REDUCE2,
-                :finalize   => FINALIZE2
+                :map        => MAP_DIM3,
+                :reduce     => REDUCE_DIM3,
+                :finalize   => FINALIZE_DIM3
+            }
+
+MAPREDUCE_DIM2 =
+            {
+                :key => {:name => "dim_2", :function => "value.dim_2"},
+                :mapreduce_values =>  [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                  ],
+                :finalize_values => [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                ],
+                :database             => "qed_test",
+                :base_collection      => "mr_dim3",
+                :mr_collection        => "mr_dim2",
+                :query      => nil,
+                :map        => MAP_DIM2,
+                :reduce     => REDUCE_DIM2,
+                :finalize   => FINALIZE_DIM2
+            }
+
+MAPREDUCE_DIM1 =
+            {
+                :key => {:name => "dim_1", :function => "value.dim_0"},
+                :mapreduce_values =>  [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                  ],
+                :finalize_values => [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                ],
+                :database             => "qed_test",
+                :base_collection      => "mr_dim2",
+                :mr_collection        => "mr_dim1",
+                :query      => nil,
+                :map        => MAP_DIM1,
+                :reduce     => REDUCE_DIM1,
+                :finalize   => FINALIZE_DIM1
+            }
+
+MAPREDUCE_DIM0 =
+            {
+                :key => {:name => "dim_0", :function => "value.dim_0"},
+                :mapreduce_values =>  [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                  ],
+                :finalize_values => [
+                    {:name => "dim_0",                :function => "value.dim_0"},
+                    {:name => "dim_1",                :function => "value.dim_1"},
+                    {:name => "dim_2",                :function => "value.dim_2"},
+                    {:name => "dim_3",                :function => "value.dim_3"},
+                    {:name => "dim_4",                :function => "value.dim_4"},
+                    {:name => "length",               :function => "value.length"},
+                    {:name => "width",                :function => "value.width"}
+                ],
+                :database             => "qed_test",
+                :base_collection      => "mr_dim1",
+                :mr_collection        => "mr_dim0",
+                :query      => nil,
+                :map        => MAP_DIM0,
+                :reduce     => REDUCE_DIM0,
+                :finalize   => FINALIZE_DIM0
             }
