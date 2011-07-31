@@ -83,9 +83,23 @@ class TestMapReducePerformer < Test::Unit::TestCase
       end
 
       context "to create a drilldown statistic four steps below the top view" do
-        should "work" do
-
-        end
+        #should "work" do
+        #  @fm.drilldown_level_current = 3
+        #  data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
+        #  puts data.inspect
+        #
+        #  # filter nil elements, for now
+        #  # TODO: can we do something about objects that are not within this map-reduce scope?
+        #  # TODO: this will be kinda important with subsequent mapreduce requests, where those
+        #  # TODO: might yield some new information (since the fall into a mapreduced scope again)
+        #  data = data.select{ |d| !d["_id"].nil? }
+        #
+        #  assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_types_in_same_dimension(data.first["_id"]), data.size
+        #
+        #  data.each do |mr_result|
+        #    assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_objects_in_universe(mr_result["_id"]), mr_result["value"]["count"]
+        #  end
+        #end
       end
 
       context "to create a drilldown statistic five steps below the top view" do
@@ -93,6 +107,18 @@ class TestMapReducePerformer < Test::Unit::TestCase
           @fm.drilldown_level_current = 4
           data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
           puts data.inspect
+
+          # filter nil elements, for now
+          # TODO: can we do something about objects that are not within this map-reduce scope?
+          # TODO: this will be kinda important with subsequent mapreduce requests, where those
+          # TODO: might yield some new information (since the fall into a mapreduced scope again)
+          data = data.select{ |d| !d["_id"].nil? }
+
+          assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_types_in_same_dimension(data.first["_id"]), data.size
+
+          data.each do |mr_result|
+            assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_objects_in_universe(mr_result["_id"]), mr_result["value"]["count"]
+          end
         end
       end
     end
