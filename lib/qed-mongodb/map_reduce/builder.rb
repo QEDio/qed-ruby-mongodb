@@ -50,7 +50,7 @@ module Qed
         end
 
         def query_only?
-          !mapreduce && !@query.nil?
+          !mapreduce? && !@query.nil?
         end
 
         # sanatize JS in here
