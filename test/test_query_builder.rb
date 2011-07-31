@@ -1,6 +1,31 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestQueryBuilder < Test::Unit::TestCase
-  should "build query" do
+  context "a builder" do
+    setup do
+      @fm = FilterModel.new(PARAMS_SCALE_OF_UNIVERSE)
+      @fm.drilldown_level_current = 1
+      @fm.view = :query_only_scale_of_universe
+      @fm.user = USER
+      @mr_config = MAPREDUCE_CONFIG
+    end
+
+    context "for queries only" do
+      should "respond with true to query?" do
+        mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(@fm, @mr_config)
+
+        assert_equal 1, mapreduce_model.size
+        assert mapreduce_model.first.query_only?
+      end
+    end
+
+    context "with no query" do
+      should "return an empty query" do
+        empty_hsh = {}
+        mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(@fm, @mr_config)
+        assert_equal 1, mapreduce_model.size
+        assert_equal empty_hsh, mapreduce_model.first.query
+      end
+    end
   end
 end

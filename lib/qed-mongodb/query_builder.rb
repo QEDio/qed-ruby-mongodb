@@ -2,10 +2,12 @@ module Qed
   module Mongodb
     class QueryBuilder
       def self.selector(fm, clasz = Qed::Mongodb::MongoidModel)
-        cursor = clasz
+        cursor = {}
         filter = fm.filter
 
         if filter.any?
+          cursor = clasz
+
           filter.each_pair do |k,v|
             att = (Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
             if v[Qed::Mongodb::FilterModel::FROM_DATE] and v[Qed::Mongodb::FilterModel::TILL_DATE]
@@ -16,8 +18,10 @@ module Qed
               cursor = cursor.where(att.to_s => v[Qed::Mongodb::FilterModel::VALUE])
             end
           end
+          cursor = cursor.selector
         end
-        return cursor.selector
+
+        return cursor
       end
     end
   end
