@@ -33,10 +33,6 @@ module Qed
               }
           }
         }
-
-      def self.get_config(user, view)
-        PROFILE[user.to_sym][view.to_sym]
-      end
     end
   end
 end
