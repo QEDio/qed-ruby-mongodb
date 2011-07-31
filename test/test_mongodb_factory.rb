@@ -1,4 +1,4 @@
-require 'test_scale_of_universe'
+require 'test_scale_of_universe_factory'
 
 
 module Qed
