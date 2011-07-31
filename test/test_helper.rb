@@ -54,14 +54,18 @@ require 'shoulda'
 
 require 'qed-mongodb'
 
+
 unless Kernel.const_defined?("FROM_DATE")
+  require 'test_helper_mapreduce_config'
+  require 'test_mongodb_factory'
+
   FROM_DATE                             = "from_date"
   FROM_DATE_VALUE                       = "2011-06-05 22:00:00 UTC"
   FROM_DATE_TRACKING_VALUE              = "2011-07-10 22:00:00 UTC"
   TILL_DATE                             = "till_date"
   TILL_DATE_VALUE                       = "2011-12-09 22:00:00 UTC"
   TILL_DATE_TRACKING_VALUE              = "2011-07-20 22:00:00 UTC"
-  USER                                  = :kp
+  USER                                  = :test
 
   PRODUCT_NAME                          = "product_name"
   M_S_PRODUCT_NAME                      = "m_s_#{PRODUCT_NAME}"
@@ -74,36 +78,45 @@ unless Kernel.const_defined?("FROM_DATE")
   VIEW                                  = "view"
   ACTION                                = "action"
   ACTION_NAME                           = "action_name"
-  ACTION_NAME_VALUE                     = "conversion_by_product"
-  ACTION_NAME_TRACKING_VALUE            = "tracking"
+  ACTION_NAME_MR2_VALUE                 = "mapreduce_2"
+  ACTION_NAME_MR3_VALUE                 = "mapreduce_3"
+  ACTION_NAME_SCALE_OF_UNIVERSE         = "scale_of_universe"
   CONTROLLER                            = "controller"
   CONTROLLER_VALUE                      = "dashboard"
 
-  PARAMS =
+  PARAMS_SCALE_OF_UNIVERSE =
+    {
+      DRILLDOWN_LEVEL_CURRENT           =>  9999999,
+      ACTION                            =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+      ACTION_NAME                       =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+      CONTROLLER                        =>  CONTROLLER_VALUE
+    }
+
+  PARAMS_MR2 =
     {
       DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
       FROM_DATE                         =>  FROM_DATE_VALUE,
       TILL_DATE                         =>  TILL_DATE_VALUE,
       M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
-      ACTION                            =>  ACTION_NAME_VALUE,
-      ACTION_NAME                       =>  ACTION_NAME_VALUE,
+      ACTION                            =>  ACTION_NAME_MR2_VALUE,
+      ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
       CONTROLLER                        =>  CONTROLLER_VALUE
     }
 
-  PARAMS_TRACKING =
+  PARAMS_MR3 =
     {
       DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
       FROM_DATE                         =>  FROM_DATE_TRACKING_VALUE,
       TILL_DATE                         =>  TILL_DATE_TRACKING_VALUE,
-      ACTION                            =>  ACTION_NAME_TRACKING_VALUE,
-      ACTION_NAME                       =>  ACTION_NAME_TRACKING_VALUE,
+      ACTION                            =>  ACTION_NAME_MR3_VALUE,
+      ACTION_NAME                       =>  ACTION_NAME_MR3_VALUE,
       CONTROLLER                        =>  CONTROLLER_VALUE
     }
 
   FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS =
-      "?#{VIEW}=#{ACTION_NAME_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_NEXT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE_GARAGE}".gsub(/ /,"%20")
+      "?#{VIEW}=#{ACTION_NAME_MR2_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_NEXT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE_GARAGE}".gsub(/ /,"%20")
   FM_GENERATED_PARAMS_URL =
-      "?#{VIEW}=#{ACTION_NAME_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_CURRENT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE}".gsub(/ /,"%20")
+      "?#{VIEW}=#{ACTION_NAME_MR2_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_CURRENT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE}".gsub(/ /,"%20")
 
   URL_ROW                               = {"_id"=>"#{M_S_PRODUCT_NAME_VALUE_GARAGE}", "value"=>{"product_name"=>"#{M_S_PRODUCT_NAME_VALUE_GARAGE}", "count"=>984.0, "worked_on"=>951.0, "qualified"=>497.0, "test"=>37.0, "turnover"=>19560.0, "payed"=>0.0, "product_uuid"=>"0892afe0b494012d895138ac6f7d89ab", "inquiry_id"=>185968}}
   URL_KEY                               = "product_name"
