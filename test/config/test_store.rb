@@ -1,9 +1,14 @@
 MAP_DIM4 =
   <<-JS
+    count = 1;
   JS
 
 REDUCE_DIM4 =
   <<-JS
+    var count = 0;
+    values.forEach(function(v){
+      count += v.count;
+    });
   JS
 
 FINALIZE_DIM4=

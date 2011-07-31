@@ -10,7 +10,8 @@ MAPREDUCE_DIM4 =
                     {:name => "dim_3",                :function => "value.dim_3"},
                     {:name => "dim_4",                :function => "value.dim_4"},
                     {:name => "length",               :function => "value.length"},
-                    {:name => "width",                :function => "value.width"}
+                    {:name => "width",                :function => "value.width"},
+                    {:name => "count"}
                   ],
                 :finalize_values => [
                     {:name => "dim_0",                :function => "value.dim_0"},
@@ -19,7 +20,8 @@ MAPREDUCE_DIM4 =
                     {:name => "dim_3",                :function => "value.dim_3"},
                     {:name => "dim_4",                :function => "value.dim_4"},
                     {:name => "length",               :function => "value.length"},
-                    {:name => "width",                :function => "value.width"}
+                    {:name => "width",                :function => "value.width"},
+                    {:name => "count",                :function => "value.count"}
                 ],
                 :database             => "qed_test",
                 :base_collection      => "scale_of_universe",
