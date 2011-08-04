@@ -142,6 +142,15 @@ class TestMapReducePerformer < Test::Unit::TestCase
         @fm = FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
         @fm.user = USER
       end
+
+      context "to create a drilldown statistic five steps below the top view" do
+        should "work" do
+          @fm.drilldown_level_current = 4
+          data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
+          puts data.inspect
+          
+        end
+      end
     end
   end
 end

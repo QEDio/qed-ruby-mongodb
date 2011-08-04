@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 class TestQueryBuilder < Test::Unit::TestCase
   context "a builder" do
     setup do
-      @fm = FilterModel.new(PARAMS_SCALE_OF_UNIVERSE)
+      @fm = FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       @fm.drilldown_level_current = 1
       @fm.view = :query_only_scale_of_universe
       @fm.user = USER

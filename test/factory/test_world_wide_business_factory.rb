@@ -1,37 +1,59 @@
 require 'mongo'
+require 'test_constants'
 
 module Qed
   module Mongodb
     module Test
       class Factory
         module WorldWideBusinessMixins
+          attr_accessor :options
 
-          def get_path(leaf, tree)
-              return [] if leaf.nil?
-
-              [leaf.to_s] + self.path(tree[leaf])
+          def initialize(options)
+            raise ArgumentError.new("Options needs to be an array!") unless options.is_a?(Array)
+            @options = options
           end
 
-          def save!(obj)
-            WorldWideBusiness.mongo_collection.insert(create_insert_hsh(obj))
-          end
+          def rec_path(tree, leaf, reversed)
+            raise ArgumentError.new("'Tree' needs a to be a hash!") unless tree.is_a?(Hash)
+            return [] if leaf.nil?
 
-          def create_insert_hsh(obj)
-            {}.tap do |hsh|
-              obj.markup.each_with_index do |m, i|
-                key = "dim_#{i}"
-                hsh[key] = m.to_s.upcase
-              end
-
-              return {:value =>  hsh.merge(obj.attributes)}
+            if reversed
+              [leaf.to_s] + self.rec_path(tree, tree[leaf], reversed)
+            else
+              self.rec_path(tree, tree[leaf], reversed) + [leaf.to_s]
             end
+          end
+
+          def get_path(tree, leaf, prefix, return_hsh = false, reversed = false)
+            path = rec_path(tree, leaf, reversed)
+
+            if( return_hsh )
+              path = {}.tap do |hsh|
+                path.each_with_index{|element, i| hsh[prefix+i.to_s] = element}
+              end
+            end
+
+            return path
+          end
+
+          #def do_save!(obj)
+          #  WorldWideBusiness.mongo_collection.insert(create_insert_hsh(obj))
+          #end
+
+          def to_hash
+            hsh = {}
+
+            options.each do |option|
+              hsh.merge!(path(option[:dimension], option[:value], true))
+            end
+            return hsh
           end
         end
 
 
         class WorldWideBusiness
           @@mongo_db = Mongo::Connection.new('127.0.0.1', 27017).db('qed_test')
-          @@collection = @@mongo_db.collection('scale_of_universe')
+          @@collection = @@mongo_db.collection('world_wide_business')
 
           def self.mongo_db
             @@mongo
@@ -41,9 +63,16 @@ module Qed
             @@collection
           end
 
-          def self.startup(line_items)
+          def self.startup(line_items = WORLD_WIDE_BUSINESS )
             line_items.each do |item|
-              (1..item[:amount]).each {|i| item[:line_item].new.save!}
+              hsh = {}
+              item[:line_item].each do |line_item_part|
+                hsh = hsh.merge(line_item_part[:class].new(line_item_part[:options]).to_hash)
+              end
+
+              (1..item[:amount]).each do |i|
+                WorldWideBusiness.mongo_collection.insert({:value => hsh})
+              end
             end
           end
 
@@ -62,38 +91,59 @@ module Qed
             JETPLANES       = "JETPLANES"
             DEV_M           = "DEV_M"
 
-            TREE  = {
-                SERVICES      => ALL,
-                GOODS         => ALL,
-                SW_CONSULTING => SERVICES,
-                AIRPLANES     => GOODS,
-                MS            => SW_CONSULTING,
-                JETPLANES     => AIRPLANES,
-                DEV_M         => MS
+            DIMENSION_PREFIXES = {
+                :devision => "DIM_DEV_"
             }
 
-            def path(leaf)
-              get_path(leaf,TREE)
+            DIMENSION_TREES   = {
+              :devision  => {
+                  SERVICES      => ALL,
+                  GOODS         => ALL,
+                  SW_CONSULTING => SERVICES,
+                  AIRPLANES     => GOODS,
+                  MS            => SW_CONSULTING,
+                  JETPLANES     => AIRPLANES,
+                  DEV_M         => MS
+              }
+            }
+
+            def path(dimension, leaf, return_hsh = false, reversed = false)
+              get_path(DIMENSION_TREES[dimension.to_sym], leaf, DIMENSION_PREFIXES[dimension.to_sym], return_hsh, reversed)
+            end
+
+            def save!
+              do_save!(self)
             end
           end
 
           class GeographicDimension
             include Qed::Mongodb::Test::Factory::WorldWideBusinessMixins
+
             ALL         = "ALL"
             EUROPE      = "EUROPE"
             DE          = "DE"
             BERLIN      = "BERLIN"
 
-            TREE = {
-                # CONTINENTS
-                EUROPE      =>  ALL,
-                # CITIES
-                BERLIN      =>  EUROPE,
-
+            DIMENSION_PREFIXES = {
+                :location => "DIM_LOC_"
             }
 
-            def path(leaf)
-              get_path(leaf,TREE)
+            # dimension tree for location
+            DIMENSION_TREES = {
+              :location => {
+                  # CONTINENTS
+                  EUROPE      =>  ALL,
+                  # CITIES
+                  BERLIN      =>  EUROPE
+              }
+            }
+
+            def path(dimension, leaf, return_hsh = false, reversed = false)
+              get_path(DIMENSION_TREES[dimension.to_sym], leaf, DIMENSION_PREFIXES[dimension.to_sym], return_hsh, reversed)
+            end
+
+            def save!
+              do_save!(self)
             end
           end
 
@@ -106,27 +156,45 @@ module Qed
             A380                = "A380"
             CPLUSPLUS           = "C++"
 
-            TREE = {
+            DIMENSION_PREFIXES = {
+                :revenue => "DIM_DEV_"
+            }
+
+            DIMENSION_TREES = {
+              :revenue => {
                 GOODS       => ALL,
                 ELECTRONICS => ALL,
                 SERVICE     => ALL,
                 A380        => GOODS,
                 CPLUSPLUS   => SERVICE
+              }
             }
 
-            def path(leaf)
-              get_path(leaf,TREE)
+            def path(dimension, leaf, return_hsh = false, reversed = false)
+              get_path(DIMENSION_TREES[dimension.to_sym], leaf, DIMENSION_PREFIXES[dimension.to_sym], return_hsh, reversed)
+            end
+
+            def save!
+              do_save!(self)
             end
           end
 
-          BERLIN_A380_JETPLANES                 = {:geographie => GeographicDimension::BERLIN, :revenue => RevenueDimension::A380, :business => BusinessDevisionDimension::JETPLANES}
+          BERLIN_A380_JETPLANES                 = [
+              {:class => GeographicDimension,         :options => [{:dimension => :location, :value => GeographicDimension::BERLIN}]},
+              {:class => RevenueDimension,            :options => [{:dimension => :revenue, :value => RevenueDimension::A380}]},
+              {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision, :value => BusinessDevisionDimension::JETPLANES}]}
+          ]
           BERLIN_A380_JETPLANES_AMOUNT          = 10
-          BERLIN_CPLUSPLUS_DEV_M                = {:geographie => GeographicDimension::BERLIN, :revenue => RevenueDimension::CPLUSPLUS, :business => BusinessDevisionDimension::DEV_M}
+          BERLIN_CPLUSPLUS_DEV_M                = [
+              {:class => GeographicDimension,         :options => [{:dimension => :location, :value => GeographicDimension::BERLIN}]},
+              {:class => RevenueDimension,            :options => [{:dimension => :revenue, :value => RevenueDimension::CPLUSPLUS}]},
+              {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision, :value => BusinessDevisionDimension::DEV_M}]}
+          ]
           BERLIN_CPLUSPLUS_DEV_M_AMOUNT         = 8
 
           WORLD_WIDE_BUSINESS = [
             {:line_item => BERLIN_A380_JETPLANES,                     :amount => BERLIN_A380_JETPLANES_AMOUNT},
-            {:line_itme => BERLIN_CPLUSPLUS_DEV_M,                    :amount => BERLIN_CPLUSPLUS_DEV_M_AMOUNT}
+            {:line_item => BERLIN_CPLUSPLUS_DEV_M,                    :amount => BERLIN_CPLUSPLUS_DEV_M_AMOUNT}
           ]
 
           # ========================= WEB PARAMETER =============================================================

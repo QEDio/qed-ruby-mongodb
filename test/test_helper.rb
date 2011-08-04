@@ -58,19 +58,19 @@ require 'qed-mongodb'
 unless Kernel.const_defined?("FROM_DATE")
   require 'config/test_constants'
   require 'config/test_mapreduce_config'
-  require 'test_mongodb_factory'
+  require 'factory/test_mongodb_factory'
 
 
-  #PARAMS_MR2 =
-  #  {
-  #    DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
-  #    FROM_DATE                         =>  FROM_DATE_VALUE,
-  #    TILL_DATE                         =>  TILL_DATE_VALUE,
-  #    M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
-  #    ACTION                            =>  ACTION_NAME_MR2_VALUE,
-  #    ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
-  #    CONTROLLER                        =>  CONTROLLER_VALUE
-  #  }
+  PARAMS_MR2 =
+    {
+      DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
+      FROM_DATE                         =>  FROM_DATE_VALUE,
+      TILL_DATE                         =>  TILL_DATE_VALUE,
+      M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
+      ACTION                            =>  ACTION_NAME_MR2_VALUE,
+      ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
+      CONTROLLER                        =>  CONTROLLER_VALUE
+    }
   #
   #PARAMS_MR3 =
   #  {
