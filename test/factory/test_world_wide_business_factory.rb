@@ -130,7 +130,7 @@ module Qed
           ]
 
           # ========================= WEB PARAMETER =============================================================
-          ACTION_NAME_WORLD_WIDE_BUSINESS               =
+          ACTION_NAME_WORLD_WIDE_BUSINESS               =     "world_wide_business"
 
           PARAMS_WORLD_WIDE_BUSINESS =
           {
