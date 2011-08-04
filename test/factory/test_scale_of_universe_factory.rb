@@ -192,6 +192,17 @@ module Qed
           end
 
           EXAMPLE_UNIVERS_PARTICLES = AMOUNT_PLANCK_LENGTHS + AMOUNT_NEUTRINOS + AMOUNT_PREONS + AMOUNT_QUARKS + AMOUNT_ELECTRONS + AMOUNT_PROTONS + AMOUNT_NEUTRONS + AMOUNT_ATOMS + AMOUNT_ATOMS1 + AMOUNT_ATOMS2
+
+          # ========================= WEB PARAMETER =============================================================
+          ACTION_NAME_SCALE_OF_UNIVERSE         = "scale_of_universe"
+
+          PARAMS_SCALE_OF_UNIVERSE =
+          {
+            DRILLDOWN_LEVEL_CURRENT           =>  9999999,
+            ACTION                            =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+            ACTION_NAME                       =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+            CONTROLLER                        =>  CONTROLLER_VALUE
+          }
         end
       end
     end

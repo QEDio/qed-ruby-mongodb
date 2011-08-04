@@ -53,7 +53,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Mongodb::Test::Factory::ScaleOfUniverse.big_crunch
         Qed::Mongodb::Test::Factory::ScaleOfUniverse.big_bang(Qed::Mongodb::Test::Factory::ScaleOfUniverse::EXAMPLE_UNIVERSE)
-        @fm = FilterModel.new(PARAMS_SCALE_OF_UNIVERSE)
+        @fm = FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
         @fm.user = USER
       end
 
@@ -135,6 +135,13 @@ class TestMapReducePerformer < Test::Unit::TestCase
     #  end
     #end
 
-
+    context "performing mapreduce on a WorldWideBusiness" do
+      setup do
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
+        @fm = FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm.user = USER
+      end
+    end
   end
 end

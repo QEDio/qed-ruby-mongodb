@@ -129,6 +129,17 @@ module Qed
             {:line_itme => BERLIN_CPLUSPLUS_DEV_M,                    :amount => BERLIN_CPLUSPLUS_DEV_M_AMOUNT}
           ]
 
+          # ========================= WEB PARAMETER =============================================================
+          ACTION_NAME_WORLD_WIDE_BUSINESS               =
+
+          PARAMS_WORLD_WIDE_BUSINESS =
+          {
+            DRILLDOWN_LEVEL_CURRENT           =>  9999999,
+            ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            ACTION_NAME                       =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            CONTROLLER                        =>  CONTROLLER_VALUE
+          }
+
           #def self.amount_of_objects_in_universe(type)
           #  type = type.to_sym.downcase
           #
