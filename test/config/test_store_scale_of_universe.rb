@@ -1,9 +1,9 @@
-MAP_DIM4 =
+MAP_SOU_DIM4 =
   <<-JS
     count = 1;
   JS
 
-REDUCE_DIM4 =
+REDUCE_SOU_DIM4 =
   <<-JS
     var count = 0;
     values.forEach(function(v){
@@ -11,55 +11,55 @@ REDUCE_DIM4 =
     });
   JS
 
-FINALIZE_DIM4=
+FINALIZE_SOU_DIM4=
   <<-JS
   JS
 
 
-MAP_DIM3 =
+MAP_SOU_DIM3 =
   <<-JS
   JS
 
-REDUCE_DIM3 =
+REDUCE_SOU_DIM3 =
   <<-JS
   JS
 
-FINALIZE_DIM3 =
+FINALIZE_SOU_DIM3 =
   <<-JS
   JS
 
-MAP_DIM2 =
+MAP_SOU_DIM2 =
   <<-JS
   JS
 
-REDUCE_DIM2 =
+REDUCE_SOU_DIM2 =
   <<-JS
   JS
 
-FINALIZE_DIM2 =
+FINALIZE_SOU_DIM2 =
   <<-JS
   JS
 
-MAP_DIM1 =
+MAP_SOU_DIM1 =
   <<-JS
   JS
 
-REDUCE_DIM1 =
+REDUCE_SOU_DIM1 =
   <<-JS
   JS
 
-FINALIZE_DIM1 =
+FINALIZE_SOU_DIM1 =
   <<-JS
   JS
 
-MAP_DIM0 =
+MAP_SOU_DIM0 =
   <<-JS
   JS
 
-REDUCE_DIM0 =
+REDUCE_SOU_DIM0 =
   <<-JS
   JS
 
-FINALIZE_DIM0 =
+FINALIZE_SOU_DIM0 =
   <<-JS
   JS

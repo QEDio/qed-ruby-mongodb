@@ -1,8 +1,10 @@
-require 'config/test_store'
+require 'config/test_store_scale_of_universe'
 
-MAPREDUCE_DIM4 =
+MR_SOU_DIM4 =
             {
-                :key => {:name => "dim_4", :function => "value.dim_4"},
+                :mapreduce_keys => [
+                    {:name => "dim_4", :function => "value.dim_4"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "dim_0",                :function => "value.dim_0"},
                     {:name => "dim_1",                :function => "value.dim_1"},
@@ -27,14 +29,16 @@ MAPREDUCE_DIM4 =
                 :base_collection      => "scale_of_universe",
                 :mr_collection        => "mr_dim4",
                 :query                => nil,
-                :map                  => MAP_DIM4,
-                :reduce               => REDUCE_DIM4,
-                :finalize             => FINALIZE_DIM4
+                :map                  => MAP_SOU_DIM4,
+                :reduce               => REDUCE_SOU_DIM4,
+                :finalize             => FINALIZE_SOU_DIM4
             }
 
-MAPREDUCE_DIM3 =
+MR_SOU_DIM3 =
             {
-                :key => {:name => "dim_3", :function => "value.dim_3"},
+                :mapreduce_keys => [
+                    {:name => "dim_3", :function => "value.dim_3"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "dim_0",                :function => "value.dim_0"},
                     {:name => "dim_1",                :function => "value.dim_1"},
@@ -57,14 +61,16 @@ MAPREDUCE_DIM3 =
                 :base_collection      => "mr_dim4",
                 :mr_collection        => "mr_dim3",
                 :query      => nil,
-                :map        => MAP_DIM3,
-                :reduce     => REDUCE_DIM3,
-                :finalize   => FINALIZE_DIM3
+                :map        => MAP_SOU_DIM3,
+                :reduce     => REDUCE_SOU_DIM3,
+                :finalize   => FINALIZE_SOU_DIM3
             }
 
-MAPREDUCE_DIM2 =
+MR_SOU_DIM2 =
             {
-                :key => {:name => "dim_2", :function => "value.dim_2"},
+                :mapreduce_keys => [
+                    {:name => "dim_2", :function => "value.dim_2"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "dim_0",                :function => "value.dim_0"},
                     {:name => "dim_1",                :function => "value.dim_1"},
@@ -87,14 +93,16 @@ MAPREDUCE_DIM2 =
                 :base_collection      => "mr_dim3",
                 :mr_collection        => "mr_dim2",
                 :query      => nil,
-                :map        => MAP_DIM2,
-                :reduce     => REDUCE_DIM2,
-                :finalize   => FINALIZE_DIM2
+                :map        => MAP_SOU_DIM2,
+                :reduce     => REDUCE_SOU_DIM2,
+                :finalize   => FINALIZE_SOU_DIM2
             }
 
-MAPREDUCE_DIM1 =
+MR_SOU_DIM1 =
             {
-                :key => {:name => "dim_1", :function => "value.dim_0"},
+                :mapreduce_keys => [
+                    {:name => "dim_1", :function => "value.dim_0"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "dim_0",                :function => "value.dim_0"},
                     {:name => "dim_1",                :function => "value.dim_1"},
@@ -117,14 +125,16 @@ MAPREDUCE_DIM1 =
                 :base_collection      => "mr_dim2",
                 :mr_collection        => "mr_dim1",
                 :query      => nil,
-                :map        => MAP_DIM1,
-                :reduce     => REDUCE_DIM1,
-                :finalize   => FINALIZE_DIM1
+                :map        => MAP_SOU_DIM1,
+                :reduce     => REDUCE_SOU_DIM1,
+                :finalize   => FINALIZE_SOU_DIM1
             }
 
-MAPREDUCE_DIM0 =
+MR_SOU_DIM0 =
             {
-                :key => {:name => "dim_0", :function => "value.dim_0"},
+                :mapreduce_keys => [
+                    {:name => "dim_0", :function => "value.dim_0"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "dim_0",                :function => "value.dim_0"},
                     {:name => "dim_1",                :function => "value.dim_1"},
@@ -147,7 +157,7 @@ MAPREDUCE_DIM0 =
                 :base_collection      => "mr_dim1",
                 :mr_collection        => "mr_dim0",
                 :query      => nil,
-                :map        => MAP_DIM0,
-                :reduce     => REDUCE_DIM0,
-                :finalize   => FINALIZE_DIM0
+                :map        => MAP_SOU_DIM0,
+                :reduce     => REDUCE_SOU_DIM0,
+                :finalize   => FINALIZE_SOU_DIM0
             }

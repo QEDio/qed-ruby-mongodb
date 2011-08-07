@@ -8,20 +8,20 @@ class TestMapReducePerformer < Test::Unit::TestCase
   context "calling function mapreduce" do
     should "throw an exception if option is not a hash" do
       assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
-        Qed::Mongodb::MapReduce::Performer.mapreduce([], MAPREDUCE_CONFIG)
+        Qed::Mongodb::MapReduce::Performer.new([], MAPREDUCE_CONFIG)
       end
     end
 
     should "throw an exception if option doesn't have the 'filter' key" do
       fm = FilterModel.new(PARAMS_MR2)
       assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
-        Qed::Mongodb::MapReduce::Performer.mapreduce({:abc => fm}, MAPREDUCE_CONFIG)
+        Qed::Mongodb::MapReduce::Performer.new({:abc => fm}, MAPREDUCE_CONFIG)
       end
     end
 
     should "throw an exception if the 'filter' value is not a FilterModel-Object" do
       assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
-        Qed::Mongodb::MapReduce::Performer.mapreduce({:filter => "fm"}, MAPREDUCE_CONFIG)
+        Qed::Mongodb::MapReduce::Performer.new({:filter => "fm"}, MAPREDUCE_CONFIG)
       end
     end
 
@@ -105,8 +105,9 @@ class TestMapReducePerformer < Test::Unit::TestCase
       context "to create a drilldown statistic five steps below the top view" do
         should "work" do
           @fm.drilldown_level_current = 4
-          data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
-          puts data.inspect
+          performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+          data = performer.mapreduce.find().to_a
+          #puts data.inspect
 
           # filter nil elements, for now
           # TODO: can we do something about objects that are not within this map-reduce scope?
@@ -114,7 +115,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
           # TODO: might yield some new information (since the fall into a mapreduced scope again)
           data = data.select{ |d| !d["_id"].nil? }
 
-          assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_types_in_same_dimension(data.first["_id"]), data.size
+          assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.line_items_with_same_value_in_dimension(data.first["_id"]), data.size
 
           data.each do |mr_result|
             assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_objects_in_universe(mr_result["_id"]), mr_result["value"]["count"]
@@ -145,9 +146,20 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
       context "to create a drilldown statistic five steps below the top view" do
         should "work" do
-          @fm.drilldown_level_current = 4
-          data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
-          puts data.inspect
+          @fm.drilldown_level_current = 2
+          performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+          data = performer.mapreduce.find().to_a
+          mr_key = performer.get_mr_key.join(",")
+
+          #puts "key: #{mr_key.inspect}"
+          #puts "data: #{data.inspect}"
+          #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
+
+          assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[mr_key].size, data.size
+
+          data.each do |mr_result|
+            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(data.first["_id"], :location), mr_result["value"]["count"].to_i
+          end
           
         end
       end

@@ -182,7 +182,7 @@ module Qed
             end
           end
 
-          def self.amount_of_types_in_same_dimension(type)
+          def self.line_items_with_same_value_in_dimension(type)
             type = type.to_sym.downcase
             SCALE.each do |s|
               return s.size if s.include?(type)
