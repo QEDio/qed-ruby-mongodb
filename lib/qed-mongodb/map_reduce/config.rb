@@ -4,7 +4,9 @@ module Qed
       class Config
         KP_CBP_1 =
             {
-                :key => {:name => "inquiry_id", :function => "NumberLong(value.inquiry_id)"},
+                :mapreduce_keys => [
+                    {:name => "inquiry_id", :function => "NumberLong(value.inquiry_id)"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "inquiry_id",           :function => "NumberLong(value.inquiry_id)"},
                     {:name => "status_id",            :function => "value.status_id"},
@@ -45,7 +47,9 @@ module Qed
 
            KP_CBP_2 =
             {
-                :key => {:name => "product_name",     :function => "value.product_name"},
+                :mapreduce_keys => [
+                    {:name => "product_name",     :function => "value.product_name"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "product_name",         :function => "value.product_name"},
                     {:name => "count"},
@@ -79,7 +83,9 @@ module Qed
 
            KP_CBC_2 =
             {
-                :key => {:name => "ag",               :function => "value.tracking_ag"},
+                :mapreduce_keys => [
+                    {:name => "ag",               :function => "value.tracking_ag"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "tracking_ag",          :function => "value.tracking_ag"},
                     {:name => "count"},
@@ -113,7 +119,9 @@ module Qed
 
           KP_TRA_2 =
             {
-                :key => {:name => nil,                :function => "(value.product_name+domain+value.level)"},
+                :mapreduce_keys => [
+                    {:name => nil,                :function => "(value.product_name+domain+value.level)"}
+                  ],
                 :mapreduce_values =>  [
                     {:name => "tracking_ag",          :function => "value.tracking_ag"},
                     {:name => "count"},

@@ -2,10 +2,10 @@ module Qed
   module Mongodb
     module MapReduce
       class Builder
-        attr_accessor :key, :mapreduce_values, :finalize_values, :database, :base_collection, :mr_collection
+        attr_accessor :mapreduce_keys, :mapreduce_values, :finalize_values, :database, :base_collection, :mr_collection
         attr_reader :reduce, :finalize, :query
 
-        KEY = :key
+        KEY = :mapreduce_keys
         MAPREDUCE_VALUES = :mapreduce_values
         FINALIZE_VALUES = :finalize_values
 
@@ -20,7 +20,7 @@ module Qed
         ARRAY_INITS = [MAPREDUCE_VALUES, FINALIZE_VALUES]
 
         def initialize(params = {})
-          @key = Key.new
+          @mapreduce_keys = []
           @mapreduce_values = []
           @finalize_values = []
           @map = nil
@@ -32,14 +32,28 @@ module Qed
           @mr_collection = nil
 
           params.keys.each do |k|
-            if k.eql?(KEY)
-              send("#{k}=".to_sym, Key.new(params[k])) if respond_to?(k)
+            # generate key objects
+            if k.eql?(KEY) and respond_to?(k)
+              params[k].each do |kk|
+                # add key object to key attr_accessor
+                send("#{k}=".to_sym, send(k.to_sym) << Key.new(kk))
+              end
+            # generate value objects
             elsif ARRAY_INITS.include?(k) and respond_to?(k)
               params[k].each do |kk|
+                # generate and add value object to corresponding attr_accessor
                 send("#{k}=".to_sym, send(k.to_sym) << Value.new(kk))
               end
             else
               send("#{k}=".to_sym, params[k]) if respond_to?(k)
+            end
+          end
+        end
+
+        def mr_key
+          [].tap do |arr|
+            mapreduce_keys.each do |mapreduce_key|
+              arr << mapreduce_key.name
             end
           end
         end
@@ -161,7 +175,7 @@ module Qed
           end
 
         def emit_map
-          emit = "emit( #{@key.function||@key.name}, "
+          emit = "emit( #{emit_keys}, "
           emit += emit_core
           emit += " );"
           return emit
@@ -175,7 +189,16 @@ module Qed
           "return " + emit_core(@finalize_values) + ";"
         end
 
-        def emit_core(values = @mapreduce_values)
+        def emit_keys(keys = mapreduce_keys)
+          ret_val = ""
+          keys.each do |k|
+            ret_val += "#{k.function||k.name},"
+          end
+          # delete last comma
+          return ret_val[0..ret_val.size-2]
+        end
+
+        def emit_core(values = mapreduce_values)
           core = "{ "
           values.each do |v|
             core += " #{v.name}: #{v.function||v.name},"
