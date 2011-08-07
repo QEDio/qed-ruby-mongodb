@@ -5,13 +5,22 @@ module Qed
         MONGO_HOST = '127.0.0.1'
         MONGO_PORT = 27017
 
-        def self.mapreduce(filter_model, mr_config)
+        attr_reader :filter_mode, :mapreduce_models, :db
+
+        def initialize(filter_model, mr_config)
           init(filter_model, mr_config)
+        end
+
+        def mapreduce()
           int_mapreduce
         end
 
+        def get_mr_key(mr_index = -1)
+          mapreduce_models[mr_index].mr_key
+        end
+
         private
-          def self.init(filter_model, mr_config)
+          def init(filter_model, mr_config)
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Mongodb::FilterModel)
 
             @filter_model = filter_model
@@ -23,7 +32,7 @@ module Qed
             @db = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].database)
           end
 
-          def self.int_mapreduce
+          def int_mapreduce
             collection = nil
 
             if @mapreduce_models.size == 1 && @mapreduce_models[0].query_only?
