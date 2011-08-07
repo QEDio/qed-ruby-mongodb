@@ -144,23 +144,101 @@ class TestMapReducePerformer < Test::Unit::TestCase
         @fm.user = USER
       end
 
-      context "to create a drilldown statistic five steps below the top view" do
-        should "work" do
-          @fm.drilldown_level_current = 2
-          performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-          data = performer.mapreduce.find().to_a
-          mr_key = performer.get_mr_key.join(",")
+      context "on the Dimension location" do
+        setup do
+           @fm.drilldown_level_current = 0
+        end
 
-          #puts "key: #{mr_key.inspect}"
-          #puts "data: #{data.inspect}"
-          #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
+        context "to create a the top view statistic" do
+          setup do
+            @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+            @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+            @data = @performer.mapreduce.find().to_a
+            @mr_key = @performer.get_mr_key.join(",")
 
-          assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[mr_key].size, data.size
-
-          data.each do |mr_result|
-            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(data.first["_id"], :location), mr_result["value"]["count"].to_i
+            #puts "key: #{mr_key.inspect}"
+            #puts "data: #{data.inspect}"
+            #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
           end
-          
+
+          should "return the correct number of mapreduced datarows" do
+            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[@mr_key].size, @data.size
+          end
+                    
+          should "return the correct amount of same data values" do
+            @data.each do |mr_result|
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["_id"], :location), mr_result["value"]["count"].to_i
+            end
+          end
+        end
+
+        context "to create a drilldown statistic one level below the top view" do
+          setup do
+            @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM1
+            @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+            @data = @performer.mapreduce.find().to_a
+            @mr_key = @performer.get_mr_key.join(",")
+
+            #puts "key: #{@mr_key.inspect}"
+            #puts "data: #{@data.inspect}"
+            #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
+          end
+
+          should "return the correct number of mapreduced datarows" do
+            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[@mr_key].size, @data.size
+          end
+
+          should "return the correct amount of same data values" do
+            @data.each do |mr_result|
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(mr_result["_id"], :location), mr_result["value"]["count"].to_i
+            end
+          end
+        end
+
+        context "to create a drilldown statistic two level below the top view" do
+          setup do
+            @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM2
+            @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+            @data = @performer.mapreduce.find().to_a
+            @mr_key = @performer.get_mr_key.join(",")
+
+            #puts "key: #{@mr_key.inspect}"
+            puts "data: #{@data.inspect}"
+            #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
+          end
+
+          should "return the correct number of mapreduced datarows" do
+            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[@mr_key].size, @data.size
+          end
+
+          should "return the correct amount of same data values" do
+            @data.each do |mr_result|
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(mr_result["_id"], :location), mr_result["value"]["count"].to_i
+            end
+          end
+        end
+
+        context "to create a drilldown statistic three level below the top view" do
+          setup do
+            @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM3
+            @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+            @data = @performer.mapreduce.find().to_a
+            @mr_key = @performer.get_mr_key.join(",")
+
+            #puts "key: #{@mr_key.inspect}"
+            puts "data: #{@data.inspect}"
+            #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
+          end
+
+          should "return the correct number of mapreduced datarows" do
+            assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[@mr_key].size, @data.size
+          end
+
+          should "return the correct amount of same data values" do
+            @data.each do |mr_result|
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(mr_result["_id"], :location), mr_result["value"]["count"].to_i
+            end
+          end
         end
       end
     end

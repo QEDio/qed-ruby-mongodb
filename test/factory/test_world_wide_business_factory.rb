@@ -195,6 +195,7 @@ module Qed
             VE          = "VE"
             ZA          = "ZA"
             MX          = "MX"
+            CA          = "CA"
             BERLIN      = "BERLIN"
             HAMBURG     = "HAMBURG"
             TAIPEH      = "TAIPEH"
@@ -202,9 +203,9 @@ module Qed
             COLOMBO     = "COLOMBO"
             GUANGZHOU   = "GUANGZHOU"
             SHANGHAI    = "SHANGHAI"
-            CA          = "CA"
-            NY          = "NY"
-            NJ          = "NJ"
+            CALIFORNIA  = "CALIFORNIA"
+            NEWYORK     = "NEWYORK"
+            NEYJERSEY   = "NEWJERSEY"
             FR3         = "FR3"
             LONDON      = "LONDON"
             MANCHASTER  = "MANCHASTER"
@@ -243,6 +244,7 @@ module Qed
                   VE          => SOUTHAMERICA,
                   ZA          => AFRICA,
                   MX          => SOUTHAMERICA,
+                  CA          => NORTHAMERICA,
                   # CITIES
                   BERLIN      => DE,
                   HAMBURG     => DE,
@@ -251,9 +253,9 @@ module Qed
                   COLOMBO     => LK,
                   GUANGZHOU   => CN,
                   SHANGHAI    => CN,
-                  CA          => US,
-                  NY          => US,
-                  NJ          => US,
+                  CALIFORNIA  => US,
+                  NEWYORK     => US,
+                  NEYJERSEY   => US,
                   FR3         => FR,
                   LONDON      => UK,
                   MANCHASTER  => UK,
@@ -385,15 +387,15 @@ module Qed
           ]
           COLOMBO_ASPIRINC_DRUGS_AMOUNT         = 13
 
-          SHANGHAI_CESSNA162_PROPELLERPLANE    = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::SHANGHAI}]},
+          GUANGZHOU_CESSNA162_PROPELLERPLANE    = [
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::GUANGZHOU}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::CESSNA162}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::PROPELLORPLANES}]}
           ]
-          SHANGHAI_CESSNA162_PROPELLERPLANE_AMOUNT = 2
+          GUANGZHOU_CESSNA162_PROPELLERPLANE_AMOUNT = 2
 
           CA_CORN_GEN                           = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::CA}]},
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::CALIFORNIA}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::CORN}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::GEN}]}
           ]
@@ -414,14 +416,14 @@ module Qed
           SHANGHAI_EBOOKS_UP1_AMOUNT            = 2
 
           NY_EGAMES_UP2                         = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NY}]},
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NEWYORK}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::EGAMES}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::UP2}]}
           ]
           NY_EGAMES_UP2_AMOUNT                  = 7
 
           NJ_ESPORTS_OTHER1                     = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NJ}]},
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NEYJERSEY}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::ESPORTS}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::OTHER1}]}
           ]
@@ -456,7 +458,7 @@ module Qed
           LIVERPOOL_R3_DEV_S_AMOUNT             = 9
 
           CA_R3_MAINTENANCE_S                   = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::CA}]},
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::CALIFORNIA}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::R3}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::MAINTENANCE_S}]}
 
@@ -464,7 +466,7 @@ module Qed
           CA_R3_MAINTENANCE_S_AMOUNT            = 3
 
           NY_CPLUSPLUS_LICENSES_S               = [
-              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NY}]},
+              {:class => GeographicDimension,         :options => [{:dimension => :location,      :value => GeographicDimension::NEWYORK}]},
               {:class => RevenueDimension,            :options => [{:dimension => :revenue,       :value => RevenueDimension::CPLUSPLUS}]},
               {:class => BusinessDevisionDimension,   :options => [{:dimension => :devision,      :value => BusinessDevisionDimension::LICENSES_S}]}
           ]
@@ -548,7 +550,7 @@ module Qed
             {:line_item => TAIPEH_BEANS_GEN,                          :amount => TAIPEH_BEANS_GEN_AMOUNT},
             {:line_item => CANBERRA_PEELER_COSMETICS,                 :amount => CANBERRA_PEELER_COSMETICS_AMOUNT},
             {:line_item => COLOMBO_ASPIRINC_DRUGS,                    :amount => COLOMBO_ASPIRINC_DRUGS_AMOUNT},
-            {:line_item => SHANGHAI_CESSNA162_PROPELLERPLANE,         :amount => SHANGHAI_CESSNA162_PROPELLERPLANE_AMOUNT},
+            {:line_item => GUANGZHOU_CESSNA162_PROPELLERPLANE,        :amount => GUANGZHOU_CESSNA162_PROPELLERPLANE_AMOUNT},
             {:line_item => CA_CORN_GEN,                               :amount => CA_CORN_GEN_AMOUNT},
             {:line_item => HAMBURG_A320_JETPLANES,                    :amount => HAMBURG_A320_JETPLANES_AMOUNT},
             {:line_item => SHANGHAI_EBOOKS_UP1,                       :amount => SHANGHAI_EBOOKS_UP1_AMOUNT},
@@ -574,6 +576,10 @@ module Qed
 
           # ========================= WEB PARAMETER =============================================================
           ACTION_NAME_WORLD_WIDE_BUSINESS               =     "world_wide_business"
+          VIEW_LOC_DIM0                                 =     "world_wide_business_loc_dim0"
+          VIEW_LOC_DIM1                                 =     "world_wide_business_loc_dim1"
+          VIEW_LOC_DIM2                                 =     "world_wide_business_loc_dim2"
+          VIEW_LOC_DIM3                                 =     "world_wide_business_loc_dim3"
 
           PARAMS_WORLD_WIDE_BUSINESS =
           {

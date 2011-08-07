@@ -27,15 +27,24 @@ MAPREDUCE_CONFIG = {
                             ]
       },
 
-      :world_wide_business           =>  {
+      :world_wide_business_loc_dim0       =>  {
         # the order is important here, the first mapreduce will be done first, then the second and so on
         :mapreduce =>       [
                                 MR_WWB_LOC_DIM0,
-                                MR_WWB_LOC_DIM1,
-                                MR_WWB_LOC_DIM2
                             ]
-      }
+      },
 
+      :world_wide_business_loc_dim1     => {
+        :mapreduce =>       [MR_WWB_LOC_DIM1]
+      },
+
+      :world_wide_business_loc_dim2     => {
+        :mapreduce =>     [MR_WWB_LOC_DIM2]
+      },
+
+      :world_wide_business_loc_dim3     => {
+        :mapreduce =>     [MR_WWB_LOC_DIM3]
+      }
 
     }
 }
