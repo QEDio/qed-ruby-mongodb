@@ -7,13 +7,12 @@ module Qed
         raise Qed::Mongodb::Exceptions::FilterModelError.new("filter_model param ist not a FilterModel-Object!") if !filter_model.is_a?(Qed::Mongodb::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.new("config param ist not a hash!") if !config.is_a?(Hash)
 
-
-
         # get the mapreduce-configurations
         mapreduce_configurations = get_config(config, filter_model.user, filter_model.view)[:mapreduce]
 
         if( mapreduce_configurations.size > filter_model.drilldown_level_current)
           # only get those needed for the current drilldown level
+          # TODO: I guess we have to rethink if a drilldown level of 0 is really the most reduced stats view
           # drilldown level == 0 is most reduced stats view
           # drilldown level == size of returned configuration is unreduced stats view (but almost certainly filtered!)
           mapreduce_configurations = mapreduce_configurations[0..mapreduce_configurations.size-(1+filter_model.drilldown_level_current)]
