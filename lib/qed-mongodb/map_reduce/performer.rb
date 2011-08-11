@@ -7,7 +7,8 @@ module Qed
 
         attr_reader :filter_mode, :mapreduce_models, :db
 
-        def initialize(filter_model, mr_config)
+        # TODO: remove default param value!
+        def initialize(filter_model, mr_config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
           init(filter_model, mr_config)
         end
 
