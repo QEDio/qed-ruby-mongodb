@@ -37,7 +37,7 @@ module Qed
             collection = nil
 
             if @mapreduce_models.size == 1 && @mapreduce_models[0].query_only?
-              collection = @mapreduce_models[0].base_collection.find(@mapreduce_models[0].query)
+              collection = @db.collection(@mapreduce_models[0].base_collection).find(@mapreduce_models[0].query)
             else
               collection = @db.collection(@mapreduce_models[0].base_collection)
 
