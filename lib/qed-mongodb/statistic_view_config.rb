@@ -39,7 +39,7 @@ module Qed
           config[:query] = filter_model.mongodb_query
 
           builder = Qed::Mongodb::MapReduce::Builder.new(config)
-          builder.forced_query = true
+          builder.force_query = true
           [builder]
         end
       end
