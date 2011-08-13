@@ -2,7 +2,7 @@ module Qed
   module Mongodb
     module MapReduce
       class Builder
-        attr_accessor :mapreduce_keys, :mapreduce_values, :finalize_values, :database, :base_collection, :mr_collection
+        attr_accessor :mapreduce_keys, :mapreduce_values, :finalize_values, :database, :base_collection, :mr_collection, :force_query
         attr_reader :reduce, :finalize, :query
 
         KEY = :mapreduce_keys
@@ -30,6 +30,7 @@ module Qed
           @database = nil
           @base_collection = nil
           @mr_collection = nil
+          @force_query  = false
 
           params.keys.each do |k|
             # generate key objects
@@ -64,7 +65,7 @@ module Qed
         end
 
         def query_only?
-          !mapreduce? && !@query.nil?
+          @forced_query || (!mapreduce? && !@query.nil?)
         end
 
         # sanatize JS in here

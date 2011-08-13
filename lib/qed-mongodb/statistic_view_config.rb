@@ -10,6 +10,14 @@ module Qed
         # get the mapreduce-configurations
         mapreduce_configurations = get_config(config, filter_model.user, filter_model.view)[:mapreduce]
 
+        if mapreduce_configurations.nil?
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.new("Either the user: #{filter_model.user} or the view: #{filter_model.view} doesn't exist'")
+        elsif !mapreduce_configurations.is_a?(Array)
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.user} and view: #{filter_model.view}")
+        elsif mapreduce_configurations.size == 0
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.new("Couldn't get mapreduce configuration for user: #{filter_model.user} and view: #{filter_model.view}")
+        end
+
         if( mapreduce_configurations.size > filter_model.drilldown_level_current)
           # only get those needed for the current drilldown level
           # TODO: I guess we have to rethink if a drilldown level of 0 is really the most reduced stats view
@@ -27,8 +35,11 @@ module Qed
           end
         # don't mapreduce, just show the filtered data
         else
-          builder = Qed::Mongodb::MapReduce::Builder.new({:query => filter_model.mongodb_query })
-          builder.database = mapreduce_configurations[0][:database]
+          config = mapreduce_configurations.first
+          config[:query] = filter_model.mongodb_query
+
+          builder = Qed::Mongodb::MapReduce::Builder.new(config)
+          builder.forced_query = true
           [builder]
         end
       end

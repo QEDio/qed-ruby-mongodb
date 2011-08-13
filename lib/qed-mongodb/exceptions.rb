@@ -21,6 +21,7 @@ module Qed
     class Exceptions
       class OptionMisformed < RuntimeError; end
       class MapReduceConfigurationNotFound < RuntimeError; end
+      class MapReduceConfigurationUnknownError < RuntimeError; end
       class FilterModelError < RuntimeError; end
     end
   end
