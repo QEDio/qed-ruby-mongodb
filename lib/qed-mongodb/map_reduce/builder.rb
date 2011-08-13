@@ -65,7 +65,7 @@ module Qed
         end
 
         def query_only?
-          @forced_query || (!mapreduce? && !@query.nil?)
+          @force_query || (!mapreduce? && !@query.nil?)
         end
 
         # sanatize JS in here

@@ -203,7 +203,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{@mr_key.inspect}"
-            puts "data: #{@data.inspect}"
+            #puts "data: #{@data.inspect}"
             #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
           end
 
@@ -226,7 +226,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{@mr_key.inspect}"
-            puts "data: #{@data.inspect}"
+            #puts "data: #{@data.inspect}"
             #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
           end
 
@@ -237,6 +237,40 @@ class TestMapReducePerformer < Test::Unit::TestCase
           should "return the correct amount of same data values" do
             @data.each do |mr_result|
               assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(mr_result["_id"], :location), mr_result["value"]["count"].to_i
+            end
+          end
+        end
+      end
+    end
+
+    context "performing a query on a WorldWideBusiness" do
+      setup do
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
+        @fm = FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm.user = USER
+      end
+
+      context "on the Dimension location" do
+        setup do
+           @fm.drilldown_level_current = 2
+        end
+
+
+        context "to create a filter but unreduced view on the data" do
+          context "on DIM3" do
+            setup do
+              @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+              @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+              @data = @performer.mapreduce.find().to_a
+              @mr_key = @performer.get_mr_key.join(",")
+              puts "data: #{@data.inspect}"
+            end
+
+            # TODO: we need something to test the filtering/query thingy
+            # TODO: below this is a workaround
+            should "return the correct number of filtered datarows" do
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["value"]["DIM_LOC_0"], :location), @data.size
             end
           end
         end
