@@ -36,10 +36,10 @@ module Qed
           def int_mapreduce
             collection = nil
 
-            if @mapreduce_models.size == 1 && @mapreduce_models[0].query_only?
-              collection = @db.collection(@mapreduce_models[0].base_collection).find(@mapreduce_models[0].query)
+            if @mapreduce_models.size == 1 && @mapreduce_models.first.query_only?
+              collection = @db.collection(@mapreduce_models.first.base_collection).find(@mapreduce_models[0].query)
             else
-              collection = @db.collection(@mapreduce_models[0].base_collection)
+              collection = @db.collection(@mapreduce_models.first.base_collection)
 
               @mapreduce_models.each do |mrm|
                 collection = collection.map_reduce(mrm.map, mrm.reduce, {:query => mrm.query, :out => {:replace => mrm.mr_collection }, :finalize => mrm.finalize})
