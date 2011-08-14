@@ -71,6 +71,21 @@ unless Kernel.const_defined?("FROM_DATE")
       ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
       CONTROLLER                        =>  CONTROLLER_VALUE
     }
+
+  PARAMS_MR3 =
+    {
+      DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
+      FROM_DATE                         =>  FROM_DATE_VALUE,
+      TILL_DATE                         =>  TILL_DATE_VALUE,
+      M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
+      ACTION                            =>  ACTION_NAME_MR3_VALUE,
+      ACTION_NAME                       =>  ACTION_NAME_MR3_VALUE,
+      CONTROLLER                        =>  CONTROLLER_VALUE
+    }
+
+  PARAMS_MR2_SHA2_DIGEST                =   "074fa37a639b3736559748ce8134e0627613547754b1cec4ef320e8fbecee973"
+  PARAMS_MR3_SHA2_DIGEST                =   "4ca0fdb70c8efdc168b46d24168f7e1e1aee70f0f4aaec41fef58874ee1f0de5"
+
   #
   #PARAMS_MR3 =
   #  {

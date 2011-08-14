@@ -13,7 +13,13 @@ module Qed
         end
 
         def mapreduce()
-          int_mapreduce
+          data_hsh = Qed::Mongodb::MapReduce::Cache.find({:filter_model => @filter_model, :mapreduce_models => @mapreduce_models, :database => @db})
+
+          if( data_hsh[:result].size == 0 )
+            data_hsh = Qed::Mongodb::MapReduce::Cache.save({:cursor => int_mapreduce, :filter_model => @filter_model, :mapreduce_models => @mapreduce_models, :database => @db})
+          end
+
+          return data_hsh
         end
 
         def get_mr_key(mr_index = -1)
@@ -34,19 +40,17 @@ module Qed
           end
 
           def int_mapreduce
-            collection = nil
-
             if @mapreduce_models.size == 1 && @mapreduce_models.first.query_only?
-              collection = @db.collection(@mapreduce_models.first.base_collection).find(@mapreduce_models[0].query)
+              data_hsh = @db.collection(@mapreduce_models.first.base_collection).find(@mapreduce_models[0].query)
             else
-              collection = @db.collection(@mapreduce_models.first.base_collection)
+              data_hsh = @db.collection(@mapreduce_models.first.base_collection)
 
               @mapreduce_models.each do |mrm|
-                collection = collection.map_reduce(mrm.map, mrm.reduce, {:query => mrm.query, :out => {:replace => mrm.mr_collection }, :finalize => mrm.finalize})
+                data_hsh = data_hsh.map_reduce(mrm.map, mrm.reduce, {:query => mrm.query, :out => {:replace => "tmp."+mrm.mr_collection}, :finalize => mrm.finalize})
               end
             end
 
-            return collection
+            return data_hsh
           end
       end
     end

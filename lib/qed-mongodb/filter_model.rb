@@ -3,7 +3,7 @@ module Qed
     class FilterModel
       VIEW = :view
 
-      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user
+      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user, :created_at
 
       FROM_DATE = :from_date
       TILL_DATE = :till_date
@@ -34,10 +34,9 @@ module Qed
       URI_PARAMS_SEPARATOR = "&"
       URI_PARAMS_ASSIGN = "="
 
-
       PARAM_PRE = [MONGODB_PARAMS_PRE, PARAM_INTEGER, PARAM_STRING, PARAM_FLOAT]
 
-      ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user]
+      ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user, :created_at]
 
 
       def self.clone(filter_model)
@@ -47,6 +46,7 @@ module Qed
         cloned_filter.view                          = filter_model.view.clone
         cloned_filter.mongodb                       = filter_model.mongodb.clone
         cloned_filter.frontend                      = filter_model.frontend.clone
+        cloned_filter.created_at                    = filter_model.created_at.clone
 
         unless filter_model.user.nil?
           if filter_model.user.is_a?(Symbol)
@@ -59,6 +59,7 @@ module Qed
       end
 
       def initialize(params = nil)
+        @created_at = {FROM_DATE => nil, TILL_DATE => nil}
         @filter = {}
         # 0 eqls top view (most reduced if you will)
         @drilldown_level_current = 0
@@ -78,14 +79,37 @@ module Qed
         convert_to_utc
       end
 
-      def hash
-        {
-          :filter                         => @filter,
-          :drilldown_level_current        => @drilldown_level_current,
-          :mongodb                        => @mongodb,
-          :view                           => @view,
-          :frontend                       => @frontend
-        }
+      def clone
+        FilterModel.clone(self)
+      end
+
+      def hash(options = {:with_dates => true})
+        if( options[:with_dates] )
+          {
+            :filter                         => @filter,
+            :drilldown_level_current        => @drilldown_level_current,
+            :mongodb                        => @mongodb,
+            :view                           => @view,
+            :frontend                       => @frontend,
+            :created_at                     => @created_at
+          }
+        else
+          {
+            :filter                         => @filter,
+            :drilldown_level_current        => @drilldown_level_current,
+            :mongodb                        => @mongodb,
+            :view                           => @view,
+            :frontend                       => @frontend
+          }
+        end
+      end
+
+      def digest(with_dates = true, clasz = Digest::SHA2)
+        if( with_dates )
+          clasz.hexdigest(hash().to_s)
+        else
+          clasz.hexdigest(hash({:with_dates => false}).to_s)
+        end
       end
 
       def json
@@ -120,7 +144,6 @@ module Qed
           v = convert_param(type,v)
           send("#{k}=".to_sym, v)
         end
-
       end
 
       def sanitize_mongo_param(key, value)
@@ -243,12 +266,15 @@ module Qed
 
           # hack, for now
           if !params[FROM_DATE].nil?
-            from_date = params[FROM_DATE] || (Date.today - 1).to_s
-            till_date = params[TILL_DATE] || Date.today.to_s
+            @created_at[FROM_DATE] = params[FROM_DATE] || (Date.today - 1).to_s
+            @created_at[TILL_DATE] = params[TILL_DATE] || Date.today.to_s
 
-            replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
-            replace_frontend({FROM_DATE => from_date})
-            replace_frontend({TILL_DATE => till_date})
+            #replace_filter({CREATED_AT => {FROM_DATE => Time.parse(from_date).utc, TILL_DATE => Time.parse(till_date).utc}})
+            #replace_frontend({FROM_DATE => from_date})
+            #replace_frontend({TILL_DATE => till_date})
+          elsif !params[CREATED_AT].nil?
+            @created_at[FROM_DATE] = params[CREATED_AT][FROM_DATE] || (Date.today - 1).to_s
+            @created_at[TILL_DATE] = params[CREATED_AT][TILL_DATE] || Date.today.to_s
           end
 
           self.view = params[:action]
@@ -278,15 +304,13 @@ module Qed
         end
 
         def convert_to_utc
-          if( @filter)
-            if( @filter[:created_at] )
-              if( @filter[:created_at][:from_date].is_a?(String) )
-                @filter[:created_at][:from_date] = Time.parse(@filter[:created_at][:from_date]).utc
-              end
+          if( @created_at )
+            if( @created_at[:from_date].is_a?(String) )
+              @created_at[:from_date] = Time.parse(@created_at[:from_date]).utc
+            end
 
-              if( @filter[:created_at][:till_date].is_a?(String))
-                @filter[:created_at][:till_date] = Time.parse(@filter[:created_at][:till_date]).utc
-              end
+            if( @created_at[:till_date].is_a?(String))
+              @created_at[:till_date] = Time.parse(@created_at[:till_date]).utc
             end
           end
         end
@@ -295,14 +319,15 @@ module Qed
           url = URI_PARAMS_START + url_view
           url += URI_PARAMS_SEPARATOR + url_drilldown(filter_model.eql?(self))
 
+          # handle from/till for created_at
+          if @created_at and @created_at[FROM_DATE] and @created_at[TILL_DATE]
+            url += URI_PARAMS_SEPARATOR + url_date(@created_at)
+          end
+
           if filter_model.filter.any?
             filter_model.filter.each_pair do |k,v|
               if v.is_a?(Hash)
-                if v[FROM_DATE].present? and v[TILL_DATE].present?
-                  url += URI_PARAMS_SEPARATOR + url_date(v)
-                else
-                  url += URI_PARAMS_SEPARATOR + url_mongo_param(k, v)
-                end
+                url += URI_PARAMS_SEPARATOR + url_mongo_param(k, v)
               else
                 raise Exception.new("Only Hash supported!")
               end

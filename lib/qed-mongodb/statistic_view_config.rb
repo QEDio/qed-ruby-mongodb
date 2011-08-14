@@ -28,6 +28,7 @@ module Qed
           [].tap do |arr|
             mapreduce_configurations.each_with_index do |config, i|
               # only first mapreduce needs this filter query
+              # interestingly this is exactly the place to implement mapreduce caching
               config[:query] = i == 0 ? filter_model.mongodb_query : nil
 
               arr << Qed::Mongodb::MapReduce::Builder.new(config)

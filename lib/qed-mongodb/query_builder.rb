@@ -2,26 +2,30 @@ module Qed
   module Mongodb
     class QueryBuilder
       def self.selector(fm, clasz = Qed::Mongodb::MongoidModel)
-        cursor = {}
+        query = {}
         filter = fm.filter
 
-        if filter.any?
-          cursor = clasz
+        if (fm.created_at && fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE] && fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE]) || filter.any?
+          query = clasz
 
-          filter.each_pair do |k,v|
-            att = (Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
-            if v[Qed::Mongodb::FilterModel::FROM_DATE] and v[Qed::Mongodb::FilterModel::TILL_DATE]
-              cursor = cursor.between(att, v[Qed::Mongodb::FilterModel::FROM_DATE], v[Qed::Mongodb::FilterModel::TILL_DATE])
-            elsif v[Qed::Mongodb::FilterModel::VALUE].is_a?(Array)
-              cursor = cursor.where(att.in => v[Qed::Mongodb::FilterModel::VALUE])
-            else
-              cursor = cursor.where(att.to_s => v[Qed::Mongodb::FilterModel::VALUE])
-            end
+          if fm.created_at && fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE] && fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE]
+            query = query.between(((Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+Qed::Mongodb::FilterModel::CREATED_AT.to_s).to_sym), fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE], fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE])
           end
-          cursor = cursor.selector
+
+          if filter.any?
+            filter.each_pair do |k,v|Qed::Mongodb::MongoidModel
+              att = (Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
+              if v[Qed::Mongodb::FilterModel::VALUE].is_a?(Array)
+                query = query.where(att.in => v[Qed::Mongodb::FilterModel::VALUE])
+              else
+                query = query.where(att.to_s => v[Qed::Mongodb::FilterModel::VALUE])
+              end
+            end
+            query = query.selector
+          end
         end
 
-        return cursor
+        return query
       end
     end
   end

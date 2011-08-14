@@ -106,7 +106,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         should "work" do
           @fm.drilldown_level_current = 4
           performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-          data = performer.mapreduce.find().to_a
+          data = performer.mapreduce[:result].find().to_a
           #puts data.inspect
 
           # filter nil elements, for now
@@ -130,7 +130,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
     #    fm.user = USER
     #    fm.drilldown_level_current = 2
     #
-    #    data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm, MAPREDUCE_CONFIG).find().to_a
+    #    data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm, MAPREDUCE_CONFIG)[:result].find().to_a
     #
     #    puts data.inspect
     #  end
@@ -144,6 +144,19 @@ class TestMapReducePerformer < Test::Unit::TestCase
         @fm.user = USER
       end
 
+      should "use the cache for the second mapreduce query" do
+        @fm.drilldown_level_current = 0
+        @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+        @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+        @data = @performer.mapreduce
+
+        assert_equal false, @data[:cached]
+
+        @data = @performer.mapreduce
+
+        assert_equal true, @data[:cached]
+      end
+
       context "on the Dimension location" do
         setup do
            @fm.drilldown_level_current = 0
@@ -153,7 +166,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
           setup do
             @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM0
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-            @data = @performer.mapreduce.find().to_a
+            @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{mr_key.inspect}"
@@ -164,7 +177,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
           should "return the correct number of mapreduced datarows" do
             assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr[@mr_key].size, @data.size
           end
-                    
+
           should "return the correct amount of same data values" do
             @data.each do |mr_result|
               assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["_id"], :location), mr_result["value"]["count"].to_i
@@ -176,7 +189,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
           setup do
             @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM1
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-            @data = @performer.mapreduce.find().to_a
+            @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{@mr_key.inspect}"
@@ -199,7 +212,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
           setup do
             @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM2
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-            @data = @performer.mapreduce.find().to_a
+            @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{@mr_key.inspect}"
@@ -222,11 +235,11 @@ class TestMapReducePerformer < Test::Unit::TestCase
           setup do
             @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM3
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-            @data = @performer.mapreduce.find().to_a
+            @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
 
             #puts "key: #{@mr_key.inspect}"
-            #puts "data: #{@data.inspect}"
+            puts "data: #{@data.inspect}"
             #puts Qed::Mongodb::Test::Factory::WorldWideBusiness.different_values_for_mr.inspect
           end
 
@@ -262,9 +275,9 @@ class TestMapReducePerformer < Test::Unit::TestCase
             setup do
               @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM0
               @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
-              @data = @performer.mapreduce.find().to_a
+              @data = @performer.mapreduce[:result].find().to_a
               @mr_key = @performer.get_mr_key.join(",")
-              puts "data: #{@data.inspect}"
+              #puts "data: #{@data.inspect}"
             end
 
             # TODO: we need something to test the filtering/query thingy
