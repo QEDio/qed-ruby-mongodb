@@ -4,26 +4,28 @@ module Qed
       class Store
         KP_EW_MAP1 =
           <<-JS
-            ad_conversions  = value.ad_stat_conversions;
-            ad_cost         = value.ad_cost_micro_amount / 1000000.0;
-            ad_impressions  = value.ad_stat_impressions;
+            conversions  = value.ad_stat_conversions;
+            cost         = value.ad_cost_micro_amount / 1000000.0;
+            impressions  = value.ad_stat_impressions;
           JS
 
         KP_EW_REDUCE1 =
             <<-JS
-                ad_conversions = 0;
-                ad_cost = 0;
-                ad_impressions = 0;
+                conversions = 0;
+                cost = 0;
+                impressions = 0;
 
                 values.forEach(function(v){
-                  ad_conversions += v.ad_conversions;
-                  ad_cost += v.ad_cost;
-                  ad_impressions += v.ad_impressions;
+                  conversions += v.conversions;
+                  cost += v.cost;
+                  impressions += v.impressions;
                 });
             JS
 
         KP_EW_FINALIZE1=
                <<-JS
+                cr = (value.conversions / value.impressions)*100.0
+                cpa = (value.cost / value.conversions)
               JS
 
 

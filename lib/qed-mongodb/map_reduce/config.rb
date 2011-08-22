@@ -20,7 +20,9 @@ module Qed
                     {:name => "campaign_name",        :function => "value.campaign_name"},
                     {:name => "ad_conversions",       :function => "value.ad_conversions"},
                     {:name => "ad_cost",              :function => "value.ad_cost"},
-                    {:name => "ad_impressions",       :function => "value.ad_impressions"}
+                    {:name => "ad_impressions",       :function => "value.ad_impressions"},
+                    {:name => "cr"},
+                    {:name => "cpa"}
                 ],
                 :database               => "kp",
                 :base_collection        => "adwords_early_warning_staging",
