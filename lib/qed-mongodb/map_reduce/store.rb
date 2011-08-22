@@ -27,8 +27,8 @@ module Qed
 
         KP_EW_FINALIZE1=
                <<-JS
-                cpa = 0;
-                cr = 0;
+                cpa = 0.0;
+                cr = 0.0;
 
                 if( value.clicks > 0 ){
                   cr = (value.conversions / value.clicks)*100.0;

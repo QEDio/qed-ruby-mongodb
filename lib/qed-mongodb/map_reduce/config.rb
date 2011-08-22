@@ -11,18 +11,21 @@ module Qed
                 :mapreduce_values => [
                     {:name => "campaign_holding",     :function => "value.campaign_holding"},
                     {:name => "campaign_name",        :function => "value.campaign_name"},
-                    {:name => "conversions",       :function => "conversions"},
-                    {:name => "cost",              :function => "cost"},
-                    {:name => "impressions",       :function => "impressions"}
+                    {:name => "conversions",          :function => "conversions"},
+                    {:name => "cost",                 :function => "cost"},
+                    {:name => "impressions",          :function => "impressions"},
+                    {:name => "clicks",               :function => "clicks"}
                 ],
                 :finalize_values => [
                     {:name => "campaign_holding",     :function => "value.campaign_holding"},
                     {:name => "campaign_name",        :function => "value.campaign_name"},
-                    {:name => "conversions",       :function => "value.conversions"},
-                    {:name => "cost",              :function => "value.cost"},
-                    {:name => "impressions",       :function => "value.impressions"},
+                    {:name => "conversions",          :function => "value.conversions"},
+                    {:name => "cost",                 :function => "value.cost"},
+                    {:name => "impressions",          :function => "value.impressions"},
                     {:name => "cr"},
-                    {:name => "cpa"}
+                    {:name => "cpa"},
+                    {:name => "clicks",               :function => "value.clicks"}
+
                 ],
                 :database               => "kp",
                 :base_collection        => "adwords_early_warning_staging",
