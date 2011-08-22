@@ -4,9 +4,9 @@ module Qed
       class Store
         KP_EW_MAP1 =
           <<-JS
-            ad_conversion = value.ad_stat_conversion;
-            ad_cost       = value.ad_cost_micro_amount;
-            ad_impressions= value.ad_stat_impressions;
+            ad_conversions  = value.ad_stat_conversions;
+            ad_cost         = value.ad_cost_micro_amount;
+            ad_impressions  = value.ad_stat_impressions;
           JS
 
         KP_EW_REDUCE1 =
