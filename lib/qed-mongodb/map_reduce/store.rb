@@ -5,7 +5,7 @@ module Qed
         KP_EW_MAP1 =
           <<-JS
             ad_conversions  = value.ad_stat_conversions;
-            ad_cost         = value.ad_cost_micro_amount;
+            ad_cost         = value.ad_cost_micro_amount / 1000000.0;
             ad_impressions  = value.ad_stat_impressions;
           JS
 
