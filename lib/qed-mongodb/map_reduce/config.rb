@@ -11,16 +11,16 @@ module Qed
                 :mapreduce_values => [
                     {:name => "campaign_holding",     :function => "value.campaign_holding"},
                     {:name => "campaign_name",        :function => "value.campaign_name"},
-                    {:name => "ad_conversions",       :function => "ad_conversions"},
-                    {:name => "ad_cost",              :function => "ad_cost"},
-                    {:name => "ad_impressions",       :function => "ad_impressions"}
+                    {:name => "conversions",       :function => "conversions"},
+                    {:name => "cost",              :function => "cost"},
+                    {:name => "impressions",       :function => "impressions"}
                 ],
                 :finalize_values => [
                     {:name => "campaign_holding",     :function => "value.campaign_holding"},
                     {:name => "campaign_name",        :function => "value.campaign_name"},
-                    {:name => "ad_conversions",       :function => "value.ad_conversions"},
-                    {:name => "ad_cost",              :function => "value.ad_cost"},
-                    {:name => "ad_impressions",       :function => "value.ad_impressions"},
+                    {:name => "conversions",       :function => "value.conversions"},
+                    {:name => "cost",              :function => "value.cost"},
+                    {:name => "impressions",       :function => "value.impressions"},
                     {:name => "cr"},
                     {:name => "cpa"}
                 ],
