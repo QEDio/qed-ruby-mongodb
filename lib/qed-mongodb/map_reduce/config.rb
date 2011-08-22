@@ -2,6 +2,35 @@ module Qed
   module Mongodb
     module MapReduce
       class Config
+        KP_EW_1 =
+            {
+                :mapreduce_keys => [
+                    # TODO: if the function == "value."#{name} I don't want to write it down
+                    {:name => "campaign_product", :function => "value.campaign_product"}
+                ],
+                :mapreduce_values => [
+                    {:name => "campaign_holding",     :function => "value.campaign_holding"},
+                    {:name => "campaign_name",        :function => "value.campaign_name"},
+                    {:name => "ad_conversions",       :function => "ad_stat_conversions"},
+                    {:name => "ad_cost",              :function => "ad_cost_micro_amount"},
+                    {:name => "ad_impressions",       :function => "ad_stat_impressions"}
+                ],
+                :finalize_values => [
+                    {:name => "campaign_holding",     :function => "value.campaign_holding"},
+                    {:name => "campaign_name",        :function => "value.campaign_name"},
+                    {:name => "ad_conversions",       :function => "value.ad_stat_conversions"},
+                    {:name => "ad_cost",              :function => "value.ad_cost_micro_amount"},
+                    {:name => "ad_impressions",       :function => "value.ad_stat_impressions"}
+                ],
+                :database               => "kp",
+                :base_collection        => "adwords_early_warning_staging",
+                :mr_collection          => "mr_adwords_early_warning_staging",
+                :query                  => nil,
+                :map                    => Qed::Mongodb::MapReduce::Store::KP_EW_MAP1,
+                :reduce                 => Qed::Mongodb::MapReduce::Store::KP_EW_REDUCE1,
+                :finalize               => Qed::Mongodb::MapReduce::Store::KP_EW_FINALIZE1
+
+            }
         KP_CBP_1 =
             {
                 :mapreduce_keys => [

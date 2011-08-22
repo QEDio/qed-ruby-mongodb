@@ -2,6 +2,28 @@ module Qed
   module Mongodb
     module MapReduce
       class Store
+        KP_EW_MAP1 =
+          <<-JS
+          JS
+
+        KP_EW_REDUCE1 =
+            <<-JS
+                ad_conversions = 0;
+                ad_cost = 0;
+                ad_impressions = 0;
+
+                values.forEach(function(v){
+                  ad_conversions += v.ad_stat_conversions;
+                  ad_cost += v.ad_cost_micro_amount;
+                  ad_impressions += v.ad_stat_impressions;
+                });
+            JS
+
+        KP_EW_FINALIZE1=
+               <<-JS
+              JS
+
+
         KP_CBP_MAP1 =
           <<-JS
               turnover = 0;

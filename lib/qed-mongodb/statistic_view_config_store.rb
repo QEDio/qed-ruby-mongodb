@@ -3,6 +3,11 @@ module Qed
     class StatisticViewConfigStore
       PROFILE = {
           :kp => {
+            :early_warning                    =>  {
+              :mapreduce =>   [
+                                    Qed::Mongodb::MapReduce::Config::KP_EW_1
+                              ]
+            },
             :conversion_by_channel            =>  {
               # the order is important here, the first mapreduce will be done first, then the second and so on
               :mapreduce =>       [
