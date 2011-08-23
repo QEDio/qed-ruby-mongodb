@@ -6,6 +6,7 @@ module Qed
             {
                 :mapreduce_keys => [
                     # TODO: if the function == "value."#{name} I don't want to write it down
+                    # if no keys provided use this key for initial mapreduce
                     {:name => "campaign_product", :function => "value.campaign_product"}
                 ],
                 :mapreduce_values => [
