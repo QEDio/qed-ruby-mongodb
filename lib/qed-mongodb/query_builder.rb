@@ -5,20 +5,20 @@ module Qed
         query = {}
         filter = fm.filter
 
-        if (fm.created_at && fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE] && fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE]) || filter.any?
+        if (fm.created_at && fm.created_at[Qed::Filter::FilterModel::FROM_DATE] && fm.created_at[Qed::Filter::FilterModel::TILL_DATE]) || filter.any?
           query = clasz
 
-          if fm.created_at && fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE] && fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE]
-            query = query.between(((Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+Qed::Mongodb::FilterModel::CREATED_AT.to_s).to_sym), fm.created_at[Qed::Mongodb::FilterModel::FROM_DATE], fm.created_at[Qed::Mongodb::FilterModel::TILL_DATE])
+          if fm.created_at && fm.created_at[Qed::Filter::FilterModel::FROM_DATE] && fm.created_at[Qed::Filter::FilterModel::TILL_DATE]
+            query = query.between(((Qed::Filter::FilterModel::DOCUMENT_OFFSET+Qed::Filter::FilterModel::CREATED_AT.to_s).to_sym), fm.created_at[Qed::Filter::FilterModel::FROM_DATE], fm.created_at[Qed::Filter::FilterModel::TILL_DATE])
           end
 
           if filter.any?
             filter.each_pair do |k,v|Qed::Mongodb::MongoidModel
-              att = (Qed::Mongodb::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
-              if v[Qed::Mongodb::FilterModel::VALUE].is_a?(Array)
-                query = query.where(att.in => v[Qed::Mongodb::FilterModel::VALUE])
+              att = (Qed::Filter::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
+              if v[Qed::Filter::FilterModel::VALUE].is_a?(Array)
+                query = query.where(att.in => v[Qed::Filter::FilterModel::VALUE])
               else
-                query = query.where(att.to_s => v[Qed::Mongodb::FilterModel::VALUE])
+                query = query.where(att.to_s => v[Qed::Filter::FilterModel::VALUE])
               end
             end
             query = query.selector

@@ -1,9 +1,12 @@
+require 'qed-mongodb/filter/map_reduce_params'
+
 module Qed
-  module Mongodb
+  module Filter
     class FilterModel
       VIEW = :view
 
       attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user, :created_at
+      attr_accessor :map_reduce_params
 
       FROM_DATE = :from_date
       TILL_DATE = :till_date
@@ -38,6 +41,8 @@ module Qed
 
       ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user, :created_at]
 
+      MAP_REDUCE_PARAMS     = :map_reduce_params
+
 
       def self.clone(filter_model)
         cloned_filter                               = FilterModel.new
@@ -47,6 +52,7 @@ module Qed
         cloned_filter.mongodb                       = filter_model.mongodb.clone
         cloned_filter.frontend                      = filter_model.frontend.clone
         cloned_filter.created_at                    = filter_model.created_at.clone
+        cloned_filter.map_reduce_params             = filter_model.map_reduce_params.clone
 
         unless filter_model.user.nil?
           if filter_model.user.is_a?(Symbol)
@@ -68,6 +74,8 @@ module Qed
         @frontend = {}
         @user = nil
 
+        @map_reduce_params = MapReduceParams.new
+
         unless params.blank?
           if params.is_a?(Hash)
             from_hash(FilterModel.symbolize_keys(params))
@@ -83,37 +91,37 @@ module Qed
         FilterModel.clone(self)
       end
 
-      def hash(options = {:with_dates => true})
-        if( options[:with_dates] )
-          {
+      def serializable_hash(options = {:with_dates => true})
+        default_options = {
             :filter                         => @filter,
             :drilldown_level_current        => @drilldown_level_current,
             :mongodb                        => @mongodb,
             :view                           => @view,
             :frontend                       => @frontend,
-            :created_at                     => @created_at
+            :map_reduce_params              => @map_reduce_params.serializable_hash
           }
-        else
-          {
-            :filter                         => @filter,
-            :drilldown_level_current        => @drilldown_level_current,
-            :mongodb                        => @mongodb,
-            :view                           => @view,
-            :frontend                       => @frontend
-          }
+
+        if( options[:with_dates] )
+          default_options.merge!(
+            {
+              :created_at                     => @created_at
+            }
+          )
         end
+
+        return default_options
       end
 
       def digest(with_dates = true, clasz = Digest::SHA2)
         if( with_dates )
-          clasz.hexdigest(hash().to_s)
+          clasz.hexdigest(serializable_hash().to_s)
         else
-          clasz.hexdigest(hash({:with_dates => false}).to_s)
+          clasz.hexdigest(serializable_hash({:with_dates => false}).to_s)
         end
       end
 
       def json
-        Yajl::Encoder.encode(hash)
+        Yajl::Encoder.encode(serializable_hash)
       end
 
       def set_mongodb_param(key, value)
@@ -229,7 +237,7 @@ module Qed
       end
 
       def eql?(other)
-        hash == other.hash
+        serializable_hash == other.serializable_hash
       end
 
       def ==(other)
@@ -256,7 +264,36 @@ module Qed
         end
       end
 
+      class QueryParams
+
+      end
+
       private
+        # basically we have to modes in this method
+        # serialize from internal (which don't have m_r_ stuff')
+        # or serialize from external which do have this m_r_ stuff
+        def add_param(param, value)
+          if param.eql?(MAP_REDUCE_PARAMS.to_s)
+            @map_reduce_params.add_emit_keys(value[:emit_keys])
+          else
+            # matches "m_k_xyz"
+            param =~ /(.+?_.+?_)(.*)/
+
+            case $1
+              when MapReduceParams::PREFIX then @map_reduce_params.add_emit_key(param, value)
+              else
+                # don't use params we know we don't want
+                return if PARAM_REJECTS.include?(param.to_sym)
+
+                if param.starts_with?(MONGODB_PARAMS_PRE)
+                  set_mongodb_param(param[2..-1],value)
+                else
+                  set_normal_param(param,value)
+                end
+            end
+          end
+        end
+
         # original method, takes the params from rails and converts it to an internal represenation
         # those params are the params provided by the browser
         def from_hash(params)
@@ -281,26 +318,13 @@ module Qed
 
           params.each_pair do |k_sym,v|
             k = k_sym.to_s
-            # don't use params we know we don't want
-            next if PARAM_REJECTS.include?(k.to_sym)
-
-            if k.starts_with?(MONGODB_PARAMS_PRE)
-              set_mongodb_param(k[2..-1],v)
-            else
-              set_normal_param(k,v)
-            end
+            add_param(k, v)
           end
         end
 
         # currently we expect only to have a string if it's in json format
         def from_string(params)
-          tmp_hsh = FilterModel.symbolize_keys(Yajl::Parser.parse(params))
-
-          # TODO: reject params here
-          # TODO: unify with from_hash
-          ATTRIBUTES.each do |att|
-             send("#{att}=".to_sym, tmp_hsh[att])
-          end
+          from_hash(FilterModel.symbolize_keys(Yajl::Parser.parse(params)))
         end
 
         def convert_to_utc

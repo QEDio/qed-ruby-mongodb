@@ -8,8 +8,8 @@ module Qed
         attr_reader :filter_mode, :mapreduce_models, :db
 
         # TODO: remove default param value!
-        def initialize(filter_model, mr_config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
-          init(filter_model, mr_config)
+        def initialize(filter_model, mr_config = Qed::Mongodb::StatisticViewConfigStore::PROFILE, builder_clasz = Marbu::Builder)
+          init(filter_model, mr_config, builder_clasz)
         end
 
         def mapreduce()
@@ -27,8 +27,8 @@ module Qed
         end
 
         private
-          def init(filter_model, mr_config)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Mongodb::FilterModel)
+          def init(filter_model, mr_config, builder_clasz)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Filter::FilterModel)
 
             @filter_model = filter_model
             # @mrm is an array, containing the configuration for all necessary mapreduces
@@ -37,6 +37,7 @@ module Qed
             raise MapReduceConfigurationNotFound.new("Couldn't find any mapreduce configuration for this request.") if @mapreduce_models.size == 0
 
             @db = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].database)
+            @builder_clasz = builder_clasz
           end
 
           def int_mapreduce
@@ -46,7 +47,8 @@ module Qed
               data_hsh = @db.collection(@mapreduce_models.first.base_collection)
 
               @mapreduce_models.each do |mrm|
-                data_hsh = data_hsh.map_reduce(mrm.map, mrm.reduce, {:query => mrm.query, :out => {:replace => "tmp."+mrm.mr_collection}, :finalize => mrm.finalize})
+                builder = @builder_clasz.new(mrm)
+                data_hsh = data_hsh.map_reduce(builder.map, builder.reduce, {:query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection}, :finalize => builder.finalize})
               end
             end
 

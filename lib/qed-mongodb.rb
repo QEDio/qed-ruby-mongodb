@@ -1,12 +1,12 @@
 require 'mongoid'
 require 'yajl'
 require 'digest/sha2'
+require 'marbu'
 
 require 'qed-mongodb/exceptions'
 require 'qed-mongodb/map_reduce/cache'
 require 'qed-mongodb/map_reduce/store'
 require 'qed-mongodb/map_reduce/config'
-require 'qed-mongodb/map_reduce/builder'
 require 'qed-mongodb/map_reduce/performer'
 require 'qed-mongodb/filter_model'
 require 'qed-mongodb/mongoid_model'
