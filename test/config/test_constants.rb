@@ -4,7 +4,9 @@ ACTION_NAME                           = "action_name"
 DRILLDOWN_LEVEL_CURRENT               = "i_drilldown_level_current"
 FROM_DATE                             = "from_date"
 PRODUCT_NAME                          = "product_name"
+PRODUCT_NAME_K                        = "product_name"
 M_S_PRODUCT_NAME                      = "m_s_#{PRODUCT_NAME}"
+M_K_PRODUCT_NAME                      = "m_k_#{PRODUCT_NAME_K}"
 TILL_DATE                             = "till_date"
 CONTROLLER                            = "controller"
 
@@ -20,6 +22,7 @@ TILL_DATE_TRACKING_VALUE              = "2011-07-20 22:00:00 UTC"
 USER                                  = :test
 
 M_S_PRODUCT_NAME_VALUE                = "Elektromobil"
+M_K_PRODUCT_NAME_VALUE                = "Key Elektromobil"
 M_S_PRODUCT_NAME_VALUE_GARAGE         = "Garage"
 
 DRILLDOWN_LEVEL_CURRENT_VALUE         = "0"

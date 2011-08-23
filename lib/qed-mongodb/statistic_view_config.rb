@@ -4,7 +4,7 @@ module Qed
       # from the config create the necessary objects to perform all mapreduce operations which are needed to generate
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
-        raise Qed::Mongodb::Exceptions::FilterModelError.new("filter_model param ist not a FilterModel-Object!") if !filter_model.is_a?(Qed::Mongodb::FilterModel)
+        raise Qed::Mongodb::Exceptions::FilterModelError.new("filter_model param ist not a FilterModel-Object!") if !filter_model.is_a?(Qed::Filter::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.new("config param ist not a hash!") if !config.is_a?(Hash)
 
         # get the mapreduce-configurations

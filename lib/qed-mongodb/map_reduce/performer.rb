@@ -28,7 +28,7 @@ module Qed
 
         private
           def init(filter_model, mr_config, builder_clasz)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Mongodb::FilterModel)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Filter::FilterModel)
 
             @filter_model = filter_model
             # @mrm is an array, containing the configuration for all necessary mapreduces

@@ -3,7 +3,7 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 class TestStatisticViewConfig < Test::Unit::TestCase
   context "Creating a StatisticViewConfig" do
     setup do
-      @fm =  FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      @fm =  Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       @fm.user = USER
     end
 
