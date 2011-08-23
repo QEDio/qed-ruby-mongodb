@@ -358,6 +358,8 @@ module Qed
             end
           end
 
+          url += map_reduce_params.get_emit_keys
+
           return url.gsub(" ", "%20")
         end
 
