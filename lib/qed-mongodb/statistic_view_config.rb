@@ -31,7 +31,7 @@ module Qed
               # interestingly this is exactly the place to implement mapreduce caching
               config[:query] = i == 0 ? filter_model.mongodb_query : nil
 
-              arr << Qed::Mongodb::MapReduce::Builder.new(config)
+              arr << Marbu::MapReduceModel.new(config)
             end
           end
         # don't mapreduce, just show the filtered data
@@ -39,9 +39,9 @@ module Qed
           config = mapreduce_configurations.first
           config[:query] = filter_model.mongodb_query
 
-          builder = Qed::Mongodb::MapReduce::Builder.new(config)
-          builder.force_query = true
-          [builder]
+          mrm = Marbu::MapReduceModel.new(config)
+          mrm.force_query = true
+          [mrm]
         end
       end
 
