@@ -40,7 +40,7 @@ class TestFilterModel < Test::Unit::TestCase
 
       # TODO: this should pass but doesn't
       # TODO: why? because one parameter gets added twice to the url output, and this is wrong ;)
-      #assert_equal FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS, @fm.url(row, key, field)
+      assert_equal FM_GENERATED_PARAMS_URL_WITH_ADDITIONAL_PARAMETERS, @fm.url(row, key, field)
     end
 
     should "generate a correct URL with the provided params (next drilldown_level) despite having to clone a symbol" do

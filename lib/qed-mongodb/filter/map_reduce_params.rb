@@ -52,17 +52,17 @@ module Qed
       end
 
       def get_emit_keys(format = :url)
+        ret_val = ""
         if format.eql?(:url)
-          "".tap do |ret_val|
-            @emit_keys.each do |emit_key|
-              ret_val += PREFIX + emit_key.key + "=" + emit_key.value
-            end
+          @emit_keys.each do |emit_key|
+            ret_val += PREFIX + emit_key.key + "=" + emit_key.value
           end
         elsif format.eql?(:hash)
           raise Exception.new("Please implement hash format export")
         else
           raise Exception.new("Unknown format #{format} for #{self.class}.get_emit_keys")
         end
+        return ret_val
       end
 
       def serializable_hash
