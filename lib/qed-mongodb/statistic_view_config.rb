@@ -4,18 +4,27 @@ module Qed
       # from the config create the necessary objects to perform all mapreduce operations which are needed to generate
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
-        raise Qed::Mongodb::Exceptions::FilterModelError.new("filter_model param ist not a FilterModel-Object!") if !filter_model.is_a?(Qed::Filter::FilterModel)
-        raise Qed::Mongodb::Exceptions::FilterModelError.new("config param ist not a hash!") if !config.is_a?(Hash)
+        raise Qed::Mongodb::Exceptions::FilterModelError.
+          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qed::Filter::FilterModel)
+        raise Qed::Mongodb::Exceptions::FilterModelError.
+          new("config param is not a hash!") if !config.is_a?(Hash)
+        raise Qed::Mongodb::Exceptions::FilterModelError.
+          new("variable user in filter_model is not allowed to be nil!") if filter_model.view.nil?
+        raise Qed::Mongodb::Exceptions::FilterModelError.
+          new("variable view in filter_model is not allowed to be nil!") if filter_model.user.nil?
 
         # get the mapreduce-configurations
         mapreduce_configurations = get_config(config, filter_model.user, filter_model.view)[:mapreduce]
 
         if mapreduce_configurations.nil?
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.new("Either the user: #{filter_model.user} or the view: #{filter_model.view} doesn't exist'")
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
+            new("Either the user: #{filter_model.user} or the view: #{filter_model.view} doesn't exist'")
         elsif !mapreduce_configurations.is_a?(Array)
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.user} and view: #{filter_model.view}")
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.
+            new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.user} and view: #{filter_model.view}")
         elsif mapreduce_configurations.size == 0
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.new("Couldn't get mapreduce configuration for user: #{filter_model.user} and view: #{filter_model.view}")
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
+            new("Couldn't get mapreduce configuration for user: #{filter_model.user} and view: #{filter_model.view}")
         end
 
         if( mapreduce_configurations.size > filter_model.drilldown_level_current)
@@ -31,7 +40,8 @@ module Qed
               # interestingly this is exactly the place to implement mapreduce caching
               config[:query] = i == 0 ? filter_model.mongodb_query : nil
 
-              arr << Marbu::MapReduceModel.new(config)
+              # set externally provided map emit keys
+              arr << set_map_emit_keys(Marbu::MapReduceModel.new(config), filter_model)
             end
           end
         # don't mapreduce, just show the filtered data
@@ -45,8 +55,21 @@ module Qed
         end
       end
 
+      def self.set_map_emit_keys(mrm, fm)
+        if fm.map_reduce_params.emit_keys.size > 0
+          map_obj = mrm.map
+          # first delete all currently defined emit keys, because we have some shinier ones
+          map_obj.keys = []
+
+          fm.map_reduce_params.emit_keys.each do |emit_key|
+            map_obj.add_key(emit_key.key)
+          end
+        end
+        mrm
+      end
+
       def self.get_config(config, user, view)
-        config[user.to_sym][view.to_sym]
+        config[user.to_sym][view.to_sym] || {}
       end
     end
   end
