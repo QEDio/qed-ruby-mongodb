@@ -3,6 +3,8 @@ EMIT_VALUE1                   = '1'
 EMIT_KEY2                     = 'm_k_campaign_holding'
 EMIT_VALUE2                   = '2'
 
+EMIT_AS_URL                   = EMIT_KEY1 + "=" + EMIT_VALUE1 + "&" + EMIT_KEY2 + "=" + EMIT_VALUE2
+
 EMIT_KEYS_LIKE_URL_PARAMS     = [
     EMIT_KEY1 + "=" + EMIT_VALUE1,
     EMIT_KEY2 + "=" + EMIT_VALUE2

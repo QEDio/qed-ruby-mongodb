@@ -31,5 +31,26 @@ class TestMapReduceParams < Test::Unit::TestCase
         assert_equal EMIT_KEYS_RESULTS_HASH, @mrp.serializable_hash
       end
     end
+
+    context "an empty hash" do
+      setup do
+        @mrp = Qed::Filter::MapReduceParams.new()
+      end
+
+      context "and adding map reduce params later via add_emit_key" do
+        setup do
+          @mrp.add_emit_key(EMIT_KEY1, EMIT_VALUE1)
+          @mrp.add_emit_key(EMIT_KEY2, EMIT_VALUE2)
+        end
+
+        should "generate the correct hash" do
+          assert_equal EMIT_KEYS_RESULTS_HASH, @mrp.serializable_hash
+        end
+
+        should "generate the correct params in url format" do
+          assert_equal EMIT_AS_URL, @mrp.url
+        end
+      end
+    end
   end
 end
