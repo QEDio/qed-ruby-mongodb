@@ -60,6 +60,7 @@ module Qed
 
       def get_emit_keys(format = :url)
         ret_val = ""
+
         if format.eql?(:url)
           @emit_keys.each do |emit_key|
             ret_val += PREFIX + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
