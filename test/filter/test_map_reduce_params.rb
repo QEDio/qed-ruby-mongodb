@@ -37,7 +37,7 @@ class TestMapReduceParams < Test::Unit::TestCase
         @mrp = Qed::Filter::MapReduceParams.new()
       end
 
-      context "and adding map reduce params later via add_emit_key" do
+      context "and adding map reduce params later via add_emit_key with key and value parameters" do
         setup do
           @mrp.add_emit_key(EMIT_KEY1, EMIT_VALUE1)
           @mrp.add_emit_key(EMIT_KEY2, EMIT_VALUE2)
@@ -49,6 +49,22 @@ class TestMapReduceParams < Test::Unit::TestCase
 
         should "generate the correct params in url format" do
           assert_equal EMIT_AS_URL, @mrp.url
+        end
+      end
+
+      context "and adding one map reduce param later via add_emit_key with key only" do
+        setup do
+          @mrp.add_emit_key(EMIT_KEY1)
+        end
+
+        should "create the correct url with default value -1" do
+          assert_equal EMIT_AS_URL_KEY1_VALUE_DEFAULT, @mrp.url
+        end
+
+        should "return an integer as value if accessed directly" do
+          assert_equal 1, @mrp.emit_keys.size
+          assert @mrp.emit_keys.first.value.is_a?(Fixnum), "Should be an fixnum-object"
+          assert_equal EMIT_VALUE_DEFAULT, @mrp.emit_keys.first.value
         end
       end
     end

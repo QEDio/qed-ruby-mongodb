@@ -62,7 +62,7 @@ module Qed
         ret_val = ""
         if format.eql?(:url)
           @emit_keys.each do |emit_key|
-            ret_val += PREFIX + emit_key.key + URI_PARAMS_ASSIGN + emit_key.value + URI_PARAMS_SEPARATOR
+            ret_val += PREFIX + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
           end
           # remove last URL_PARAMS_SEPARATOR
           ret_val = ret_val[0..-2]
@@ -83,6 +83,7 @@ module Qed
 
     class KeyValue
       attr_accessor :key, :value
+      DEFAULT_VALUE     = -1
 
       def self.clone(key_value)
         KeyValue.new(key_value.key, key_value.value)
@@ -90,7 +91,7 @@ module Qed
 
       def initialize(key, value)
         @key = key
-        @value = value
+        @value = value || DEFAULT_VALUE
       end
 
       def clone
