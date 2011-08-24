@@ -25,30 +25,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
       end
     end
 
-    #should "return one mapreduced result for a drilldown level of 0 and a filter for Elektromobil" do
-    #  fm = FilterModel.new(PARAMS_MR2)
-    #  fm.user = USER
-    #
-    #  data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm, MAPREDUCE_CONFIG).find().to_a
-    #  assert_equal 1, data.size
-    #
-    #  data = data.first
-    #  assert_equal fm.filter[PRODUCT_NAME.to_sym][:value], data["_id"]
-    #  # assert many more things, like numbers etc
-    #end
-
-
-    #
-    #should "return many mapreduced trackings" do
-    #  fm = FilterModel.new(PARAMS_MR3)
-    #  fm.user = USER
-    #
-    #  data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm, MAPREDUCE_CONFIG).find().to_a
-    #
-    #  puts data.inspect
-    #
-    #end
-
     context "performing mapreduce in the Universe" do
       setup do
         Qed::Mongodb::Test::Factory::ScaleOfUniverse.big_crunch
@@ -82,26 +58,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
         end
       end
 
-      context "to create a drilldown statistic four steps below the top view" do
-        #should "work" do
-        #  @fm.drilldown_level_current = 3
-        #  data = Qed::Mongodb::MapReduce::Performer.mapreduce(@fm, MAPREDUCE_CONFIG).find().to_a
-        #  puts data.inspect
-        #
-        #  # filter nil elements, for now
-        #  # TODO: can we do something about objects that are not within this map-reduce scope?
-        #  # TODO: this will be kinda important with subsequent mapreduce requests, where those
-        #  # TODO: might yield some new information (since the fall into a mapreduced scope again)
-        #  data = data.select{ |d| !d["_id"].nil? }
-        #
-        #  assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_types_in_same_dimension(data.first["_id"]), data.size
-        #
-        #  data.each do |mr_result|
-        #    assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.amount_of_objects_in_universe(mr_result["_id"]), mr_result["value"]["count"]
-        #  end
-        #end
-      end
-
       context "to create a drilldown statistic five steps below the top view" do
         should "work" do
           @fm.drilldown_level_current = 4
@@ -113,7 +69,8 @@ class TestMapReducePerformer < Test::Unit::TestCase
           # TODO: can we do something about objects that are not within this map-reduce scope?
           # TODO: this will be kinda important with subsequent mapreduce requests, where those
           # TODO: might yield some new information (since the fall into a mapreduced scope again)
-          data = data.select{ |d| !d["_id"].nil? }
+          raise Exception.new("This will only work with one emit key") if data.first["_id"].size > 1
+          data = data.select{ |d| !d["_id"].values.first.nil? }
 
           assert_equal  Qed::Mongodb::Test::Factory::ScaleOfUniverse.line_items_with_same_value_in_dimension(data.first["_id"]), data.size
 
@@ -123,18 +80,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
         end
       end
     end
-
-    #context "creating a filtered but not mapreduced view" do
-    #  should "work" do
-    #    fm = FilterModel.new(PARAMS_MR3)
-    #    fm.user = USER
-    #    fm.drilldown_level_current = 2
-    #
-    #    data = Qed::Mongodb::MapReduce::Performer.mapreduce(fm, MAPREDUCE_CONFIG)[:result].find().to_a
-    #
-    #    puts data.inspect
-    #  end
-    #end
 
     context "performing mapreduce on a WorldWideBusiness" do
       setup do
@@ -150,9 +95,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
         @data = @performer.mapreduce
 
-        # TODO: this should return false on the first run!
-        # TODO: currently it returns true, but i'm to lazy to fix it
-        #assert_equal false, @data[:cached]
+        assert_equal false, @data[:cached]
 
         @data = @performer.mapreduce
 
@@ -182,7 +125,8 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
           should "return the correct amount of same data values" do
             @data.each do |mr_result|
-              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["_id"], :location), mr_result["value"]["count"].to_i
+              assert_equal Qed::Mongodb::Test::Factory::WorldWideBusiness.
+                line_items_with_same_value_in_dimension(@data.first["_id"], :location), mr_result["value"]["count"].to_i
             end
           end
         end
@@ -257,6 +201,24 @@ class TestMapReducePerformer < Test::Unit::TestCase
         end
       end
     end
+    
+    context "with at least two map emit keys" do
+      setup do
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
+        Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
+
+        @fm = Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
+        @fm.user = USER
+        @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM3
+        @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+      end
+
+      should "TODO: write test-framework to check returned mapreduce data" do
+        @data = @performer.mapreduce[:result].find().to_a
+        #puts @data.inspect
+        raise Exception.new("The returned data seems to be ok, checked against the Google Docs-Sheet. But we have to write the corresponding testfunctions in here.")
+      end
+    end
 
     context "performing a query on a WorldWideBusiness" do
       setup do
@@ -271,7 +233,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
            @fm.drilldown_level_current = 2
         end
 
-
         context "to create a filter but unreduced view on the data" do
           context "on DIM3" do
             setup do
@@ -279,7 +240,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
               @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
               @data = @performer.mapreduce[:result].find().to_a
               @mr_key = @performer.get_mr_key.join(",")
-              #puts "data: #{@data.inspect}"
             end
 
             # TODO: we need something to test the filtering/query thingy
