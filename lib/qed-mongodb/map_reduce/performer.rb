@@ -5,7 +5,7 @@ module Qed
         MONGO_HOST = '127.0.0.1'
         MONGO_PORT = 27017
 
-        attr_reader :filter_mode, :mapreduce_models, :db
+        attr_reader :filter_model, :mapreduce_models, :db
 
         # TODO: remove default param value!
         def initialize(filter_model, mr_config = Qed::Mongodb::StatisticViewConfigStore::PROFILE, builder_clasz = Marbu::Builder)
@@ -13,10 +13,23 @@ module Qed
         end
 
         def mapreduce()
-          data_hsh = Qed::Mongodb::MapReduce::Cache.find({:filter_model => @filter_model, :mapreduce_models => @mapreduce_models, :database => @db})
+
+          data_hsh = Qed::Mongodb::MapReduce::Cache.find(
+              { :filter_model           => @filter_model,
+                :mapreduce_models       => @mapreduce_models,
+                :database               => @db
+              }
+          )
 
           if( data_hsh[:result].size == 0 )
-            data_hsh = Qed::Mongodb::MapReduce::Cache.save({:cursor => int_mapreduce, :filter_model => @filter_model, :mapreduce_models => @mapreduce_models, :database => @db})
+            data_hsh = Qed::Mongodb::MapReduce::Cache.save(
+                {
+                    :cursor             => int_mapreduce,
+                    :filter_model       => @filter_model,
+                    :mapreduce_models   => @mapreduce_models,
+                    :database           => @db
+                }
+            )
           end
 
           return data_hsh
@@ -48,7 +61,14 @@ module Qed
 
               @mapreduce_models.each do |mrm|
                 builder = @builder_clasz.new(mrm)
-                data_hsh = data_hsh.map_reduce(builder.map, builder.reduce, {:query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection}, :finalize => builder.finalize})
+
+                data_hsh = data_hsh.map_reduce(
+                    builder.map, builder.reduce,
+                    {
+                      :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
+                      :finalize => builder.finalize
+                    }
+                )
               end
             end
 
