@@ -43,11 +43,17 @@ module Qed
 
           SCALE   = [SIZE_0, SIZE_1, SIZE_2, SIZE_3, SIZE_4, SIZE_5]
 
-          @@mongo_db = Mongo::Connection.new('127.0.0.1', 27017).db('qed_test')
-          @@collection = @@mongo_db.collection('scale_of_universe')
+          @@db_name         = 'qed_ruby_mongodb_test'
+          @@mongo           = Mongo::Connection.new('127.0.0.1', 27017)
+          @@db              = @@mongo.db(@@db_name)
+          @@collection      = @@db.collection('scale_of_universe')
 
-          def self.mongo_db
+          def self.mongo
             @@mongo
+          end
+
+          def self.db
+            @@db
           end
 
           def self.mongo_collection
@@ -62,7 +68,7 @@ module Qed
 
           # since this makes for a cyclic univers it's a nice fit here
           def self.big_crunch
-            ScaleOfUniverse.mongo_collection.drop
+            ScaleOfUniverse.mongo.drop_database(@@db_name)
           end
 
           class Meaning
@@ -175,7 +181,8 @@ module Qed
           ]
 
           def self.amount_of_objects_in_universe(type)
-            type = type.to_sym.downcase
+            raise Exception.new("Currently only one emit key supported") if type.size > 1
+            type = type.values.first.to_sym.downcase
 
             EXAMPLE_UNIVERSE.each do |bp|
               return bp[:amount] if bp[:blueprint]::TYPE.eql?(type)
@@ -183,7 +190,10 @@ module Qed
           end
 
           def self.line_items_with_same_value_in_dimension(type)
-            type = type.to_sym.downcase
+            raise Exception.new("Currently only one emit key supported") if type.size > 1
+            raise Exception.new("If the value is nil, I'm not sure what todo, therefore I raise you!'") if type.values.first.nil?
+
+            type = type.values.first.to_sym.downcase
             SCALE.each do |s|
               return s.size if s.include?(type)
             end
@@ -197,12 +207,12 @@ module Qed
           ACTION_NAME_SCALE_OF_UNIVERSE         = "scale_of_universe"
 
           PARAMS_SCALE_OF_UNIVERSE =
-          {
-            DRILLDOWN_LEVEL_CURRENT           =>  9999999,
-            ACTION                            =>  ACTION_NAME_SCALE_OF_UNIVERSE,
-            ACTION_NAME                       =>  ACTION_NAME_SCALE_OF_UNIVERSE,
-            CONTROLLER                        =>  CONTROLLER_VALUE
-          }
+            {
+              DRILLDOWN_LEVEL_CURRENT           =>  9999999,
+              ACTION                            =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+              ACTION_NAME                       =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+              CONTROLLER                        =>  CONTROLLER_VALUE
+            }
         end
       end
     end

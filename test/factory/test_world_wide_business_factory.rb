@@ -51,11 +51,17 @@ module Qed
 
 
         class WorldWideBusiness
-          @@mongo_db = Mongo::Connection.new('127.0.0.1', 27017).db('qed_test')
-          @@collection = @@mongo_db.collection('world_wide_business')
+          @@db_name         = 'qed_ruby_mongodb_test'
+          @@mongo           = Mongo::Connection.new('127.0.0.1', 27017)
+          @@db              = @@mongo.db(@@db_name)
+          @@collection      = @@db.collection('world_wide_business')
 
-          def self.mongo_db
+          def self.mongo
             @@mongo
+          end
+
+          def self.db
+            @@db
           end
 
           def self.mongo_collection
@@ -71,7 +77,7 @@ module Qed
           end
 
           def self.sell_out
-            WorldWideBusiness.mongo_collection.drop
+            WorldWideBusiness.mongo.drop_database(@@db_name)
           end
 
           class BusinessDevisionDimension
@@ -589,13 +595,18 @@ module Qed
             CONTROLLER                        =>  CONTROLLER_VALUE
           }
 
-          #def self.amount_of_objects_in_universe(type)
-          #  type = type.to_sym.downcase
-          #
-          #  EXAMPLE_UNIVERSE.each do |bp|
-          #    return bp[:amount] if bp[:blueprint]::TYPE.eql?(type)
-          #  end
-          #end
+          M_K_DIM_LOC_3                       =   "m_k_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"
+          M_K_DIM_LOC_2                       =   "m_k_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "2"
+
+          PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS =
+          {
+            DRILLDOWN_LEVEL_CURRENT           =>  0,
+            ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            ACTION_NAME                       =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            CONTROLLER                        =>  CONTROLLER_VALUE,
+            M_K_DIM_LOC_3                     =>  1,
+            M_K_DIM_LOC_2                     =>  2
+          }
 
           # dimension (;location, :revenue, :devision, ...)
           # within dimension key for aggregation
@@ -622,7 +633,13 @@ module Qed
           end
 
           def self.line_items_with_same_value_in_dimension(value, dimension, line_items = WORLD_WIDE_BUSINESS)
-            value = value.upcase
+            if value.is_a?(Hash)
+              raise Exception.new("Currently only one emit key supported!") if value.size > 1
+              value = value.values.first.upcase
+            elsif value.is_a?(String)
+              value = value
+            end
+
             dimension = dimension.downcase.to_sym
             amount = 0
 
