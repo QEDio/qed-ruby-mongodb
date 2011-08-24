@@ -2,7 +2,10 @@ module Qed
   module Filter
     # holds all params that are passed in starting with "m_k_"
     class MapReduceParams
-      PREFIX        = "m_k_"
+      PREFIX                  = "m_k_"
+      URI_PARAMS_SEPARATOR    = "&"
+      URI_PARAMS_ASSIGN       = "="
+
       attr_accessor :emit_keys
 
       def self.clone(map_reduce_params)
@@ -51,12 +54,18 @@ module Qed
         end
       end
 
+      def url
+        get_emit_keys(:url)
+      end
+
       def get_emit_keys(format = :url)
         ret_val = ""
         if format.eql?(:url)
           @emit_keys.each do |emit_key|
-            ret_val += PREFIX + emit_key.key + "=" + emit_key.value
+            ret_val += PREFIX + emit_key.key + URI_PARAMS_ASSIGN + emit_key.value + URI_PARAMS_SEPARATOR
           end
+          # remove last URL_PARAMS_SEPARATOR
+          ret_val = ret_val[0..-2]
         elsif format.eql?(:hash)
           raise Exception.new("Please implement hash format export")
         else
