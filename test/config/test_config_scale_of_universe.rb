@@ -25,7 +25,7 @@ MR_SOU_DIM4 =
                     {:name => "width",                :function => "value.width"},
                     {:name => "count",                :function => "value.count"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => "scale_of_universe",
                 :mr_collection        => "mr_dim4",
                 :query                => nil,
@@ -57,7 +57,7 @@ MR_SOU_DIM3 =
                     {:name => "length",               :function => "value.length"},
                     {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => "mr_dim4",
                 :mr_collection        => "mr_dim3",
                 :query      => nil,
@@ -89,7 +89,7 @@ MR_SOU_DIM2 =
                     {:name => "length",               :function => "value.length"},
                     {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => "mr_dim3",
                 :mr_collection        => "mr_dim2",
                 :query      => nil,
@@ -121,7 +121,7 @@ MR_SOU_DIM1 =
                     {:name => "length",               :function => "value.length"},
                     {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => "mr_dim2",
                 :mr_collection        => "mr_dim1",
                 :query      => nil,
@@ -153,7 +153,7 @@ MR_SOU_DIM0 =
                     {:name => "length",               :function => "value.length"},
                     {:name => "width",                :function => "value.width"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => "mr_dim1",
                 :mr_collection        => "mr_dim0",
                 :query      => nil,

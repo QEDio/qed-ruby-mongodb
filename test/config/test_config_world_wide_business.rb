@@ -15,7 +15,7 @@ MR_WWB_LOC_DIM0 =
                     {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
                     {:name => "count",                :function => "value.count"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => WWB_BASE_COLLECTION,
                 :mr_collection        => "#{WWB_BASE_COLLECTION}_mr_dim0",
                 :query                => nil,
@@ -39,7 +39,7 @@ MR_WWB_LOC_DIM1 =
                     {:name => "DIM_LOC_1",            :function => "value.DIM_LOC_1"},
                     {:name => "count",                :function => "value.count"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => WWB_BASE_COLLECTION,
                 :mr_collection        => "#{WWB_BASE_COLLECTION}_mr_dim1",
                 :query      => nil,
@@ -65,7 +65,7 @@ MR_WWB_LOC_DIM2 =
                     {:name => "DIM_LOC_2",            :function => "value.DIM_LOC_2"},
                     {:name => "count",                :function => "value.count"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => WWB_BASE_COLLECTION,
                 :mr_collection        => "#{WWB_BASE_COLLECTION}_mr_dim2",
                 :query      => nil,
@@ -93,7 +93,7 @@ MR_WWB_LOC_DIM3 =
                     {:name => "DIM_LOC_3",            :function => "value.DIM_LOC_3"},
                     {:name => "count",                :function => "value.count"}
                 ],
-                :database             => "qed_test",
+                :database             => "qed_ruby_mongodb_test",
                 :base_collection      => WWB_BASE_COLLECTION,
                 :mr_collection        => "#{WWB_BASE_COLLECTION}_mr_dim3",
                 :query      => nil,
