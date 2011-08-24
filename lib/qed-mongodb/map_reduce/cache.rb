@@ -4,8 +4,8 @@ module Qed
       class Cache
         def self.find(options = {})
           data_array = []
+          cached = false
 
-          cached = !(options[:saved] || false)
           db = options[:database]
           fm = options[:filter_model]
           mapreduce_model = options[:mapreduce_models].first
@@ -13,11 +13,18 @@ module Qed
           query = Qed::Mongodb::MongoidModel.where(:digest_with_date => fm.digest())
 
           cursor = db.collection(mapreduce_model.mr_collection).find(query.selector)
-          data_array = cursor.find().to_a.first["result"] if cursor.count > 0
+          
+          if cursor.count > 0
+            data_array = cursor.find().to_a.first["result"]
+            cached = !(options[:saved] || false)
+          end
                   
           return {:cached => cached, :result => data_array}
         end
 
+        # TODO: make upsert for document, if always insert then either
+        # TODO: a) each request generates a new document or
+        # TODO: b) updated stuff not saved (insert with already existing key => no update)
         def self.save(options = {})
           db = options[:database]
           fm = options[:filter_model]
