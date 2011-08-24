@@ -9,12 +9,12 @@ module Qed
           query = clasz
 
           if fm.created_at && fm.created_at[Qed::Filter::FilterModel::FROM_DATE] && fm.created_at[Qed::Filter::FilterModel::TILL_DATE]
-            query = query.between(((Qed::Filter::FilterModel::DOCUMENT_OFFSET+Qed::Filter::FilterModel::CREATED_AT.to_s).to_sym), fm.created_at[Qed::Filter::FilterModel::FROM_DATE], fm.created_at[Qed::Filter::FilterModel::TILL_DATE])
+            query = query.between(((Marbu::MapReduceModel::DOCUMENT_OFFSET+Qed::Filter::FilterModel::CREATED_AT.to_s).to_sym), fm.created_at[Qed::Filter::FilterModel::FROM_DATE], fm.created_at[Qed::Filter::FilterModel::TILL_DATE])
           end
 
           if filter.any?
             filter.each_pair do |k,v|Qed::Mongodb::MongoidModel
-              att = (Qed::Filter::FilterModel::DOCUMENT_OFFSET+k.to_s).to_sym
+              att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+k.to_s).to_sym
               if v[Qed::Filter::FilterModel::VALUE].is_a?(Array)
                 query = query.where(att.in => v[Qed::Filter::FilterModel::VALUE])
               else
