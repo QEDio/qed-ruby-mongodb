@@ -3,6 +3,11 @@ require 'config/test_config_world_wide_business'
 
 MAPREDUCE_CONFIG = {
     :test => {
+      :mapreduce_2                => {
+        :mapreduce =>       [
+            MR_WWB_LOC_DIM0
+        ]
+      },
       :scale_of_universe           =>  {
         # the order is important here, the first mapreduce will be done first, then the second and so on
         :mapreduce =>       [
