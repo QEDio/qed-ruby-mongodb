@@ -18,7 +18,6 @@ module Qed
       DRILLDOWN_LEVEL_CURRENT = :drilldown_level_current
       DRILLDOWN_LEVEL_NEXT = :drilldown_level_next
 
-      DOCUMENT_OFFSET = VALUE.to_s + "."
       TIMEZONE = 2*60*60
 
       #### this defines two basic accessors for a row as returned by map-reduce
@@ -232,6 +231,9 @@ module Qed
         replace_filter({column_key => {VALUE => column_value}})
       end
 
+      # TODO:
+      # shouldn't be in here
+      # use Builder directly
       def mongodb_query(clasz = Qed::Mongodb::MongoidModel)
         Qed::Mongodb::QueryBuilder.selector(self, clasz)
       end
