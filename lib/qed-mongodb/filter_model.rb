@@ -206,7 +206,7 @@ module Qed
 
         if( !row.nil? || (!column_key.nil? && !column_value.nil?))
           cloned = FilterModel.clone(self)
-          cloned.set_params_e(row['_id'], column_key, column_value)
+          cloned.set_params_e(Array(row['_id']), column_key, column_value)
         end
 
         int_url(cloned)
@@ -248,7 +248,7 @@ module Qed
         @map_reduce_params.add_emit_keys(emit_keys)
 
         if filter_key && filter_value
-          replace_filter({column_key => {VALUE => column_value}})
+          replace_filter({filter_key => {VALUE => filter_value}})
         end
       end
 
