@@ -28,7 +28,7 @@ module Qed
         return if emit_keys.size == 0
 
         if( emit_keys.first.is_a?(Array))
-          emit_keys.each {|emit_key| add_emit_key(emit_key.first, emit_key.second)}
+          emit_keys.each {|emit_key| add_emit_key(emit_key[0], emit_key[1])}
         elsif( emit_keys.first.is_a?(Hash))
           emit_keys.each {|emit_key| add_emit_key(emit_key[:key], emit_key[:value])}
         elsif( emit_keys.first.is_a?(String))
