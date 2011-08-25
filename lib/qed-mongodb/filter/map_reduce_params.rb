@@ -69,7 +69,7 @@ module Qed
         prefixes.each do |prefix|
           if format.eql?(:url)
             @emit_keys.each do |emit_key|
-              if emit_key.value.to_s != "-1"
+              if !(emit_key.value.to_s.eql?("-1") && prefix.eql?("m_s_"))
                 ret_val += prefix + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
               end
             end
