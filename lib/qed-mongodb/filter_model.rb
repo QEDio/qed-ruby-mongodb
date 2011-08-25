@@ -188,12 +188,25 @@ module Qed
         @drilldown_level_current+1
       end
 
-      def url(row=nil, column_key=nil, column_value=nil)
+      # TODO: merge with new version and then throw away
+      # old version
+      def urle(row=nil, column_key=nil, column_value=nil)
         cloned = self
 
         if( !row.nil? && !column_key.nil? && !column_value.nil?)
           cloned = FilterModel.clone(self)
           cloned.set_params(row, column_key, column_value)
+        end
+
+        int_url(cloned)
+      end
+
+      def url(row=nil, column_key=nil, column_value=nil)
+        cloned = self
+
+        if( !row.nil? || (!column_key.nil? && !column_value.nil?))
+          cloned = FilterModel.clone(self)
+          cloned.set_params_e(row['_id'], column_key, column_value)
         end
 
         int_url(cloned)
@@ -232,11 +245,11 @@ module Qed
       end
 
       def set_params_e(emit_keys, filter_key, filter_value)
-        emit_keys.each do |emit_key|
-          @map_reduce_params.add_emit_keys(emit_keys)
-        end
+        @map_reduce_params.add_emit_keys(emit_keys)
 
-        replace_filter({column_key => {VALUE => column_value}})
+        if filter_key && filter_value
+          replace_filter({column_key => {VALUE => column_value}})
+        end
       end
 
       # TODO:
