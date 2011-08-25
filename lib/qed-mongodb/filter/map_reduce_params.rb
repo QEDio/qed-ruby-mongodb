@@ -54,25 +54,32 @@ module Qed
         end
       end
 
-      def url
-        get_emit_keys(:url)
+      def url(filter = false)
+        get_emit_keys(:url, filter)
       end
 
-      def get_emit_keys(format = :url)
+      def get_emit_keys(format = :url, filter = false)
         ret_val = ""
+        prefixes = [PREFIX]
 
-        if format.eql?(:url)
-          @emit_keys.each do |emit_key|
-            ret_val += PREFIX + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
-          end
-          # remove last URL_PARAMS_SEPARATOR
-          ret_val = ret_val[0..-2]
-        elsif format.eql?(:hash)
-          raise Exception.new("Please implement hash format export")
-        else
-          raise Exception.new("Unknown format #{format} for #{self.class}.get_emit_keys")
+        if( filter )
+          prefixes << "m_s_"
         end
-        return ret_val
+
+        prefixes.each do |prefix|
+          if format.eql?(:url)
+            @emit_keys.each do |emit_key|
+              ret_val += prefix + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
+            end
+            # remove last URL_PARAMS_SEPARATOR
+          elsif format.eql?(:hash)
+            raise Exception.new("Please implement hash format export")
+          else
+            raise Exception.new("Unknown format #{format} for #{self.class}.get_emit_keys")
+          end
+        end
+
+        ret_val[0..-2]
       end
 
       def serializable_hash
