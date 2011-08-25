@@ -231,6 +231,14 @@ module Qed
         replace_filter({column_key => {VALUE => column_value}})
       end
 
+      def set_params_e(emit_keys, filter_key, filter_value)
+        emit_keys.each do |emit_key|
+          @map_reduce_params.add_emit_keys(emit_keys)
+        end
+
+        replace_filter({column_key => {VALUE => column_value}})
+      end
+
       # TODO:
       # shouldn't be in here
       # use Builder directly
