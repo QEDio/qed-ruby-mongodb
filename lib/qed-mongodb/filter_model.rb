@@ -364,7 +364,10 @@ module Qed
 
         def int_url(filter_model = self)
           url = URI_PARAMS_START + url_view
+          # TODO: we need to get rid of this drilldown level
+          # it breaks basically everything
           url += URI_PARAMS_SEPARATOR + url_drilldown(filter_model.eql?(self))
+
 
           # handle from/till for created_at
           if @created_at and @created_at[FROM_DATE] and @created_at[TILL_DATE]
@@ -401,8 +404,11 @@ module Qed
           "#{VIEW}#{URI_PARAMS_ASSIGN}#{view}"
         end
 
+        # TODO: we need to get rid of this drilldown level
+        # TODO: NOW!!!!!!!!!!!!!!!!!
         def url_drilldown(current_level = true)
-          drilldown_level = current_level ? drilldown_level_current : drilldown_level_next
+          drilldown_level = 0
+          #drilldown_level = current_level ? drilldown_level_current : drilldown_level_next
           "#{parameter_url(DRILLDOWN_LEVEL_CURRENT)}#{URI_PARAMS_ASSIGN}#{drilldown_level}"
         end
 

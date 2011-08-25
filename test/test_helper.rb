@@ -119,8 +119,6 @@ unless Kernel.const_defined?("FROM_DATE")
   FM_GENERATD_PARAMS_WITH_ROW_URL =
     "?#{VIEW}=#{ACTION_NAME_MR2_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_NEXT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE}&#{M_K_PRODUCT_NAME}=#{M_K_PRODUCT_NAME_VALUE}".gsub(/ /,"%20")
 
-#  ?view=mapreduce_2&i_drilldown_level_current=1&from_date=2011-06-05%2022:00:00%20UTC&till_date=2011-12-09%2022:00:00%20UTC&m_s_product_name=Elektromobil&m_k_product_name=Key%20Elektromobil">
-
   URL_ROW                               = {"_id"=>{M_S_PRODUCT_NAME=>M_S_PRODUCT_NAME_VALUE_GARAGE}, "value"=>{"product_name"=>"#{M_S_PRODUCT_NAME_VALUE_GARAGE}", "count"=>984.0, "worked_on"=>951.0, "qualified"=>497.0, "test"=>37.0, "turnover"=>19560.0, "payed"=>0.0, "product_uuid"=>"0892afe0b494012d895138ac6f7d89ab", "inquiry_id"=>185968}}
   URL_KEY                               = "product_name"
   URL_FIELD                             = M_S_PRODUCT_NAME_VALUE_GARAGE
