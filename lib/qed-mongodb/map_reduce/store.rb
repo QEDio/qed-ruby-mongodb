@@ -36,7 +36,7 @@ module Qed
                 }
 
                 if( value.conversions > 0 ){
-                  cpa = Math.round((value.cost / value.conversions)*10000)/100;
+                  cpa = Math.round((value.cost / value.conversions)*100)/100;
                 }
               JS
 
