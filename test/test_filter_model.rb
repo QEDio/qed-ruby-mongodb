@@ -58,6 +58,11 @@ class TestFilterModel < Test::Unit::TestCase
       assert_equal FM_GENERATED_PARAMS_URL, @fm.url
     end
 
+    should "generate a correct URL using the provided row parameter" do
+      row = URL_ROW
+      assert_equal FM_GENERATD_PARAMS_WITH_ROW_URL, @fm.url(row)
+    end
+
     should "create the correct digest for its current state" do
       assert_equal PARAMS_MR2_SHA2_DIGEST, @fm.digest
     end
