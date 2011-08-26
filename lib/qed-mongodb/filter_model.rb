@@ -41,6 +41,7 @@ module Qed
       ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user, :created_at]
 
       MAP_REDUCE_PARAMS     = :map_reduce_params
+      
 
 
       def self.clone(filter_model)

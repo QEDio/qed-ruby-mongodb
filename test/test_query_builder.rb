@@ -20,11 +20,10 @@ class TestQueryBuilder < Test::Unit::TestCase
     end
 
     context "with no query" do
-      should "return an empty query" do
-        empty_hsh = {}
+      should "return nil" do
         mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(@fm, @mr_config)
         assert_equal 1, mapreduce_model.size
-        assert_equal empty_hsh, mapreduce_model.first.query
+        assert_equal nil, mapreduce_model.first.query
       end
     end
   end
