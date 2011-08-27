@@ -256,8 +256,12 @@ module Qed
       # TODO:
       # shouldn't be in here
       # use Builder directly
-      def mongodb_query(clasz = Qed::Mongodb::MongoidModel)
-        Qed::Mongodb::QueryBuilder.selector(self, clasz)
+      def mongodb_query(options = {})
+        int_options = {
+            :clasz =>  Qed::Mongodb::MongoidModel
+        }.merge(options)
+
+        Qed::Mongodb::QueryBuilder.selector(self, int_options)
       end
 
       def eql?(other)

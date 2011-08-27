@@ -61,7 +61,9 @@ unless Kernel.const_defined?("FROM_DATE")
   require 'config/test_constants'
   require 'config/test_filter_helper'
   require 'config/test_mapreduce_config'
+  require 'config/test_query_builder_helper'
   require 'factory/test_mongodb_factory'
+
 
   PARAMS_MR2 =
     {

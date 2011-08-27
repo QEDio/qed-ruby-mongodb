@@ -35,21 +35,34 @@ module Qed
           mapreduce_configurations = mapreduce_configurations[0..mapreduce_configurations.size-(1+filter_model.drilldown_level_current)]
 
           [].tap do |arr|
-            mapreduce_configurations.each_with_index do |config, i|
+            mapreduce_configurations.each_with_index do |int_config, i|
               # only first mapreduce needs this filter query
               # interestingly this is exactly the place to implement mapreduce caching
-              config[:query] = i == 0 ? filter_model.mongodb_query : nil
+
+
+              options = {}
+              if int_config[:time_params]
+                puts "time_params #{int_config[:time_params]}"
+                options.merge!({:time_params => int_config[:time_params]})
+              end
+
+              int_config[:query] = i == 0 ? filter_model.mongodb_query(options) : nil
 
               # set externally provided map emit keys
-              arr << set_map_emit_keys(Marbu::MapReduceModel.new(config), filter_model)
+              arr << set_map_emit_keys(Marbu::MapReduceModel.new(int_config), filter_model)
             end
           end
         # don't mapreduce, just show the filtered data
         else
-          config = mapreduce_configurations.first
-          config[:query] = filter_model.mongodb_query
+          int_config = mapreduce_configurations.first
+          options = {}
+          if  int_config[:time_params]
+            puts "time_params #{int_config[:time_params]}"
+            options.merge!({:time_params => int_config[:time_params]})
+          end
+          int_config[:query] = filter_model.mongodb_query(options)
 
-          mrm = Marbu::MapReduceModel.new(config)
+          mrm = Marbu::MapReduceModel.new(int_config)
           mrm.force_query = true
           [mrm]
         end

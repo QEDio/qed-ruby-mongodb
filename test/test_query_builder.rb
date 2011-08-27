@@ -27,4 +27,17 @@ class TestQueryBuilder < Test::Unit::TestCase
       end
     end
   end
+
+  context "for two timepoints" do
+    setup do
+      @fm = Qed::Filter::FilterModel.new(QB_FM1)
+      @fm.drilldown_level_current = 0
+      @fm.view = :query_only_scale_of_universe
+      @fm.user = USER
+    end
+
+    should "return correctly" do
+      assert_equal QB_QUERY1, Qed::Mongodb::QueryBuilder.selector(@fm, :clasz => Qed::Mongodb::MongoidModel, :time_params => ["date_field1", "date_field2"]).to_s
+    end
+  end
 end

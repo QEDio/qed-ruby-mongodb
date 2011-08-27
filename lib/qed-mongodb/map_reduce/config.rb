@@ -30,8 +30,7 @@ module Qed
                 :base_collection        => "adwords_early_warning_staging",
                 :mr_collection          => "mr_adwords_early_warning_staging",
                 :query                  => nil,
-                :query_from             => "ad_from",
-                :query_till             => "ad_till",
+                :time_params            => ["ad_from", "ad_till"],
                 :map                    => Qed::Mongodb::MapReduce::Store::KP_EW_MAP1,
                 :reduce                 => Qed::Mongodb::MapReduce::Store::KP_EW_REDUCE1,
                 :finalize               => Qed::Mongodb::MapReduce::Store::KP_EW_FINALIZE1

@@ -3,8 +3,11 @@ module Qed
     class QueryBuilder
       QUERY_DATE_FIELD = :created_at
 
-      def self.selector(fm, clasz = Qed::Mongodb::MongoidModel, options = {})
+      def self.selector(fm, options = {})
+        raise Exception.new("key time_params is not allowed to have a nil object as value!") if (options.key?(:time_params) and options[:time_params].nil?)
+
         int_options = internal_options.merge(options)
+        clasz       = int_options[:clasz]
 
         query = nil
         filter = fm.filter
@@ -31,7 +34,7 @@ module Qed
       def self.build_others(query, fm)
         filter = fm.filter
         if filter.any?
-          filter.each_pair do |k,v|Qed::Mongodb::MongoidModel
+          filter.each_pair do |k,v|
             att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+k.to_s).to_sym
             if v[Qed::Filter::FilterModel::VALUE].is_a?(Array)
               query = query.where(att.in => v[Qed::Filter::FilterModel::VALUE])
@@ -45,9 +48,12 @@ module Qed
 
       def self.internal_options
         {
-            :time_params        => [QUERY_DATE_FIELD]
+            :time_params        => [QUERY_DATE_FIELD],
+            :clasz              => Qed::Mongodb::MongoidModel
         }
       end
+
+
     end
   end
 end
