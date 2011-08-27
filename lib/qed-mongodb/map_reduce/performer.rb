@@ -62,6 +62,8 @@ module Qed
               @mapreduce_models.each do |mrm|
                 builder = @builder_clasz.new(mrm)
 
+                Rails.logger.warn("Map: #{builder.map}, Reduce: #{builder.reduce}, Finalize: #{builder.finalize}")
+
                 data_hsh = data_hsh.map_reduce(
                     builder.map, builder.reduce,
                     {
