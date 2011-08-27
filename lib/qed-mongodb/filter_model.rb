@@ -5,7 +5,8 @@ module Qed
     class FilterModel
       VIEW = :view
 
-      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user, :created_at
+      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user
+      attr_reader   :created_at
       attr_accessor :map_reduce_params
 
       FROM_DATE = :from_date
@@ -84,6 +85,12 @@ module Qed
           end
         end
 
+        convert_to_utc
+      end
+
+      def set_times(from_date, till_date)
+        @created_at[FROM_DATE] = from_date
+        @created_at[TILL_DATE] = till_date
         convert_to_utc
       end
 
