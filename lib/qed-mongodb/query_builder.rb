@@ -24,8 +24,8 @@ module Qed
       end
 
       def self.build_date(query, time_params, from, till)
-        date_time_from = DateTime.parse(from).to_time.utc
-        date_time_till = DateTime.parse(till).to_time.utc
+        date_time_from = DateTime.parse(from.to_s).to_time.utc
+        date_time_till = DateTime.parse(till.to_s).to_time.utc
 
         time_params.each do |param|
           query = query.between(("value."+param.to_s).to_sym, date_time_from, date_time_till)
