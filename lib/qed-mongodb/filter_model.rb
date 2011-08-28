@@ -5,8 +5,8 @@ module Qed
     class FilterModel
       VIEW = :view
 
-      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user
-      attr_reader   :created_at
+      #TODO: created_at needs methods that ensure that its always DateTime.to_time.utc!!
+      attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user, :created_at
       attr_accessor :map_reduce_params
 
       FROM_DATE = :from_date
