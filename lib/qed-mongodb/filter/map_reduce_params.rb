@@ -34,7 +34,7 @@ module Qed
         elsif( emit_keys.first.is_a?(String))
           emit_keys.each {|emit_key| add_emit_key(emit_key)}
         elsif( emit_keys.first.is_a?(KeyValue))
-          emit_keys.each {|emit_key| @emit_keys << emit_key.clone}
+          emit_keys.each {|emit_key| add_emit_key(emit_key.key, emit_key.value)}
         else
           raise Exception.new("The type #{emit_keys.first.class} is not supported as type in emit_keys")
         end
@@ -48,10 +48,27 @@ module Qed
           k = splitted_key.first.gsub(PREFIX,'')
           v = value || splitted_key.second
 
-          @emit_keys << KeyValue.new(k, v)
+          if( has_emit_key?(k) )
+            replace_emit_key(KeyValue.new(k, v))
+          else
+            @emit_keys << KeyValue.new(k, v)
+          end
         else
           raise Exception.new("Not sure what I should do with this parameter as key #{key} and this value #{value}")
         end
+      end
+
+      def has_emit_key?(key)
+        (@emit_keys.collect{|emit_key| emit_key.key.eql?(key)}.size > 0)
+      end
+
+      def delete_emit_key(key)
+        @emit_keys = @emit_keys.each.reject{|emit_key| emit_key.key.eql?(key)}
+      end
+
+      def replace_emit_key(key_val)
+        delete_emit_key(key_val.key)
+        @emit_keys << key_val
       end
 
       def url(filter = false)
@@ -59,7 +76,6 @@ module Qed
       end
 
       def get_emit_keys(format = :url, filter = false)
-        ret_val = ""
         prefixes = [PREFIX]
 
         if( filter )
@@ -68,20 +84,20 @@ module Qed
 
         prefixes.each do |prefix|
           if format.eql?(:url)
+            ret_val = ""
             @emit_keys.each do |emit_key|
               if !(emit_key.value.to_s.eql?("-1") && prefix.eql?("m_s_"))
                 ret_val += prefix + emit_key.key.to_s + URI_PARAMS_ASSIGN + emit_key.value.to_s + URI_PARAMS_SEPARATOR
               end
             end
             # remove last URL_PARAMS_SEPARATOR
-          elsif format.eql?(:hash)
-            raise Exception.new("Please implement hash format export")
+            return ret_val[0..-2]
+          elsif format.eql?(:array)
+            return serializable_hash[:emit_keys]
           else
             raise Exception.new("Unknown format #{format} for #{self.class}.get_emit_keys")
           end
         end
-
-        ret_val[0..-2]
       end
 
       def serializable_hash
