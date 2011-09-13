@@ -62,7 +62,7 @@ module Qed
               @mapreduce_models.each do |mrm|
                 builder = @builder_clasz.new(mrm)
 
-                Rails.logger.warn("query: #{builder.query}")
+                #Rails.logger.warn("query: #{builder.query}")
 
                 data_hsh = data_hsh.map_reduce(
                     builder.map, builder.reduce,
