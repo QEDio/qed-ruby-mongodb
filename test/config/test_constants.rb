@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 VIEW                                  = "view"
 ACTION                                = "action"
 ACTION_NAME                           = "action_name"
@@ -24,6 +26,9 @@ USER                                  = :test
 M_S_PRODUCT_NAME_VALUE                = "Elektromobil"
 M_K_PRODUCT_NAME_VALUE                = "Key Elektromobil"
 M_S_PRODUCT_NAME_VALUE_GARAGE         = "Garage"
+
+M_S_PRODUCT_NAME_VALUE_SPECIAL_CHARS  = "Ää, Öö, Üü"
+M_K_PRODUCT_NAME_VALUE_SPECIAL_CHARS  = "Key Ää, Öö, Üü"
 
 DRILLDOWN_LEVEL_CURRENT_VALUE         = "0"
 DRILLDOWN_LEVEL_NEXT_VALUE            = "1"

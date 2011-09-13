@@ -1,3 +1,5 @@
+# encoding: utf-8
+
 require 'mongoid'
 require 'yajl'
 require 'digest/sha2'

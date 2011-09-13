@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 require 'rubygems'
 require 'spork'
 require 'simplecov'
@@ -45,15 +47,11 @@ end
 # free to delete them.
 
 
-
-
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'rubygems'
 require 'test/unit'
 require 'shoulda'
-
 require 'qed-mongodb'
 
 
@@ -99,6 +97,19 @@ unless Kernel.const_defined?("FROM_DATE")
       M_K_PRODUCT_NAME                  =>  M_K_PRODUCT_NAME_VALUE
     }
 
+    PARAMS_SPECIAL_CHARACTERS =
+    {
+      DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
+      FROM_DATE                         =>  FROM_DATE_VALUE,
+      TILL_DATE                         =>  TILL_DATE_VALUE,
+      M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE_SPECIAL_CHARS,
+      ACTION                            =>  ACTION_NAME_MR2_VALUE,
+      ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
+      CONTROLLER                        =>  CONTROLLER_VALUE,
+      M_K_PRODUCT_NAME                  =>  M_K_PRODUCT_NAME_VALUE_SPECIAL_CHARS
+    }
+
+
   PARAMS_MR2_SHA2_DIGEST                =   "0f90048b7d1bfd9dbdee92fafa0983e590832d03f5e23d12cad6f69753c6e86d"
   PARAMS_MR3_SHA2_DIGEST                =   "a1b3c937c6d944d5c55cb828ed073a4618d3b502f5c39042abc3db3284cc1d6e"
   PARAMS_MR4_SHA2_DIGEST                =   ""
@@ -121,9 +132,15 @@ unless Kernel.const_defined?("FROM_DATE")
   FM_GENERATD_PARAMS_WITH_ROW_URL =
     "?#{VIEW}=#{ACTION_NAME_MR2_VALUE}&#{DRILLDOWN_LEVEL_CURRENT}=#{DRILLDOWN_LEVEL_NEXT_VALUE}&#{FROM_DATE}=#{FROM_DATE_VALUE}&#{TILL_DATE}=#{TILL_DATE_VALUE}&#{M_S_PRODUCT_NAME}=#{M_S_PRODUCT_NAME_VALUE}&#{M_K_PRODUCT_NAME}=#{M_K_PRODUCT_NAME_VALUE}".gsub(/ /,"%20")
 
+  FM_GENERATED_PARAMS_URL_SPECIAL_CHARACTERS =
+    "?view=mapreduce_2&i_drilldown_level_current=0&from_date=2011-06-05%2022:00:00%20UTC&till_date=2011-12-09%2022:00:00%20UTC&m_s_product_name=%C3%84%C3%A4,%20%C3%96%C3%B6,%20%C3%9C%C3%BC&m_k_product_name=Key%20%C3%84%C3%A4,%20%C3%96%C3%B6,%20%C3%9C%C3%BC"
+
   URL_ROW                               = {"_id"=>{M_S_PRODUCT_NAME=>M_S_PRODUCT_NAME_VALUE_GARAGE}, "value"=>{"product_name"=>"#{M_S_PRODUCT_NAME_VALUE_GARAGE}", "count"=>984.0, "worked_on"=>951.0, "qualified"=>497.0, "test"=>37.0, "turnover"=>19560.0, "payed"=>0.0, "product_uuid"=>"0892afe0b494012d895138ac6f7d89ab", "inquiry_id"=>185968}}
   URL_KEY                               = "product_name"
   URL_FIELD                             = M_S_PRODUCT_NAME_VALUE_GARAGE
+
+  URL_ROW_SPECIAL_CHAR                  = {"_id"=>{M_S_PRODUCT_NAME=>M_S_PRODUCT_NAME_VALUE_SPECIAL_CHARS}, "value"=>{"product_name"=>"#{M_S_PRODUCT_NAME_VALUE_SPECIAL_CHARS}", "count"=>984.0, "worked_on"=>951.0, "qualified"=>497.0, "test"=>37.0, "turnover"=>19560.0, "payed"=>0.0, "product_uuid"=>"0892afe0b494012d895138ac6f7d89ab", "inquiry_id"=>185968}}
+
   PARAMS_RESULTING_MONGODB_QUERY = '{:"value.created_at"=>{"$gte"=>2011-06-05 22:00:00 UTC, "$lt"=>2011-12-09 22:00:00 UTC}, "value.product_name"=>"Elektromobil"}'
 end
 

@@ -398,7 +398,7 @@ module Qed
 
           url += URI_PARAMS_SEPARATOR + map_reduce_params.get_emit_keys(:url, true)
 
-          return url.gsub(" ", "%20")
+          return URI.escape(url)
         end
 
         def parameter_url(param)

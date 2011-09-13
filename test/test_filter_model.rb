@@ -63,6 +63,8 @@ class TestFilterModel < Test::Unit::TestCase
       assert_equal FM_GENERATD_PARAMS_WITH_ROW_URL, @fm.url(row)
     end
 
+
+
     should "create the correct digest for its current state" do
       assert_equal PARAMS_MR2_SHA2_DIGEST, @fm.digest
     end
@@ -75,6 +77,16 @@ class TestFilterModel < Test::Unit::TestCase
       fm_cloned = @fm.clone
       fm_cloned.view = "something else"
       assert_equal PARAMS_MR3_SHA2_DIGEST, fm_cloned.digest
+    end
+  end
+
+  context "creating a filtermodel from a rails params with special characters" do
+    setup do
+      @fm = Qed::Filter::FilterModel.new(PARAMS_SPECIAL_CHARACTERS)
+    end
+
+    should "escape the special characters in the url" do
+      assert_equal FM_GENERATED_PARAMS_URL_SPECIAL_CHARACTERS, @fm.url
     end
   end
 
