@@ -1,5 +1,5 @@
 # encoding: utf-8
-
+require 'core_ext/enumerable'
 require 'mongoid'
 require 'yajl'
 require 'digest/sha2'

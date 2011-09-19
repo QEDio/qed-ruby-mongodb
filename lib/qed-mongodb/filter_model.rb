@@ -79,7 +79,7 @@ module Qed
 
         unless params.blank?
           if params.is_a?(Hash)
-            from_hash(FilterModel.symbolize_keys(params))
+            from_hash(params.symbolize_keys_rec)
           elsif params.is_a?(String)
             from_string(params)
           end
@@ -283,28 +283,12 @@ module Qed
         puts ("FilterModel: #{self.inspect}")
       end
 
-      def self.symbolize_keys(obj)
-        if obj.is_a?(Hash)
-          obj.inject({}) do |options, (key, value)|
-            options[(key.to_sym rescue key) || key] = (value.is_a?(Hash)||value.is_a?(Array)) ? symbolize_keys(value) : value
-            options
-          end
-        elsif obj.is_a?(Array)
-          obj.inject([]) do |options, value|
-            options << ((value.is_a?(Hash)||value.is_a?(Array)) ? symbolize_keys(value) : value)
-            options
-          end
-        else
-          raise Exception.new("Can't do that!")
-        end
-      end
-
       class QueryParams
 
       end
 
       private
-        # basically we have to modes in this method
+        # basically we have two modes in this method
         # serialize from internal (which don't have m_r_ stuff')
         # or serialize from external which do have this m_r_ stuff
         def add_param(param, value)
@@ -359,7 +343,7 @@ module Qed
 
         # currently we expect only to have a string if it's in json format
         def from_string(params)
-          from_hash(FilterModel.symbolize_keys(Yajl::Parser.parse(params)))
+          from_hash(Yajl::Parser.parse(params).symbolize_keys_rec)
         end
 
         def convert_to_utc

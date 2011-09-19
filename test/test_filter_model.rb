@@ -1,15 +1,6 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestFilterModel < Test::Unit::TestCase
-  context "The FilterModel class" do
-    should "symbolize hash keys if asked todo so" do
-      hsh1 = {"a" => "b"}
-      hsh2 = {:a => "b"}
-
-      assert_equal Qed::Filter::FilterModel.symbolize_keys(hsh1), hsh2
-    end
-  end
-
   context "creating a filtermodel from a rails params hash" do
     setup do
       @fm = Qed::Filter::FilterModel.new(PARAMS_MR4)
