@@ -13,7 +13,7 @@ module Qed
         end
 
         def mapreduce()
-
+          # TODO: mrapper should already be used here
           data_hsh = Qed::Mongodb::MapReduce::Cache.find(
               { :filter_model           => @filter_model,
                 :mapreduce_models       => @mapreduce_models,
