@@ -1,3 +1,4 @@
 .idea/
 /.rvmrc
 coverage/
+/pkg/qed-mongodb-0.0.1.gem
