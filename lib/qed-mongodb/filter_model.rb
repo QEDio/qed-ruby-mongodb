@@ -386,7 +386,7 @@ module Qed
             url = URI.escape(url)
           end
           
-          return URI.escape(url)
+          return url
         end
 
         def parameter_url(param)
