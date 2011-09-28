@@ -382,7 +382,7 @@ module Qed
 
           url += URI_PARAMS_SEPARATOR + map_reduce_params.get_emit_keys(:url, true)
 
-          if encoding
+          if encode
             url = URI.escape(url)
           end
           
