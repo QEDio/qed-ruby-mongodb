@@ -209,7 +209,7 @@ module Qed
         int_url(cloned)
       end
 
-      def url(row=nil, column_key=nil, column_value=nil)
+      def url(row=nil, column_key=nil, column_value=nil, encode = true)
         cloned = self
 
         if( !row.nil? || (!column_key.nil? && !column_value.nil?))
@@ -217,7 +217,7 @@ module Qed
           cloned.set_params_e(Array(row['_id']), column_key, column_value)
         end
 
-        int_url(cloned)
+        int_url(cloned, encode)
       end
 
       def get_type(value)
@@ -358,7 +358,7 @@ module Qed
           end
         end
 
-        def int_url(filter_model = self)
+        def int_url(filter_model = self, encode = true)
           url = URI_PARAMS_START + url_view
           # TODO: we need to get rid of this drilldown level
           # it breaks basically everything
@@ -382,6 +382,10 @@ module Qed
 
           url += URI_PARAMS_SEPARATOR + map_reduce_params.get_emit_keys(:url, true)
 
+          if encoding
+            url = URI.escape(url)
+          end
+          
           return URI.escape(url)
         end
 
