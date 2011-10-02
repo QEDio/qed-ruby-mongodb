@@ -1,4 +1,5 @@
 require 'qed-mongodb/filter/map_reduce_params'
+require 'qed-mongodb/filter/time_params'
 
 module Qed
   module Filter
@@ -8,6 +9,8 @@ module Qed
       #TODO: created_at needs methods that ensure that its always DateTime.to_time.utc!!
       attr_accessor :filter, :drilldown_level_current, :view, :mongodb, :frontend, :user, :created_at
       attr_accessor :map_reduce_params
+      attr_accessor :time_params
+      attr_accessor :plugins
 
       FROM_DATE = :from_date
       TILL_DATE = :till_date
@@ -42,7 +45,6 @@ module Qed
       ATTRIBUTES = [:filter, :drilldown_level_current, VIEW, :mongodb, :frontend, :user, :created_at]
 
       MAP_REDUCE_PARAMS     = :map_reduce_params
-      
 
 
       def self.clone(filter_model)
@@ -54,6 +56,7 @@ module Qed
         cloned_filter.frontend                      = filter_model.frontend.clone
         cloned_filter.created_at                    = filter_model.created_at.clone
         cloned_filter.map_reduce_params             = filter_model.map_reduce_params.clone
+        cloned_filter.plugins                       = filter_model.plugins.collect(&:clone)
 
         unless filter_model.user.nil?
           if filter_model.user.is_a?(Symbol)
@@ -74,6 +77,7 @@ module Qed
         @view = nil
         @frontend = {}
         @user = nil
+        @plugins = []
 
         @map_reduce_params = MapReduceParams.new
 
@@ -105,7 +109,8 @@ module Qed
             :mongodb                        => @mongodb,
             :view                           => @view,
             :frontend                       => @frontend,
-            :map_reduce_params              => @map_reduce_params.serializable_hash
+            :map_reduce_params              => @map_reduce_params.serializable_hash,
+            :plugins                        => plugins.collect{|plugin| {:clasz => plugin.class, :data => plugin.serializable_hash}}
           }
 
         if( options[:with_dates] )
@@ -316,6 +321,8 @@ module Qed
         # original method, takes the params from rails and converts it to an internal represenation
         # those params are the params provided by the browser
         def from_hash(params)
+          params = deserialize_plugins(params)
+
           # TODO: we should set a default date range here
           # we should set one, because otherwise we will mapreduce everything, but the default parameters should be
           # set somewhere else
@@ -331,6 +338,9 @@ module Qed
           elsif !params[CREATED_AT].nil?
             @created_at[FROM_DATE] = params[CREATED_AT][FROM_DATE] || (Date.today - 1).to_s
             @created_at[TILL_DATE] = params[CREATED_AT][TILL_DATE] || Date.today.to_s
+          else
+            #@created_at[FROM_DATE] = (Date.today - 1).to_s
+            #@created_at[TILL_DATE] = Date.today.to_s
           end
 
           self.view = params[:action]
@@ -339,6 +349,18 @@ module Qed
             k = k_sym.to_s
             add_param(k, v)
           end
+        end
+
+        def deserialize_plugins(params)
+          plugins = params.delete(:plugins)
+
+          if(!plugins.nil?)
+            plugins.each do |plugin|
+              @plugins << plugin[:clasz].constantize.from_serializable_hash(plugin[:data])
+            end
+          end
+
+          return params
         end
 
         # currently we expect only to have a string if it's in json format
@@ -380,7 +402,15 @@ module Qed
             end
           end
 
-          url += URI_PARAMS_SEPARATOR + map_reduce_params.get_emit_keys(:url, true)
+          u = map_reduce_params.get_emit_keys(:url, true)
+          if( !u.nil? && u.size > 0 )
+            url += Qed::RESTX::Constants::URI_PARAMS_SEPARATOR + map_reduce_params.get_emit_keys(:url, true)
+          end
+
+          u = plugins_url
+          if( !u.nil? && u.size > 0 )
+            url += Qed::RESTX::Constants::URI_PARAMS_SEPARATOR + purl
+          end
 
           if encode
             url = URI.escape(url)
@@ -418,6 +448,20 @@ module Qed
 
         def url_mongo_param(key, hsh)
           "#{MONGODB_PARAMS_PRE}#{get_type(hsh[VALUE])}#{key.to_s}#{URI_PARAMS_ASSIGN}#{hsh[VALUE]}"
+        end
+
+        def plugins_url(ext_options = {})
+          options = {
+            :array => false
+          }.merge(ext_options)
+
+          ret_val = plugins.map(&:url)
+
+          if( !options[:array] )
+            ret_val = ret_val.join(Qed::RESTX::Constants::URI_PARAMS_SEPARATOR)
+          end
+
+          return ret_val
         end
     end
   end

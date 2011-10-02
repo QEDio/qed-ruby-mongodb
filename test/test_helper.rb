@@ -110,8 +110,8 @@ unless Kernel.const_defined?("FROM_DATE")
     }
 
 
-  PARAMS_MR2_SHA2_DIGEST                =   "0f90048b7d1bfd9dbdee92fafa0983e590832d03f5e23d12cad6f69753c6e86d"
-  PARAMS_MR3_SHA2_DIGEST                =   "a1b3c937c6d944d5c55cb828ed073a4618d3b502f5c39042abc3db3284cc1d6e"
+  PARAMS_MR2_SHA2_DIGEST                =   "d7d164e85f6265bc71063d35eec586e9bfb4f03cc28f51a0bbc01f79be02f8bc"
+  PARAMS_MR3_SHA2_DIGEST                =   "4d0f099ce62ee1a77567cf594d1d6984486f48f9b58f564a40949782b0493b16"
   PARAMS_MR4_SHA2_DIGEST                =   ""
 
   #
