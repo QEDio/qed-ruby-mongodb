@@ -1,4 +1,4 @@
-require 'config/test_store_world_wide_business'
+require 'fixtures/test_store_world_wide_business'
 
 WWB_BASE_COLLECTION     =   "world_wide_business"
 

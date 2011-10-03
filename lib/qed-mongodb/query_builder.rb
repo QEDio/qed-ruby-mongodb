@@ -12,10 +12,10 @@ module Qed
         query = nil
         filter = fm.filter
 
-        if (fm.created_at && fm.created_at[Qed::Filter::FilterModel::FROM_DATE] && fm.created_at[Qed::Filter::FilterModel::TILL_DATE]) || filter.any?
+        if (fm.created_at && fm.created_at[Qaram::FilterModel::FROM_DATE] && fm.created_at[Qaram::FilterModel::TILL_DATE]) || filter.any?
           query = clasz
 
-          query = build_date(query, int_options[:time_params], fm.created_at[Qed::Filter::FilterModel::FROM_DATE], fm.created_at[Qed::Filter::FilterModel::TILL_DATE])
+          query = build_date(query, int_options[:time_params], fm.created_at[Qaram::FilterModel::FROM_DATE], fm.created_at[Qaram::FilterModel::TILL_DATE])
           query = build_others(query, fm)
         end
 
@@ -39,10 +39,10 @@ module Qed
         if filter.any?
           filter.each_pair do |k,v|
             att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+k.to_s).to_sym
-            if v[Qed::Filter::FilterModel::VALUE].is_a?(Array)
-              query = query.where(att.in => v[Qed::Filter::FilterModel::VALUE])
+            if v[Qaram::FilterModel::VALUE].is_a?(Array)
+              query = query.where(att.in => v[Qaram::FilterModel::VALUE])
             else
-              query = query.where(att.to_s => v[Qed::Filter::FilterModel::VALUE])
+              query = query.where(att.to_s => v[Qaram::FilterModel::VALUE])
             end
           end
         end

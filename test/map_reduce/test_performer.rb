@@ -13,7 +13,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
     end
 
     should "throw an exception if option doesn't have the 'filter' key" do
-      fm = Qed::Filter::FilterModel.new(PARAMS_MR2)
+      fm = Qaram::FilterModel.new(PARAMS_MR2)
       assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
         Qed::Mongodb::MapReduce::Performer.new({:abc => fm}, MAPREDUCE_CONFIG)
       end
@@ -29,7 +29,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Mongodb::Test::Factory::ScaleOfUniverse.big_crunch
         Qed::Mongodb::Test::Factory::ScaleOfUniverse.big_bang(Qed::Mongodb::Test::Factory::ScaleOfUniverse::EXAMPLE_UNIVERSE)
-        @fm = Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+        @fm = Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
         @fm.user = USER
       end
 
@@ -85,7 +85,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
         Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
-        @fm = Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm = Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
         @fm.user = USER
       end
 
@@ -207,7 +207,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
         Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
 
-        @fm = Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
+        @fm = Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
         @fm.user = USER
         @fm.view = Qed::Mongodb::Test::Factory::WorldWideBusiness::VIEW_LOC_DIM3
         @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
@@ -224,7 +224,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Mongodb::Test::Factory::WorldWideBusiness.sell_out
         Qed::Mongodb::Test::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
-        @fm = Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm = Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
         @fm.user = USER
       end
 

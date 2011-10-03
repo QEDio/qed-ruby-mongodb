@@ -4,7 +4,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   context "Creating a StatisticViewConfig the wrong way" do
     context "by omitting the user" do
       setup do
-        @fm = Qed::Filter::FilterModel.new(PARAMS_MR4)
+        @fm = Qaram::FilterModel.new(QARAM_PARAMS_MR4)
       end
 
       should "throw an Exception" do
@@ -17,7 +17,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   
   context "Creating a StatisticViewConfig" do
     setup do
-      @fm =  Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      @fm =  Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       @fm.user = USER
     end
 
@@ -53,7 +53,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   context "Using StatisticViewConfig to return MapReduceModel Objects" do
     context "by providing a filtermodel with external emit keys" do
       setup do
-        @fm = Qed::Filter::FilterModel.new(PARAMS_MR4)
+        @fm = Qaram::FilterModel.new(QARAM_PARAMS_MR4)
         @fm.user = USER
       end
 

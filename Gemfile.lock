@@ -9,6 +9,16 @@ GIT
       sinatra
       vegas
 
+GIT
+  remote: git@github.com:QEDio/qaram.git
+  revision: 77dbea243411dec318b9a5d4cfc2e5d454b71a61
+  submodules: true
+  specs:
+    qaram (0.0.1)
+      activesupport
+      rake
+      yajl-ruby
+
 PATH
   remote: .
   specs:
@@ -63,6 +73,7 @@ PLATFORMS
 
 DEPENDENCIES
   marbu!
+  qaram!
   qed-mongodb!
   shoulda
   simplecov

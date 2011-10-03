@@ -5,7 +5,7 @@ module Qed
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qed::Filter::FilterModel)
+          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qaram::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.
           new("config param is not a hash!") if !config.is_a?(Hash)
         raise Qed::Mongodb::Exceptions::FilterModelError.
@@ -46,7 +46,7 @@ module Qed
                 options.merge!({:time_params => int_config[:time_params]})
               end
 
-              int_config[:query] = i == 0 ? filter_model.mongodb_query(options) : nil
+              int_config[:query] = i == 0 ? Qed::Mongodb::QueryBuilder.selector(filter_model, {:clasz => Qed::Mongodb::MongoidModel}.merge(options)) : nil
 
               # set externally provided map emit keys
               arr << set_map_emit_keys(Marbu::MapReduceModel.new(int_config), filter_model)
@@ -60,7 +60,7 @@ module Qed
             puts "time_params #{int_config[:time_params]}"
             options.merge!({:time_params => int_config[:time_params]})
           end
-          int_config[:query] = filter_model.mongodb_query(options)
+          int_config[:query] = Qed::Mongodb::QueryBuilder.selector(filter_model, {:clasz => Qed::Mongodb::MongoidModel}.merge(options))
 
           mrm = Marbu::MapReduceModel.new(int_config)
           mrm.force_query = true

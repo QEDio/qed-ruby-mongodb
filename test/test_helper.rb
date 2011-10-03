@@ -52,14 +52,15 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'test/unit'
 require 'shoulda'
+require 'qaram'
 require 'qed-mongodb'
 
 
 unless Kernel.const_defined?("FROM_DATE")
-  require 'config/test_constants'
-  require 'config/test_filter_helper'
-  require 'config/test_mapreduce_config'
-  require 'config/test_query_builder_helper'
+  require 'fixtures/test_constants'
+  require 'fixtures/test_filter_helper'
+  require 'fixtures/test_mapreduce_config'
+  require 'fixtures/test_query_builder_helper'
   require 'factory/test_mongodb_factory'
 
 
@@ -83,18 +84,6 @@ unless Kernel.const_defined?("FROM_DATE")
       ACTION                            =>  ACTION_NAME_MR3_VALUE,
       ACTION_NAME                       =>  ACTION_NAME_MR3_VALUE,
       CONTROLLER                        =>  CONTROLLER_VALUE
-    }
-
-  PARAMS_MR4 =
-    {
-      DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,
-      FROM_DATE                         =>  FROM_DATE_VALUE,
-      TILL_DATE                         =>  TILL_DATE_VALUE,
-      M_S_PRODUCT_NAME                  =>  M_S_PRODUCT_NAME_VALUE,
-      ACTION                            =>  ACTION_NAME_MR2_VALUE,
-      ACTION_NAME                       =>  ACTION_NAME_MR2_VALUE,
-      CONTROLLER                        =>  CONTROLLER_VALUE,
-      M_K_PRODUCT_NAME                  =>  M_K_PRODUCT_NAME_VALUE
     }
 
     PARAMS_SPECIAL_CHARACTERS =

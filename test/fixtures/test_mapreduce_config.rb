@@ -1,5 +1,5 @@
-require 'config/test_config_scale_of_universe'
-require 'config/test_config_world_wide_business'
+require 'fixtures/test_config_scale_of_universe'
+require 'fixtures/test_config_world_wide_business'
 
 MAPREDUCE_CONFIG = {
     :test => {
