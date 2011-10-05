@@ -11,11 +11,12 @@ GIT
 
 GIT
   remote: git@github.com:QEDio/qaram.git
-  revision: 77dbea243411dec318b9a5d4cfc2e5d454b71a61
+  revision: ae681e26bbd7b64b4fef2e82cd78141ef5ba7a23
   submodules: true
   specs:
     qaram (0.0.1)
       activesupport
+      i18n
       rake
       yajl-ruby
 

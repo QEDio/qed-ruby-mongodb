@@ -1,4 +1,4 @@
-require 'fixtures/test_store_scale_of_universe'
+require 'fixtures/store_scale_of_universe_fixture'
 
 MR_SOU_DIM4 =
             {
