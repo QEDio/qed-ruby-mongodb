@@ -3,8 +3,8 @@ require File.dirname(__FILE__) + '/test_helper.rb'
 class TestQueryBuilder < Test::Unit::TestCase
   context "a builder" do
     setup do
-      @fm = Qaram::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
-      @fm.drilldown_level_current = 2
+      @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      #@fm.drilldown_level_current = 2
       @fm.view = :query_only_scale_of_universe
       @fm.user = USER
       @mr_config = MAPREDUCE_CONFIG

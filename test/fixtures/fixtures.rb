@@ -1,1 +1,1 @@
-require 'fixtures/config_scale_of_universe_fixture'
+require 'fixtures/mapreduce_config_fixture'

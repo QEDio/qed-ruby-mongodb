@@ -57,10 +57,21 @@ require 'qed-mongodb'
 
 
 unless Kernel.const_defined?("FROM_DATE")
+  require 'fixtures/qaram_fixture'
   require 'fixtures/fixtures'
   require 'factory/factory'
+  include Qaram::Test::Base
 
-
+  QARAM_PARAMS_1    =
+    {
+      PREFIXED_VIEW           =>  VIEW_VALUE,
+      PREFIXED_ACTION         =>  ACTION_VALUE,
+      PREFIXED_CONTROLLER     =>  CONTROLLER_VALUE,
+      PREFIXED_STEP_SIZE      =>  STEP_SIZE_VALUE,
+      PREFIXED_FROM           =>  FROM_VALUE,
+      PREFIXED_TILL           =>  TILL_VALUE,
+      PREFIXED_PRODUCT_NAME   =>  PRODUCT_NAME_VALUE
+    }
   #PARAMS_MR2 =
   #  {
   #    DRILLDOWN_LEVEL_CURRENT           =>  DRILLDOWN_LEVEL_CURRENT_VALUE,

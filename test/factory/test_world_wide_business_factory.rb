@@ -1,8 +1,8 @@
 require 'mongo'
 
 module Qed
-  module Mongodb
-    module Test
+  module Test
+    module Mongodb
       class Factory
         module WorldWideBusinessMixins
           attr_accessor :options
@@ -51,6 +51,8 @@ module Qed
 
 
         class WorldWideBusiness
+          include Qaram::Test::Base
+          
           @@db_name         = 'qed_ruby_mongodb_test'
           @@mongo           = Mongo::Connection.new('127.0.0.1', 27017)
           @@db              = @@mongo.db(@@db_name)
@@ -82,7 +84,7 @@ module Qed
           end
 
           class BusinessDevisionDimension
-            include Qed::Mongodb::Test::Factory::WorldWideBusinessMixins
+            include WorldWideBusinessMixins
             ALL             = "ALL"
 
             # Services or Goods
@@ -182,7 +184,7 @@ module Qed
           end
 
           class GeographicDimension
-            include Qed::Mongodb::Test::Factory::WorldWideBusinessMixins
+            include WorldWideBusinessMixins
 
             ALL         = "ALL"
             EUROPE      = "EUROPE"
@@ -287,7 +289,7 @@ module Qed
           end
 
           class RevenueDimension
-            include Qed::Mongodb::Test::Factory::WorldWideBusinessMixins
+            include WorldWideBusinessMixins
             ALL                 = "ALL"
             GOODS               = "GOODS"
             ELECTRONICS         = "ELECTRONICS"
@@ -590,10 +592,8 @@ module Qed
 
           PARAMS_WORLD_WIDE_BUSINESS =
           {
-            DRILLDOWN_LEVEL_CURRENT           =>  9999999,
-            ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            ACTION_NAME                       =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            CONTROLLER                        =>  CONTROLLER_VALUE
+            PREFIXED_ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            PREFIXED_CONTROLLER                        =>  CONTROLLER_VALUE
           }
 
           M_K_DIM_LOC_3                       =   "m_k_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"
@@ -601,10 +601,8 @@ module Qed
 
           PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS =
           {
-            DRILLDOWN_LEVEL_CURRENT           =>  0,
-            ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            ACTION_NAME                       =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            CONTROLLER                        =>  CONTROLLER_VALUE,
+            PREFIXED_ACTION                   =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
+            PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE,
             M_K_DIM_LOC_3                     =>  1,
             M_K_DIM_LOC_2                     =>  2
           }
