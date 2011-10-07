@@ -13,16 +13,6 @@ class TestQueryBuilder < Test::Unit::TestCase
       @mr_config = MAPREDUCE_CONFIG
     end
 
-    #context "for queries only" do
-    #  should "respond with true to query_only?" do
-    #    mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(@fm, @mr_config)
-    #
-    #    assert_equal 1, mapreduce_model.size
-    #    # TODO: currently this can never return true, since we don't know if we are on the atomic level of our data
-    #    assert_equal true, mapreduce_model.first.query_only?
-    #  end
-    #end
-
     context "with no query" do
       should "return nil" do
         mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(@fm, @mr_config)

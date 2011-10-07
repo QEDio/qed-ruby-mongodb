@@ -56,8 +56,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
     context "by providing a filtermodel with external emit keys" do
       setup do
         @fm = Qaram::FilterModel.new(QARAM_PARAMS_1)
-        @fm.plugins << Qaram::Plugin::Confidential.new
-        @fm.get_plugin(Qaram::Plugin::Confidential).user = USER
+        @fm.user = USER
       end
 
       should "delete the default emit_keys and set the provided ones" do

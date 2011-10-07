@@ -60,7 +60,7 @@ module Qed
               builder = @builder_clasz.new(mrm)
 
               #Rails.logger.warn("query: #{builder.query}")
-              puts("query: #{builder.query}")
+              #puts("query: #{builder.query}")
 
               data_hsh = data_hsh.map_reduce(
                 builder.map, builder.reduce,
