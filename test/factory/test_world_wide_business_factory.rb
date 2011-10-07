@@ -596,15 +596,15 @@ module Qed
             PREFIXED_CONTROLLER                        =>  CONTROLLER_VALUE
           }
 
-          M_K_DIM_LOC_3                       =   "m_k_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"
-          M_K_DIM_LOC_2                       =   "m_k_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "2"
+          M_DIM_LOC_3                       =   "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"
+          M_DIM_LOC_2                       =   "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "2"
 
           PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS =
           {
             PREFIXED_ACTION                   =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
             PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE,
-            M_K_DIM_LOC_3                     =>  1,
-            M_K_DIM_LOC_2                     =>  2
+            M_DIM_LOC_3                       =>  1,
+            M_DIM_LOC_2                       =>  2
           }
 
           # dimension (;location, :revenue, :devision, ...)

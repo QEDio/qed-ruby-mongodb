@@ -70,7 +70,7 @@ module Qed
       end
 
       def self.set_map_emit_keys(mrm, fm)
-        if fm.map_reduce_params.size > 0
+        if( fm.map_reduce_params && fm.map_reduce_params.size > 0 )
           map_obj = mrm.map
           # first delete all currently defined emit keys, because we have some shinier ones
           map_obj.keys = []

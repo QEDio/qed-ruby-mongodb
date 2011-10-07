@@ -31,11 +31,14 @@ module Qed
 
       def self.build_from_date_time(query, plugin, ext_options = {})
         options   = ext_options
-        from      = DateTime.parse(plugin.from.to_s).to_time.utc
-        till      = DateTime.parse(plugin.till.to_s).to_time.utc
 
-        options[:time_params].each do |param|
-          query = query.between((Marbu::MapReduceModel::DOCUMENT_OFFSET+param.to_s).to_sym, from, till)
+        if( plugin && plugin.from && plugin.till )
+          #from      = DateTime.parse(plugin.from.to_s).to_time.utc
+          #till      = DateTime.parse(plugin.till.to_s).to_time.utc
+
+          options[:time_params].each do |param|
+            query = query.between((Marbu::MapReduceModel::DOCUMENT_OFFSET+param.to_s).to_sym, plugin.from, plugin.till)
+          end
         end
 
         return query

@@ -1,6 +1,8 @@
 require File.dirname(__FILE__) + '/../test_helper.rb'
 
 class TestMapReducePerformer < Test::Unit::TestCase
+  include Qed::Test::StatisticViewConfigStore
+  
   should "load" do
     Qed::Mongodb::MapReduce::Performer
   end
@@ -9,13 +11,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
     should "throw an exception if option is not a hash" do
       assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
         Qed::Mongodb::MapReduce::Performer.new([], MAPREDUCE_CONFIG)
-      end
-    end
-
-    should "throw an exception if option doesn't have the 'filter' key" do
-      fm = Qaram::FilterModel.new(PARAMS_MR2)
-      assert_raise Qed::Mongodb::Exceptions::OptionMisformed do
-        Qed::Mongodb::MapReduce::Performer.new({:abc => fm}, MAPREDUCE_CONFIG)
       end
     end
 
@@ -205,7 +200,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
     context "with at least two map emit keys" do
       setup do
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
-        Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Mongodb::Test::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
+        Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
 
         @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
         @fm.user = USER
@@ -216,7 +211,9 @@ class TestMapReducePerformer < Test::Unit::TestCase
       should "TODO: write test-framework to check returned mapreduce data" do
         @data = @performer.mapreduce[:result].find().to_a
         #puts @data.inspect
-        raise Exception.new("The returned data seems to be ok, checked against the Google Docs-Sheet. But we have to write the corresponding testfunctions in here.")
+        raise Exception.new("After the refactoring, this is definitely wrong!")
+        # TODO: Exception before factor
+        #raise Exception.new("The returned data seems to be ok, checked against the Google Docs-Sheet. But we have to write the corresponding testfunctions in here.")
       end
     end
 
@@ -230,22 +227,23 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
       context "on the Dimension location" do
         setup do
-           @fm.drilldown_level_current = 2
         end
 
         context "to create a filter but unreduced view on the data" do
-          context "on DIM3" do
+          context "on DIM0" do
             setup do
               @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
               @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
+              # TODO: we are not using mrapper here, so this is going to be bad
               @data = @performer.mapreduce[:result].find().to_a
+              puts "data: #{@data.inspect}"
               @mr_key = @performer.get_mr_key.join(",")
             end
 
             # TODO: we need something to test the filtering/query thingy
             # TODO: below this is a workaround
             should "return the correct number of filtered datarows" do
-              assert_equal Qed::Test::Mongodb::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["value"]["DIM_LOC_0"], :location), @data.size
+              assert_equal Qed::Test::Mongodb::Factory::WorldWideBusiness.line_items_with_same_value_in_dimension(@data.first["value"]["DIM_LOC_0"], :location), @data.first["value"]["count"]
             end
           end
         end

@@ -60,6 +60,7 @@ unless Kernel.const_defined?("FROM_DATE")
   require 'fixtures/qaram_fixture'
   require 'fixtures/fixtures'
   require 'factory/factory'
+  
   include Qaram::Test::Base
 
   QARAM_PARAMS_1    =

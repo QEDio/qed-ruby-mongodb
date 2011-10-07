@@ -212,6 +212,7 @@ module Qed
           PARAMS_SCALE_OF_UNIVERSE =
             {
           #    DRILLDOWN_LEVEL_CURRENT           =>  9999999,
+              PREFIXED_VIEW                     =>  VIEW_VALUE,
               PREFIXED_ACTION                   =>  ACTION_NAME_SCALE_OF_UNIVERSE,
               PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE
             }

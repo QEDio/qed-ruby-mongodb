@@ -54,24 +54,21 @@ module Qed
           end
 
           def int_mapreduce
-            if @mapreduce_models.size == 1 && @mapreduce_models.first.query_only?
-              data_hsh = @db.collection(@mapreduce_models.first.base_collection).find(@mapreduce_models[0].query)
-            else
-              data_hsh = @db.collection(@mapreduce_models.first.base_collection)
+            data_hsh = @db.collection(@mapreduce_models.first.base_collection)
 
-              @mapreduce_models.each do |mrm|
-                builder = @builder_clasz.new(mrm)
+            @mapreduce_models.each do |mrm|
+              builder = @builder_clasz.new(mrm)
 
-                #Rails.logger.warn("query: #{builder.query}")
+              #Rails.logger.warn("query: #{builder.query}")
+              puts("query: #{builder.query}")
 
-                data_hsh = data_hsh.map_reduce(
-                    builder.map, builder.reduce,
-                    {
-                      :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
-                      :finalize => builder.finalize
-                    }
-                )
-              end
+              data_hsh = data_hsh.map_reduce(
+                builder.map, builder.reduce,
+                {
+                  :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
+                  :finalize => builder.finalize
+                }
+              )
             end
 
             return data_hsh
