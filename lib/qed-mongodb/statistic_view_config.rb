@@ -84,7 +84,12 @@ module Qed
 
       # Todo: this is bad shortcut, but for now I just need it to work
       def self.get_config(config, filter_model)
+        raise Exception.new("filter_model has no user! This is not allowed") if filter_model.user.nil?
         user = filter_model.user.to_sym
+
+        if( filter_model.view.nil? && filter_model.action.nil? )
+          raise Exception.new("filter_model view and action are both nil! This is not allowd!")
+        end
         action = filter_model.action.to_sym
         view = filter_model.view.to_sym
 
