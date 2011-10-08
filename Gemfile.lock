@@ -11,7 +11,7 @@ GIT
 
 GIT
   remote: git@github.com:QEDio/qaram.git
-  revision: abb4981f2b996f78d1c1b36dcf6060809757851b
+  revision: e672de1c573a67bde8faa26231d7c5fc58bf7401
   submodules: true
   specs:
     qaram (0.0.1)
