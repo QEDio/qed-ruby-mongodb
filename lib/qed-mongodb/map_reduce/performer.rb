@@ -44,7 +44,6 @@ module Qed
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qaram::FilterModel)
 
             @filter_model = filter_model
-            # @mrm is an array, containing the configuration for all necessary mapreduces
             @mapreduce_models = Qed::Mongodb::StatisticViewConfig.create_config(@filter_model, mr_config)
 
             raise MapReduceConfigurationNotFound.new("Couldn't find any mapreduce configuration for this request.") if @mapreduce_models.size == 0
