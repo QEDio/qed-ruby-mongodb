@@ -90,15 +90,13 @@ module Qed
         if( filter_model.view.nil? && filter_model.action.nil? )
           raise Exception.new("filter_model view and action are both nil! This is not allowd!")
         end
-        action = filter_model.action.to_sym
-        view = filter_model.view.to_sym
 
         raise Exception.new("Unknown user #{user}") unless config.key?(user)
 
-        if(config[user.to_sym].key?(view))
-          accessor = view
+        if(filter_model.view && config[user.to_sym].key?(filter_model.view.to_sym))
+          accessor = filter_model.view.to_sym
         else
-          accessor = action
+          accessor = filter_model.action.to_sym
         end
 
         config[user][accessor] || {}
