@@ -14,7 +14,7 @@ module Qed
           new("variable view in filter_model is not allowed to be nil!") if filter_model.user.nil?
 
         # get the mapreduce-configurations
-        mapreduce_configurations = get_config(config, filter_model.user, filter_model.view)[:mapreduce]
+        mapreduce_configurations = get_config(config, filter_model)[:mapreduce]
 
         if mapreduce_configurations.nil?
           raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
@@ -82,8 +82,21 @@ module Qed
         mrm
       end
 
-      def self.get_config(config, user, view)
-        config[user.to_sym][view.to_sym] || {}
+      # Todo: this is bad shortcut, but for now I just need it to work
+      def self.get_config(config, filter_model)
+        user = filter_model.user.to_sym
+        action = filter_model.action.to_sym
+        view = filter_model.view.to_sym
+
+        raise Exception.new("Unknown user #{user}") unless config.key?(user)
+
+        if(config[user.to_sym].key?(view))
+          accessor = view
+        else
+          accessor = action
+        end
+
+        config[user][accessor] || {}
       end
     end
   end

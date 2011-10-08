@@ -46,8 +46,8 @@ module Qaram
       PREFIXED_ACTION                       = Qaram::Plugin::View.prefix+ACTION
       PREFIXED_CONTROLLER                   = Qaram::Plugin::View.prefix+CONTROLLER
 
-      VIEW_VALUE                            = "scale_of_universe"
-      ACTION_VALUE                          = "do something"
+      VIEW_VALUE                            = "something else"
+      ACTION_VALUE                          = "scale_of_universe"
       CONTROLLER_VALUE                      = "dashboard"
       # End: View-Plugin Params
     end
