@@ -32,7 +32,6 @@ class TestMapReducePerformer < Test::Unit::TestCase
         should "work" do
           performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
           data = performer.mapreduce[:result].find().to_a
-          puts data.inspect
 
           # filter nil elements, for now
           # TODO: can we do something about objects that are not within this map-reduce scope?
