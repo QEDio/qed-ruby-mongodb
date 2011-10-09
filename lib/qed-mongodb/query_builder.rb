@@ -7,18 +7,16 @@ module Qed
         raise Exception.new("key time_params is not allowed to have a nil object as value!") if (ext_options.key?(:time_params) and ext_options[:time_params].nil?)
 
         options     = default_options.merge(ext_options)
-        clasz       = options[:clasz]
+        query       = options[:clasz]
 
-        query = nil
+        query = build_from_date_time(query, fm.datetime, :time_params => options[:time_params])
+        query = build_from_map_reduce(query, fm.mapreduce)
 
-        if( fm.get_plugin(Qaram::Plugin::MapReduce) || fm.get_plugin(Qaram::Plugin::DateTime) )
-          query = clasz
-
-          query = build_from_date_time(query, fm.get_plugin(Qaram::Plugin::DateTime), :time_params => options[:time_params])
-          query = build_from_map_reduce(query, fm.get_plugin(Qaram::Plugin::MapReduce))
+        if( query.is_a?(Mongoid::Criteria) )
+          query = query.selector
+        else
+          query = nil
         end
-
-        query = query.selector if query
         return query
       end
 
@@ -33,9 +31,6 @@ module Qed
         options   = ext_options
 
         if( plugin && plugin.from && plugin.till )
-          #from      = DateTime.parse(plugin.from.to_s).to_time.utc
-          #till      = DateTime.parse(plugin.till.to_s).to_time.utc
-
           options[:time_params].each do |param|
             query = query.between((Marbu::MapReduceModel::DOCUMENT_OFFSET+param.to_s).to_sym, plugin.from, plugin.till)
           end
@@ -58,7 +53,6 @@ module Qed
             end
           end
         end
-
         return query
       end
     end
