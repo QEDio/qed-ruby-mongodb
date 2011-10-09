@@ -65,13 +65,14 @@ unless Kernel.const_defined?("FROM_DATE")
 
   QARAM_PARAMS_1    =
     {
-      PREFIXED_VIEW           =>  VIEW_VALUE,
-      PREFIXED_ACTION         =>  ACTION_VALUE,
-      PREFIXED_CONTROLLER     =>  CONTROLLER_VALUE,
-      PREFIXED_STEP_SIZE      =>  STEP_SIZE_VALUE,
-      PREFIXED_FROM           =>  FROM_VALUE,
-      PREFIXED_TILL           =>  TILL_VALUE,
-      PREFIXED_PRODUCT_NAME   =>  PRODUCT_NAME_VALUE
+      PREFIXED_VIEW                   => VIEW_VALUE,
+      PREFIXED_ACTION                 => ACTION_VALUE,
+      PREFIXED_CONTROLLER             => CONTROLLER_VALUE,
+      PREFIXED_STEP_SIZE              => STEP_SIZE_VALUE,
+      PREFIXED_FROM                   => FROM_VALUE,
+      PREFIXED_TILL                   => TILL_VALUE,
+      PREFIXED_PRODUCT_NAME           => PRODUCT_NAME_VALUE,
+      PREFIXED_EMIT_KEY_PRODUCT       => EMIT_KEY_PRODUCT_VALUE_DEFAULT_VALUE
     }
 end
 

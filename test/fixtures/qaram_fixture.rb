@@ -29,14 +29,24 @@ module Qaram
 
       # Start: MapReduce-Plugin Params
       ### IDs
+      EMIT_KEY_PRODUCT                      = "key_that_needs_to_be_set"
+      PREFIXED_EMIT_KEY_PRODUCT             = Qaram::Plugin::MapReduce.prefix+EMIT_KEY_PRODUCT
+
+      ### Values
+      EMIT_KEY_PRODUCT_VALUE_DEFAULT_VALUE  = -1
+      EMIT_KEY_PRODUCT_VALUE_GARAGE         = "Garage"
+      # End: MapReduce-Plugin Params
+
+      # Start: Query-Plugin Params
+      ### IDs
       PRODUCT_NAME                          = "product_name"
-      PREFIXED_PRODUCT_NAME                 = Qaram::Plugin::MapReduce.prefix+PRODUCT_NAME
+      PREFIXED_PRODUCT_NAME                 = Qaram::Plugin::Query.prefix+PRODUCT_NAME
 
       ### Values
       PRODUCT_NAME_VALUE                    = "Elektromobil"
       PRODUCT_NAME_VALUE_GARAGE             = "Garage"
       PRODUCT_NAME_VALUE_SPECIAL_CHARS      = "Ää, Öö, Üü"
-      # End: MapReduce-Plugin Params
+      # End: Query-Plugin Params
 
       # Start: View-Plugin Params
       VIEW                                  = Qaram::Plugin::View::VIEW_ID.to_s

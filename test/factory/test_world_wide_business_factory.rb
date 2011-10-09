@@ -76,7 +76,7 @@ module Qed
 
               item[:amount].times { WorldWideBusiness.mongo_collection.insert({:value => hsh}) }
             end
-            sleep(0.3)
+            sleep(0.4)
           end
 
           def self.sell_out

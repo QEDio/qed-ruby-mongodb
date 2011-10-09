@@ -68,7 +68,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
 
         assert_equal 1, map.keys.size
         key = map.keys.first
-        assert_equal PRODUCT_NAME, key.name
+        assert_equal EMIT_KEY_PRODUCT, key.name
       end
     end
   end

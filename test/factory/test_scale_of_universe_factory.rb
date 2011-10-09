@@ -65,6 +65,7 @@ module Qed
             blueprints.each do |bp|
               (1..bp[:amount]).each {|i| bp[:blueprint].new.save!}
             end
+            sleep(0.4)
           end
 
           # since this makes for a cyclic univers it's a nice fit here
@@ -87,6 +88,7 @@ module Qed
             end
 
             def self.save!(obj)
+
               ScaleOfUniverse.mongo_collection.insert(create_insert_hsh(obj))
             end
 
@@ -96,7 +98,6 @@ module Qed
                   key = "dim_#{i}"
                   hsh[key] = m.to_s.upcase
                 end
-
                 return {:value =>  hsh.merge(obj.attributes)}
               end
             end

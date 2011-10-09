@@ -10,7 +10,7 @@ module Qed
         query       = options[:clasz]
 
         query = build_from_date_time(query, fm.datetime, :time_params => options[:time_params])
-        query = build_from_map_reduce(query, fm.mapreduce)
+        query = build_from_query(query, fm.query)
 
         if( query.is_a?(Mongoid::Criteria) )
           query = query.selector
@@ -39,7 +39,7 @@ module Qed
         return query
       end
 
-      def self.build_from_map_reduce(query, plugin, ext_options = {})
+      def self.build_from_query(query, plugin, ext_options = {})
         options       = ext_options
 
         if( plugin && plugin.values )
