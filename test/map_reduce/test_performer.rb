@@ -25,7 +25,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Test::Mongodb::Factory::ScaleOfUniverse.big_crunch
         Qed::Test::Mongodb::Factory::ScaleOfUniverse.big_bang(Qed::Test::Mongodb::Factory::ScaleOfUniverse::EXAMPLE_UNIVERSE)
         @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
-        @fm.user = USER
+        @fm.confidential.user = USER
       end
 
       context "to create a drilldown statistic five steps below the top view" do
@@ -54,11 +54,11 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
         @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
-        @fm.user = USER
+        @fm.confidential.user = USER
       end
 
       should "use the cache for the second mapreduce query" do
-        @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+        @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
         @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
         @data = @performer.mapreduce
 
@@ -75,7 +75,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
         context "to create a the top view statistic" do
           setup do
-            @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+            @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
             @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
@@ -95,7 +95,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
         context "to create a drilldown statistic one level below the top view" do
           setup do
-            @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM1
+            @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM1
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
             @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
@@ -114,7 +114,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
         context "to create a drilldown statistic two level below the top view" do
           setup do
-            @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM2
+            @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM2
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
             @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
@@ -133,7 +133,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
 
         context "to create a drilldown statistic three level below the top view" do
           setup do
-            @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM3
+            @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM3
             @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
             @data = @performer.mapreduce[:result].find().to_a
             @mr_key = @performer.get_mr_key.join(",")
@@ -158,8 +158,8 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
 
         @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
-        @fm.user = USER
-        @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM3
+        @fm.confidential.user = USER
+        @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM3
         @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
       end
 
@@ -177,7 +177,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
         @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
-        @fm.user = USER
+        @fm.confidential.user = USER
       end
 
       context "on the Dimension location" do
@@ -187,7 +187,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         context "to create a filter but unreduced view on the data" do
           context "on DIM0" do
             setup do
-              @fm.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
+              @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM0
               @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
               # TODO: we are not using mrapper here, so this is going to be bad
               @data = @performer.mapreduce[:result].find().to_a

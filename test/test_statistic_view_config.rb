@@ -20,7 +20,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   context "Creating a StatisticViewConfig" do
     setup do
       @fm =  Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
-      @fm.user = USER
+      @fm.confidential.user = USER
     end
 
     should "raise an exception if param filter_model is nil" do
@@ -56,7 +56,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
     context "by providing a filtermodel with external emit keys" do
       setup do
         @fm = Qaram::FilterModel.new(QARAM_PARAMS_1)
-        @fm.user = USER
+        @fm.confidential.user = USER
       end
 
       should "delete the default emit_keys and set the provided ones" do
