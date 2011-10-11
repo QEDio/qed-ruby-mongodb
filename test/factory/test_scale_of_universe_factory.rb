@@ -1,8 +1,8 @@
 require 'mongo'
 
 module Qed
-  module Mongodb
-    module Test
+  module Test
+    module Mongodb
       class Factory
         module ScaleOfUniversClassMixins
           # markup represents the different dimensions for this object in a datacube
@@ -18,8 +18,9 @@ module Qed
           end
         end
 
-
         class ScaleOfUniverse
+          include Qaram::Test::Base
+
           PLANCK_LENGTH = :planck_length
           NEUTRINO      = :neutriono
           PREON         = :preon
@@ -64,6 +65,7 @@ module Qed
             blueprints.each do |bp|
               (1..bp[:amount]).each {|i| bp[:blueprint].new.save!}
             end
+            sleep(0.4)
           end
 
           # since this makes for a cyclic univers it's a nice fit here
@@ -72,6 +74,8 @@ module Qed
           end
 
           class Meaning
+            include Qaram::Test::Base
+
             def self.generate_fabrice(base_clasz)
               h = {:markup => [], :attributes => {}}
 
@@ -84,6 +88,7 @@ module Qed
             end
 
             def self.save!(obj)
+
               ScaleOfUniverse.mongo_collection.insert(create_insert_hsh(obj))
             end
 
@@ -93,66 +98,65 @@ module Qed
                   key = "dim_#{i}"
                   hsh[key] = m.to_s.upcase
                 end
-
                 return {:value =>  hsh.merge(obj.attributes)}
               end
             end
           end
 
           class PlanckLength < Meaning
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = PLANCK_LENGTH
             ATTRIBUTES = {:length => 1, :width => 1}
           end
 
           class Neutrino < PlanckLength
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = NEUTRINO
             ATTRIBUTES = {:length => 2, :width => 2}
           end
 
           class Electron < PlanckLength
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = ELECTRON
             ATTRIBUTES = {:length => 4, :width => 4}
           end
 
           class Preon < PlanckLength
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = PREON
             ATTRIBUTES = {:length => 3, :width => 3}
           end
 
           class Quark < Preon
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = QUARK
             ATTRIBUTES = {:length => 4, :width => 4}
           end
 
           class Neutron < Quark
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             # 2 down and  1 up quark
             TYPE = NEUTRON
           end
 
           class Proton < Quark
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             # 2 up and 1 down quark
             TYPE = PROTON
           end
 
           class Atom < Neutron
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = ATOM
           end
 
           class Atom1 < Proton
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = ATOM1
           end
 
           class Atom2 < Proton
-            include Qed::Mongodb::Test::Factory::ScaleOfUniversClassMixins
+            include ScaleOfUniversClassMixins
             TYPE = ATOM2
           end
 
@@ -208,10 +212,9 @@ module Qed
 
           PARAMS_SCALE_OF_UNIVERSE =
             {
-              DRILLDOWN_LEVEL_CURRENT           =>  9999999,
-              ACTION                            =>  ACTION_NAME_SCALE_OF_UNIVERSE,
-              ACTION_NAME                       =>  ACTION_NAME_SCALE_OF_UNIVERSE,
-              CONTROLLER                        =>  CONTROLLER_VALUE
+              PREFIXED_VIEW                     =>  VIEW_VALUE,
+              PREFIXED_ACTION                   =>  ACTION_NAME_SCALE_OF_UNIVERSE,
+              PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE
             }
         end
       end

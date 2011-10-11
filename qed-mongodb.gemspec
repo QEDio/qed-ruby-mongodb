@@ -22,6 +22,8 @@ Gem::Specification.new do |s|
   s.add_dependency('rake')
   s.add_dependency('mongoid')
   s.add_dependency('yajl-ruby')
+  #s.add_dependency('activesupport', '~> 3.1.1.rc2')
+  s.add_dependency('i18n')
   s.add_development_dependency('shoulda')
   s.add_development_dependency('spork')
   s.add_development_dependency('spork-testunit')

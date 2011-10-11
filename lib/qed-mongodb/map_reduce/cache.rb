@@ -34,7 +34,6 @@ module Qed
           collection = db.collection(mapreduce_model.mr_collection)
 
           data = {
-              :digest_without_date    => fm.digest(false),
               :digest_with_date       => fm.digest(),
               :result                 => cursor.find().to_a
           }
