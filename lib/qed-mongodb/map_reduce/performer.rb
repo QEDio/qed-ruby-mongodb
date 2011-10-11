@@ -41,10 +41,9 @@ module Qed
 
         private
           def init(filter_model, mr_config, builder_clasz)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qed::Filter::FilterModel)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qaram::FilterModel)
 
             @filter_model = filter_model
-            # @mrm is an array, containing the configuration for all necessary mapreduces
             @mapreduce_models = Qed::Mongodb::StatisticViewConfig.create_config(@filter_model, mr_config)
 
             raise MapReduceConfigurationNotFound.new("Couldn't find any mapreduce configuration for this request.") if @mapreduce_models.size == 0
@@ -54,24 +53,21 @@ module Qed
           end
 
           def int_mapreduce
-            if @mapreduce_models.size == 1 && @mapreduce_models.first.query_only?
-              data_hsh = @db.collection(@mapreduce_models.first.base_collection).find(@mapreduce_models[0].query)
-            else
-              data_hsh = @db.collection(@mapreduce_models.first.base_collection)
+            data_hsh = @db.collection(@mapreduce_models.first.base_collection)
 
-              @mapreduce_models.each do |mrm|
-                builder = @builder_clasz.new(mrm)
+            @mapreduce_models.each do |mrm|
+              builder = @builder_clasz.new(mrm)
 
-                #Rails.logger.warn("query: #{builder.query}")
+              #Rails.logger.warn("query: #{builder.query}")
+              #puts("query: #{builder.query}")
 
-                data_hsh = data_hsh.map_reduce(
-                    builder.map, builder.reduce,
-                    {
-                      :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
-                      :finalize => builder.finalize
-                    }
-                )
-              end
+              data_hsh = data_hsh.map_reduce(
+                builder.map, builder.reduce,
+                {
+                  :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
+                  :finalize => builder.finalize
+                }
+              )
             end
 
             return data_hsh

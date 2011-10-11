@@ -1,10 +1,12 @@
 require File.dirname(__FILE__) + '/test_helper.rb'
 
 class TestStatisticViewConfig < Test::Unit::TestCase
+  include Qed::Test::StatisticViewConfigStore
+
   context "Creating a StatisticViewConfig the wrong way" do
     context "by omitting the user" do
       setup do
-        @fm = Qed::Filter::FilterModel.new(PARAMS_MR4)
+        @fm = Qaram::FilterModel.new(QARAM_PARAMS_1)
       end
 
       should "throw an Exception" do
@@ -17,8 +19,8 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   
   context "Creating a StatisticViewConfig" do
     setup do
-      @fm =  Qed::Filter::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
-      @fm.user = USER
+      @fm =  Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      @fm.confidential.user = USER
     end
 
     should "raise an exception if param filter_model is nil" do
@@ -53,8 +55,8 @@ class TestStatisticViewConfig < Test::Unit::TestCase
   context "Using StatisticViewConfig to return MapReduceModel Objects" do
     context "by providing a filtermodel with external emit keys" do
       setup do
-        @fm = Qed::Filter::FilterModel.new(PARAMS_MR4)
-        @fm.user = USER
+        @fm = Qaram::FilterModel.new(QARAM_PARAMS_1)
+        @fm.confidential.user = USER
       end
 
       should "delete the default emit_keys and set the provided ones" do
@@ -66,7 +68,7 @@ class TestStatisticViewConfig < Test::Unit::TestCase
 
         assert_equal 1, map.keys.size
         key = map.keys.first
-        assert_equal PRODUCT_NAME_K, key.name
+        assert_equal EMIT_KEY_PRODUCT, key.name
       end
     end
   end

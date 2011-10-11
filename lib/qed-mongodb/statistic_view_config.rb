@@ -5,84 +5,73 @@ module Qed
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qed::Filter::FilterModel)
+          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qaram::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.
           new("config param is not a hash!") if !config.is_a?(Hash)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("variable user in filter_model is not allowed to be nil!") if filter_model.view.nil?
+          new("variable user in filter_model is not allowed to be nil!") if filter_model.view.view.nil?
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("variable view in filter_model is not allowed to be nil!") if filter_model.user.nil?
+          new("variable view in filter_model is not allowed to be nil!") if filter_model.confidential.user.nil?
 
         # get the mapreduce-configurations
-        mapreduce_configurations = get_config(config, filter_model.user, filter_model.view)[:mapreduce]
+        mapreduce_configurations = get_config(config, filter_model)[:mapreduce]
 
         if mapreduce_configurations.nil?
           raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
-            new("Either the user: #{filter_model.user} or the view: #{filter_model.view} doesn't exist'")
+            new("Either the user: #{filter_model.confidential.user} or the view: #{filter_model.view.view} doesn't exist'")
         elsif !mapreduce_configurations.is_a?(Array)
           raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.
-            new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.user} and view: #{filter_model.view}")
+            new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
         elsif mapreduce_configurations.size == 0
           raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
-            new("Couldn't get mapreduce configuration for user: #{filter_model.user} and view: #{filter_model.view}")
+            new("Couldn't get mapreduce configuration for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
         end
 
-        if( mapreduce_configurations.size > filter_model.drilldown_level_current)
-          # only get those needed for the current drilldown level
-          # TODO: I guess we have to rethink if a drilldown level of 0 is really the most reduced stats view
-          # drilldown level == 0 is most reduced stats view
-          # drilldown level == size of returned configuration is unreduced stats view (but almost certainly filtered!)
-          mapreduce_configurations = mapreduce_configurations[0..mapreduce_configurations.size-(1+filter_model.drilldown_level_current)]
+        mapreduce_configuration = mapreduce_configurations[0]
+        options = {}
 
-          [].tap do |arr|
-            mapreduce_configurations.each_with_index do |int_config, i|
-              # only first mapreduce needs this filter query
-              # interestingly this is exactly the place to implement mapreduce caching
-
-
-              options = {}
-              if int_config[:time_params]
-                puts "time_params #{int_config[:time_params]}"
-                options.merge!({:time_params => int_config[:time_params]})
-              end
-
-              int_config[:query] = i == 0 ? filter_model.mongodb_query(options) : nil
-
-              # set externally provided map emit keys
-              arr << set_map_emit_keys(Marbu::MapReduceModel.new(int_config), filter_model)
-            end
-          end
-        # don't mapreduce, just show the filtered data
-        else
-          int_config = mapreduce_configurations.first
-          options = {}
-          if  int_config[:time_params]
-            puts "time_params #{int_config[:time_params]}"
-            options.merge!({:time_params => int_config[:time_params]})
-          end
-          int_config[:query] = filter_model.mongodb_query(options)
-
-          mrm = Marbu::MapReduceModel.new(int_config)
-          mrm.force_query = true
-          [mrm]
+        if mapreduce_configuration[:time_params]
+          options.merge!({:time_params => mapreduce_configuration[:time_params]})
         end
+
+        mapreduce_configuration[:query] = Qed::Mongodb::QueryBuilder.selector(filter_model, {:clasz => Qed::Mongodb::MongoidModel}.merge(options))
+
+        # set externally provided map emit keys
+        [set_map_emit_keys(Marbu::MapReduceModel.new(mapreduce_configuration), filter_model)]
       end
 
       def self.set_map_emit_keys(mrm, fm)
-        if fm.map_reduce_params.emit_keys.size > 0
+        if( fm.mapreduce.values.size > 0 )
           map_obj = mrm.map
           # first delete all currently defined emit keys, because we have some shinier ones
           map_obj.keys = []
 
-          fm.map_reduce_params.emit_keys.each do |emit_key|
+          fm.mapreduce.values.each do |emit_key|
             map_obj.add_key(emit_key.key)
           end
         end
         mrm
       end
 
-      def self.get_config(config, user, view)
-        config[user.to_sym][view.to_sym] || {}
+      # Todo: this is bad shortcut, but for now I just need it to work
+      def self.get_config(config, filter_model)
+        #puts "FilterModel: #{filter_model.inspect}"
+        raise Exception.new("filter_model has no user! This is not allowed") if filter_model.confidential.user.nil?
+        user = filter_model.confidential.user.to_sym
+
+        if( filter_model.view.view.nil? && filter_model.view.action.nil? )
+          raise Exception.new("filter_model view and action are both nil! This is not allowd!")
+        end
+
+        raise Exception.new("Unknown user #{user}") unless config.key?(user)
+
+        if(filter_model.view.view && config[user.to_sym].key?(filter_model.view.view.to_sym))
+          accessor = filter_model.view.view.to_sym
+        else
+          accessor = filter_model.view.action.to_sym
+        end
+
+        config[user][accessor] || {}
       end
     end
   end
