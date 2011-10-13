@@ -46,8 +46,12 @@ module Qed
           plugin.values.each do |value|
             att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+value.key.to_s).to_sym
 
-            if value.value.is_a?(Array)
-             query = query.where(att.in => value.value)
+            if value.value.is_a?(Array) && value.value.size > 0
+              if( value.value.size == 1)
+                query = query.where(att.to_s => value.value[0])
+              else
+                query = query.where(att.in => value.value)
+              end
             else
               query = query.where(att.to_s => value.value)
             end
