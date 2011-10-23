@@ -21,7 +21,7 @@ module Qed
               }
           )
 
-          if( data_hsh[:result].size == 0 )
+          if( !data_hsh[:cached] )
             data_hsh = Qed::Mongodb::MapReduce::Cache.save(
                 {
                     :cursor             => int_mapreduce,
