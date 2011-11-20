@@ -1,7 +1,7 @@
 module Qed
   module Test
     module QueryBuilder
-      include Qaram::Test::Base
+      include Qstate::Test::Base
 
       QB_PARAMS_1 =
         {

@@ -5,7 +5,7 @@ module Qed
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qaram::FilterModel)
+          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qstate::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.
           new("config param is not a hash!") if !config.is_a?(Hash)
         raise Qed::Mongodb::Exceptions::FilterModelError.

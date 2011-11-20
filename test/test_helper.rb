@@ -52,16 +52,16 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'test/unit'
 require 'shoulda'
-require 'qaram'
+require 'qstate'
 require 'qed-mongodb'
 
 
 unless Kernel.const_defined?("FROM_DATE")
-  require 'fixtures/qaram_fixture'
+  require 'fixtures/qstate_fixture'
   require 'fixtures/fixtures'
   require 'factory/factory'
   
-  include Qaram::Test::Base
+  include Qstate::Test::Base
 
   QARAM_PARAMS_1    =
     {

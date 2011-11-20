@@ -24,7 +24,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Test::Mongodb::Factory::ScaleOfUniverse.big_crunch
         Qed::Test::Mongodb::Factory::ScaleOfUniverse.big_bang(Qed::Test::Mongodb::Factory::ScaleOfUniverse::EXAMPLE_UNIVERSE)
-        @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+        @fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
         @fm.confidential.user = USER
       end
 
@@ -53,7 +53,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
-        @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
         @fm.confidential.user = USER
       end
 
@@ -157,7 +157,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
 
-        @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
+        @fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS)
         @fm.confidential.user = USER
         @fm.view.view = Qed::Test::Mongodb::Factory::WorldWideBusiness::VIEW_LOC_DIM3
         @performer = Qed::Mongodb::MapReduce::Performer.new(@fm, MAPREDUCE_CONFIG)
@@ -176,7 +176,7 @@ class TestMapReducePerformer < Test::Unit::TestCase
       setup do
         Qed::Test::Mongodb::Factory::WorldWideBusiness.sell_out
         Qed::Test::Mongodb::Factory::WorldWideBusiness.startup(Qed::Test::Mongodb::Factory::WorldWideBusiness::WORLD_WIDE_BUSINESS)
-        @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
+        @fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::WorldWideBusiness::PARAMS_WORLD_WIDE_BUSINESS)
         @fm.confidential.user = USER
       end
 

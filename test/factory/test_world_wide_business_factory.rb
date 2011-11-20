@@ -51,7 +51,7 @@ module Qed
 
 
         class WorldWideBusiness
-          include Qaram::Test::Base
+          include Qstate::Test::Base
           
           @@db_name         = 'qed_ruby_mongodb_test'
           @@mongo           = Mongo::Connection.new('127.0.0.1', 27017)

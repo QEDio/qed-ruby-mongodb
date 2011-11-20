@@ -41,7 +41,7 @@ module Qed
 
         private
           def init(filter_model, mr_config, builder_clasz)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qaram::FilterModel)
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!") unless filter_model.is_a?(Qstate::FilterModel)
 
             @filter_model = filter_model
             @mapreduce_models = Qed::Mongodb::StatisticViewConfig.create_config(@filter_model, mr_config)

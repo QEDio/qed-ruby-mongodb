@@ -19,7 +19,7 @@ module Qed
         end
 
         class ScaleOfUniverse
-          include Qaram::Test::Base
+          include Qstate::Test::Base
 
           PLANCK_LENGTH = :planck_length
           NEUTRINO      = :neutriono
@@ -74,7 +74,7 @@ module Qed
           end
 
           class Meaning
-            include Qaram::Test::Base
+            include Qstate::Test::Base
 
             def self.generate_fabrice(base_clasz)
               h = {:markup => [], :attributes => {}}

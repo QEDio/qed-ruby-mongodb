@@ -7,7 +7,7 @@ class TestQueryBuilder < Test::Unit::TestCase
     include Qed::Test::StatisticViewConfigStore
     
     setup do
-      @fm = Qaram::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      @fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       @fm.view.view = :query_only_scale_of_universe
       @fm.confidential.user = USER
       @mr_config = MAPREDUCE_CONFIG
@@ -24,7 +24,7 @@ class TestQueryBuilder < Test::Unit::TestCase
 
   context "for two timepoints" do
     setup do
-      @fm = Qaram::FilterModel.new(QB_PARAMS_1)
+      @fm = Qstate::FilterModel.new(QB_PARAMS_1)
       @fm.view.view = :query_only_scale_of_universe
       @fm.confidential.user = USER
     end

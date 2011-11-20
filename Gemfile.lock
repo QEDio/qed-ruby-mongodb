@@ -10,11 +10,11 @@ GIT
       vegas
 
 GIT
-  remote: git@github.com:QEDio/qaram.git
-  revision: f88de150908fb87fe6e4512f5a040f219d0fb48a
+  remote: git@github.com:QEDio/qstate.git
+  revision: 73ef41a50d42aba81721c66ae8bc7b9f8007e121
   submodules: true
   specs:
-    qaram (0.0.1)
+    qstate (0.0.1)
       activesupport
       i18n
       rake
@@ -76,8 +76,8 @@ PLATFORMS
 
 DEPENDENCIES
   marbu!
-  qaram!
   qed-mongodb!
+  qstate!
   shoulda
   simplecov
   spork
