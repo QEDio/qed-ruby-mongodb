@@ -29,7 +29,7 @@ module Qed
                <<-JS
                 cpa = 0.0;
                 cr = 0.0;
-                cost = Math.round(value.cost * 100)/100
+                cost = Math.round(value.cost * 100)/100;
 
                 if( value.clicks > 0 ){
                   cr = Math.round((value.conversions / value.clicks)*10000)/100;

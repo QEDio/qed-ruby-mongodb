@@ -53,7 +53,7 @@ module Qed
           end
 
           def int_mapreduce
-            data_hsh = @db.collection(@mapreduce_models.first.base_collection)
+            coll = @db.collection(@mapreduce_models.first.base_collection)
 
             @mapreduce_models.each do |mrm|
               builder = @builder_clasz.new(mrm)
@@ -61,7 +61,7 @@ module Qed
               #Rails.logger.warn("query: #{builder.query}")
               #puts("query: #{builder.query}")
 
-              data_hsh = data_hsh.map_reduce(
+              coll = coll.map_reduce(
                 builder.map, builder.reduce,
                 {
                   :query => builder.query, :out => {:replace => "tmp."+mrm.mr_collection},
@@ -70,7 +70,7 @@ module Qed
               )
             end
 
-            return data_hsh
+            return coll
           end
       end
     end
