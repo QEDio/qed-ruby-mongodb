@@ -1,0 +1,3 @@
+require 'fixtures/external/external'
+require 'fixtures/mapreduce_config_fixture'
+require 'fixtures/query_builder_fixture'

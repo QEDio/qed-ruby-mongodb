@@ -37,7 +37,7 @@ module Qed
         mapreduce_configuration[:query] = Qed::Mongodb::QueryBuilder.selector(filter_model, {:clasz => Qed::Mongodb::MongoidModel}.merge(options))
 
         # set externally provided map emit keys
-        [set_map_emit_keys(Marbu::MapReduceModel.new(mapreduce_configuration), filter_model)]
+        [set_map_emit_keys(Marbu::Models::MapReduceFinalize.new(mapreduce_configuration), filter_model)]
       end
 
       def self.set_map_emit_keys(mrm, fm)
