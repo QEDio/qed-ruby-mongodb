@@ -32,7 +32,7 @@ module Qed
 
         if( plugin && plugin.from && plugin.till )
           options[:time_params].each do |param|
-            query = query.between((Marbu::MapReduceModel::DOCUMENT_OFFSET+param.to_s).to_sym, plugin.from, plugin.till)
+            query = query.between((Marbu::Models::Misc::DOCUMENT_OFFSET+param.to_s).to_sym, plugin.from, plugin.till)
           end
         end
 
@@ -44,7 +44,7 @@ module Qed
 
         if( plugin && plugin.values )
           plugin.values.each do |value|
-            att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+value.key.to_s).to_sym
+            att = (Marbu::Models::Misc::DOCUMENT_OFFSET+value.key.to_s).to_sym
 
             if value.value.is_a?(Array) && value.value.size > 0
               if( value.value.size == 1)
