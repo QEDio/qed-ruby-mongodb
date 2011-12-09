@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Qed::Mongodb::QueryBuilder do
-  include Qed::Test::QueryBuilder
-  include Qed::Test::StatisticViewConfigStore
+  include Qed::Mongodb::Test::Fixtures::QueryBuilder
+  include Qed::Mongodb::Test::Fixtures::StatisticViewConfigStore
 
   context "a builder" do
     let(:fm) do
-      fm = Qstate::FilterModel.new(Qed::Test::Mongodb::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      fm = Qstate::FilterModel.new(Qed::Mongodb::Test::Fixtures::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       fm.view.view = :query_only_scale_of_universe
       fm.confidential.user = USER
       fm
