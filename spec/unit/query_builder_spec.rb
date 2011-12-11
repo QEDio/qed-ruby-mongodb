@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Qed::Mongodb::QueryBuilder do
   include Qed::Mongodb::Test::Fixtures::StatisticViewConfigStore
 
-
   context "a builder" do
     let(:fm) do
       fm = Qstate::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)

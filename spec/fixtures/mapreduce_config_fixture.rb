@@ -9,10 +9,6 @@ module Qed
                 # the order is important here, the first mapreduce will be done first, then the second and so on
                 :mapreduce => [
                   Marbu::Test::Fixtures::Models::MapReduceFinalize::MR_SOU_DIM4
-                  #MR_SOU_DIM3,
-                  #MR_SOU_DIM2,
-                  #MR_SOU_DIM1,
-                  #MR_SOU_DIM0
                 ]
               },
               :query_only_scale_of_universe =>  {

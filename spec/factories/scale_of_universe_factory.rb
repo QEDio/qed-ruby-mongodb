@@ -66,7 +66,7 @@ module Qed
             sleep(0.4)
           end
 
-          # since this makes for a cyclic univers it's a nice fit here
+          # since this makes for a cyclic universe it's a nice fit here
           def self.big_crunch
             ScaleOfUniverse.mongo.drop_database(@@db_name)
           end
