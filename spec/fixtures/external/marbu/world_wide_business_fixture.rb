@@ -6,7 +6,7 @@ module Marbu
           MR_WWB_LOC_DIM0 = {
             :map => {
               :keys => [
-                {:name => "DIM_LOC_0", :function => "value.DIM_LOC_0"}
+                {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"}
               ],
               :values =>  [
                 {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
@@ -18,6 +18,10 @@ module Marbu
             },
 
             :reduce => {
+              :values =>  [
+                {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
+                {:name => "count"}
+              ],
               :code => {
                 :text =>  <<-JS
                             var count = 0;
@@ -43,9 +47,9 @@ module Marbu
           }
 
           MR_WWB_LOC_DIM1 = {
-            :maps => {
+            :map => {
               :keys => [
-                {:name => "DIM_LOC_1", :function => "value.DIM_LOC_1"}
+                {:name => "DIM_LOC_1",            :function => "value.DIM_LOC_1"}
               ],
               :values =>  [
                 {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
@@ -58,6 +62,11 @@ module Marbu
             },
 
             :reduce => {
+              :values =>  [
+                {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
+                {:name => "DIM_LOC_1",            :function => "value.DIM_LOC_1"},
+                {:name => "count"}
+              ],
               :code => {
                 :text =>  <<-JS
                             var count = 0;
@@ -100,6 +109,12 @@ module Marbu
             },
 
             :reduce => {
+              :values =>  [
+                {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
+                {:name => "DIM_LOC_1",            :function => "value.DIM_LOC_1"},
+                {:name => "DIM_LOC_2",            :function => "value.DIM_LOC_2"},
+                {:name => "count"}
+              ],
               :code => {
                 :text =>  <<-JS
                             var count = 0;
@@ -144,6 +159,13 @@ module Marbu
             },
 
             :reduce => {
+              :values =>  [
+                {:name => "DIM_LOC_0",            :function => "value.DIM_LOC_0"},
+                {:name => "DIM_LOC_1",            :function => "value.DIM_LOC_1"},
+                {:name => "DIM_LOC_2",            :function => "value.DIM_LOC_2"},
+                {:name => "DIM_LOC_3",            :function => "value.DIM_LOC_3"},
+                {:name => "count"}
+              ],
               :code => {
                 :text =>  <<-JS
                             var count = 0;

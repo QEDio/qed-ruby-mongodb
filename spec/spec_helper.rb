@@ -60,3 +60,7 @@ require 'factories/factories'
 RSpec.configure do |config|
 
 end
+
+def spec_helper_get_mr_key(performer, options = {:index => -1})
+  performer.mapreduce_models[options[:index]].map.keys.collect(&:name)
+end

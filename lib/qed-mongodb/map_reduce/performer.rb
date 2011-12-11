@@ -6,10 +6,10 @@ module Qed
         MONGO_PORT = 27017
 
         attr_reader :filter_model, :mapreduce_models, :db
-        attr_accessor :use_cache
+        attr_accessor :cache
 
         def initialize( filter_model, ext_options = {} )
-          options       = default_options.merge( ext_options.delete_if{|k,v|v.nil?})
+          options       = default_options.merge( ext_options.delete_if{|k,v|v.nil?} )
 
           unless filter_model.is_a?(Qstate::FilterModel)
             raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!")
@@ -23,21 +23,21 @@ module Qed
             raise MapReduceConfigurationNotFound.new("Couldn't find any mapreduce configuration for this request.")
           end
 
-          @db = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].misc.database)
+          @db                 = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].misc.database)
           @builder_klass      = options[:builder_klass]
-          @use_cache          = options[:use_cache]
+          @cache              = options[:cache]
         end
 
         def default_options
           {
             :config         => Qed::Mongodb::StatisticViewConfigStore::PROFILE,
             :builder_klass  => Marbu::Builder,
-            :use_cache      => true
+            :cache          => true
           }
         end
 
         def mapreduce()
-          if( use_cache )
+          if( cache )
             # TODO: mrapper should already be used here
             data_hsh = Qed::Mongodb::MapReduce::Cache.find(
                 { :filter_model           => @filter_model,
@@ -61,10 +61,6 @@ module Qed
           end
 
           return data_hsh
-        end
-
-        def get_mr_key(mr_index = -1)
-          mapreduce_models[mr_index].mr_key
         end
 
         private

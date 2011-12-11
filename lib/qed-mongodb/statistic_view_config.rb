@@ -60,7 +60,7 @@ module Qed
         user = filter_model.confidential.user.to_sym
 
         if( filter_model.view.view.nil? && filter_model.view.action.nil? )
-          raise Exception.new("filter_model view and action are both nil! This is not allowd!")
+          raise Exception.new("filter_model view and action are both nil! This is not allowed!")
         end
 
         raise Exception.new("Unknown user #{user}") unless config.key?(user)
