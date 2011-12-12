@@ -136,12 +136,12 @@ module Qed
             ],
             :code => {
               :text => <<-JS
-                        var turnover = 0;
-                        var payed = 0;
+                        var turnover  = 0;
+                        var payed     = 0;
 
                         values.forEach(function(v){
-                          turnover += v.turnover;
-                          payed += v.payed;
+                          turnover  += v.turnover;
+                          payed     += v.payed;
                         });
                       JS
             }
@@ -166,9 +166,9 @@ module Qed
             ],
             :code => {
               :text =>  <<-JS
-                          worked = 1;
+                          worked    = 1;
                           qualified = 1;
-                          test = 0;
+                          test      = 0;
 
                           if(value.status_id == 0){worked=0};
                           if(value.status_id == 4){test=1};
@@ -483,7 +483,7 @@ module Qed
             :code => {
               :text =>  <<-JS
                           var turnover 		= 0;
-                          var payed 		= 0;
+                          var payed 		  = 0;
 
                           if(value.lead_status_id == 1){turnover = value.leaddetails_price};
                           if(value.leaddetails_billing_status_id == 2){payed = value.leaddetails_price};
@@ -502,12 +502,12 @@ module Qed
             ],
             :code => {
               :text =>  <<-JS
-                          var turnover = 0;
-                          var payed = 0;
+                          var turnover  = 0;
+                          var payed     = 0;
 
                           values.forEach(function(v){
                             turnover 	+= v.turnover;
-                            payed 	+= v.payed;
+                            payed 	  += v.payed;
                           });
                         JS
             }
@@ -647,8 +647,8 @@ module Qed
                           var conversions_backend	= 0;
 
                           values.forEach(function(v){
-                            cost     		+= v.cost;
-                            turnover 		+= v.turnover;
+                            cost     		        += v.cost;
+                            turnover 		        += v.turnover;
                             conversions_adwords	+= v.conversions_adwords;
                             conversions_backend	+= v.conversions_backend;
                           });
@@ -673,9 +673,9 @@ module Qed
 
             :code => {
               :text =>  <<-JS
-                          db         	= value.turnover - value.cost;
-                          rel_db     	= (db/value.cost) * 100;
-                          target_cpa 	= (value.turnover / value.conversions_backend) / 2;
+                          db         	  = value.turnover - value.cost;
+                          rel_db      	= (db/value.cost) * 100;
+                          target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
                           current_cpa 	= value.cost / value.conversions_backend;
                         JS
             }
@@ -720,14 +720,14 @@ module Qed
             ],
             :code => {
               :text =>  <<-JS
-                          var turnover			= 0;
-                          var cost			= 0;
+                          var turnover			      = 0;
+                          var cost			          = 0;
                           var conversions_adwords	= 0;
                           var conversions_backend	= 0;
 
                           values.forEach(function(v){
-                            cost     		+= v.cost;
-                            turnover 		+= v.turnover;
+                            cost     		        += v.cost;
+                            turnover 		        += v.turnover;
                             conversions_adwords	+= v.conversions_adwords;
                             conversions_backend	+= v.conversions_backend;
                           });
@@ -752,9 +752,9 @@ module Qed
 
             :code => {
               :text =>  <<-JS
-                          db         	= value.turnover - value.cost;
-                          rel_db     	= (db/value.cost) * 100;
-                          target_cpa 	= (value.turnover / value.conversions_backend) / 2;
+                          db         	  = value.turnover - value.cost;
+                          rel_db     	  = (db/value.cost) * 100;
+                          target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
                           current_cpa 	= value.cost / value.conversions_backend;
                         JS
             }
