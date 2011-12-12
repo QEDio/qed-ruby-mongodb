@@ -6,7 +6,7 @@ module Qed
       def self.selector(fm, ext_options = {})
         raise Exception.new("key time_params is not allowed to have a nil object as value!") if (ext_options.key?(:time_params) and ext_options[:time_params].nil?)
 
-        options     = default_options.merge(ext_options)
+        options     = default_options.merge(ext_options.delete_if{|k,v|v.nil?})
         query       = options[:clasz]
 
         query = build_from_date_time(query, fm.datetime, :time_params => options[:time_params])
