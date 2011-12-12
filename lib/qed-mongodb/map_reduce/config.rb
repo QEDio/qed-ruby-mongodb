@@ -466,6 +466,306 @@ module Qed
             :time_params          => ["created_at"]
           }
         }
+
+        KP_ADWORDS_DB_1 = {
+          :map => {
+            :keys => [
+              {:name => "inquiry_id",           :function => "value.inquiry_id"}
+            ],
+            :values => [
+              {:name => "inquiry_id",           :function => "value.inquiry_id"},
+              {:name => "turnover"},
+              {:name => "payed"},
+              {:name => "created_at",           :function => "value.created_at"},
+              {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
+              {:name => "status_id",            :function => "value.status_id"}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover 		= 0;
+                          var payed 		= 0;
+
+                          if(value.lead_status_id == 1){turnover = value.leaddetails_price};
+                          if(value.leaddetails_billing_status_id == 2){payed = value.leaddetails_price};
+                        JS
+            }
+          },
+
+          :reduce => {
+            :values => [
+              {:name => "inquiry_id",           :function => "value.inquiry_id"},
+              {:name => "turnover"},
+              {:name => "payed"},
+              {:name => "created_at",           :function => "value.created_at"},
+              {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
+              {:name => "status_id",            :function => "value.status_id"}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover = 0;
+                          var payed = 0;
+
+                          values.forEach(function(v){
+                            turnover 	+= v.turnover;
+                            payed 	+= v.payed;
+                          });
+                        JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => "inquiry_id",           :function => "value.inquiry_id"},
+              {:name => "turnover"},
+              {:name => "payed"},
+              {:name => "created_at",           :function => "value.created_at"},
+              {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
+              {:name => "status_id",            :function => "value.status_id"}
+            ]
+          },
+
+          :misc => {
+            :database           => "kp",
+            :input_collection   => "my_first_staging_collection",
+            :output_collection  => "my_first_staging_collection_mr"
+          },
+
+          :query => {
+            :time_params => ['created_at']
+          }
+        }
+
+        KP_ADWORDS_DB_2 = {
+          :map => {
+            :keys => [
+              {:name => 'ad_group_ad_id',         :function => 'value.ad_group_ad_id'}
+            ],
+            :values => [
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'cost',                   :function => '0'},
+              {:name => 'product_name',           :function => '""'},
+              {:name => 'campaign_name',          :function => '""'},
+              {:name => 'ad_group_name',          :function => '""'},
+              {:name => 'conversions_backend',    :function => '1'},
+              {:name => 'conversions_adwords',    :function => '0'},
+            ]
+          },
+
+          :reduce => {
+            :values => [
+              {:name => 'turnover'},
+              {:name => 'cost'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'conversions_backend',    :function => 'conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'conversions_adwords'},
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover			      = 0;
+                          var cost			          = 0;
+                          var conversions_adwords	= 0;
+                          var conversions_backend	= 0;
+
+                          values.forEach(function(v){
+                            cost     		        += v.cost;
+                            turnover 		        += v.turnover;
+                            conversions_adwords	+= v.conversions_adwords;
+                            conversions_backend	+= v.conversions_backend;
+                          });
+                        JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'cost',                   :function => 'value.cost'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'db'},
+              {:name => 'rel_db'},
+              {:name => 'target_cpa'},
+              {:name => 'current_cpa'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          db         	  = value.turnover - value.cost;
+                          rel_db     	  = (db/value.cost) * 100;
+                          target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
+                          current_cpa 	= value.cost / value.conversions_backend;
+                        JS
+            }
+          },
+
+          :misc => {
+            :database           => "kp",
+            :input_collection   => "my_first_staging_collection_mr",
+            :output_collection  => "session_stat"
+          },
+
+          :query => {
+            :time_params => ['created_at']
+          }
+        }
+
+        KP_ADWORDS_DB_3 = {
+          :map => {
+            :keys => [
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
+            ],
+            :values => [
+              {:names => 'product_name',            :function => 'value.product_name'},
+              {:names => 'campaign_name',           :function => 'value.campaign_name'},
+              {:names => 'ad_group_name',           :function => 'value.ad_group_name'},
+              {:names => 'cost',                    :function => 'value.cost'},
+              {:names => 'turnover',                :function => 'value.turnover'},
+              {:names => 'conversions_adwords',     :function => 'value.conversions_adwords'},
+              {:names => 'conversions_backends',    :function => 'value.conversions_backends'}
+            ]
+          },
+
+          :reduce => {
+            :values => [
+              {:names => 'cost'},
+              {:names => 'turnover'},
+              {:names => 'conversions_adwords'},
+              {:names => 'conversions_backend'},
+              {:names => 'product_name',              :function => 'value.product_name'},
+              {:names => 'campaign_name',             :function => 'value.campaign_name'},
+              {:names => 'ad_group_name',             :function => 'value.ad_group_name'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover			      = 0;
+                          var cost			          = 0;
+                          var conversions_adwords	= 0;
+                          var conversions_backend	= 0;
+
+                          values.forEach(function(v){
+                            cost     		+= v.cost;
+                            turnover 		+= v.turnover;
+                            conversions_adwords	+= v.conversions_adwords;
+                            conversions_backend	+= v.conversions_backend;
+                          });
+                        JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'cost',                   :function => 'value.cost'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'db'},
+              {:name => 'rel_db'},
+              {:name => 'target_cpa'},
+              {:name => 'current_cpa'}
+            ],
+
+            :code => {
+              :text =>  <<-JS
+                          db         	= value.turnover - value.cost;
+                          rel_db     	= (db/value.cost) * 100;
+                          target_cpa 	= (value.turnover / value.conversions_backend) / 2;
+                          current_cpa 	= value.cost / value.conversions_backend;
+                        JS
+            }
+          },
+
+          :misc => {
+            :database           => "kp",
+            :input_collection   => "adwords_early_warning_staging",
+            :output_collection  => "session_stat"
+          },
+
+          :query => {
+            :time_params => ['ad_from']
+          }
+        }
+
+        KP_ADWORDS_DB_4 = {
+          :map => {
+            :keys => [
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
+            ],
+            :values => [
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'cost',                     :function => 'value.cost'},
+              {:name => 'turnover',                 :function => 'value.turnover'},
+              {:name => 'conversions_adwords',      :function => 'value.conversions_adwords'},
+              {:name => 'conversions_backend',      :function => 'value.conversions_backend'}
+            ]
+          },
+
+          :reduce => {
+            :values => [
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'cost'},
+              {:name => 'turnover'},
+              {:name => 'conversions_adwords'},
+              {:name => 'conversions_backend'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover			= 0;
+                          var cost			= 0;
+                          var conversions_adwords	= 0;
+                          var conversions_backend	= 0;
+
+                          values.forEach(function(v){
+                            cost     		+= v.cost;
+                            turnover 		+= v.turnover;
+                            conversions_adwords	+= v.conversions_adwords;
+                            conversions_backend	+= v.conversions_backend;
+                          });
+                        JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'cost',                   :function => 'value.cost'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'db'},
+              {:name => 'rel_db'},
+              {:name => 'target_cpa'},
+              {:name => 'current_cpa'}
+            ],
+
+            :code => {
+              :text =>  <<-JS
+                          db         	= value.turnover - value.cost;
+                          rel_db     	= (db/value.cost) * 100;
+                          target_cpa 	= (value.turnover / value.conversions_backend) / 2;
+                          current_cpa 	= value.cost / value.conversions_backend;
+                        JS
+            }
+          },
+
+          :misc => {
+            :database           => "kp",
+            :input_collection   => "session_stat",
+            :output_collection  => "session_stat_mr"
+          }
+        }
       end
     end
   end
