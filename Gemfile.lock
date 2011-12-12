@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:QEDio/marbu.git
-  revision: e547db7510de8be4e832980e61f9640f64b374a1
+  revision: 58b3cc670ad12ddd79ea8ff150b56c78b4fd8249
   branch: make_work
   submodules: true
   specs:
@@ -79,7 +79,7 @@ GEM
     spork (0.8.5)
     spork-testunit (0.0.7)
       spork (>= 0.6.0)
-    systemu (2.4.1)
+    systemu (2.4.2)
     tilt (1.3.3)
     turn (0.8.3)
       ansi
