@@ -14,7 +14,7 @@ describe Qed::Mongodb::QueryBuilder do
     let(:mr_config) { MAPREDUCE_CONFIG }
 
     context "with no query" do
-      it "returns nil" do
+      it "will return false for present?" do
         mapreduce_model = Qed::Mongodb::StatisticViewConfig.create_config(fm, mr_config)
         mapreduce_model.size.should == 1
         mapreduce_model.first.query.present?.should be_false
@@ -45,9 +45,11 @@ describe Qed::Mongodb::QueryBuilder do
       fm
     end
 
+    let(:query){ Marbu::Models::Query.new(:datetime_fields => ['date_field1', 'date_field2']) }
+
     it "does return teh correct query" do
       Qed::Mongodb::QueryBuilder.
-        selector(fm, :clasz => Qed::Mongodb::MongoidModel, :time_params => ["date_field1", "date_field2"]).to_s.
+        selector(fm, :klass => Qed::Mongodb::MongoidModel, :query => query).to_s.
           should == QB_QUERY1
     end
   end

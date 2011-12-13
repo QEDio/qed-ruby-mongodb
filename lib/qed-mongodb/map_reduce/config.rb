@@ -470,7 +470,7 @@ module Qed
         KP_ADWORDS_DB_1 = {
           :map => {
             :keys => [
-              {:name => "inquiry_id",           :function => "value.inquiry_id"}
+              {:name => "inquiry_id",           :function => "value.inquiry_id", :exchangeable => false}
             ],
             :values => [
               {:name => "inquiry_id",           :function => "value.inquiry_id"},
