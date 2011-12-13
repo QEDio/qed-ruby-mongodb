@@ -625,7 +625,7 @@ module Qed
               {:name => 'cost',                     :function => 'value.cost'},
               {:name => 'turnover',                 :function => 'value.turnover'},
               {:name => 'conversions_adwords',      :function => 'value.conversions_adwords'},
-              {:names => 'conversions_backends',    :function => 'value.conversions_backends'}
+              {:name => 'conversions_backends',    :function => 'value.conversions_backends'}
             ]
           },
 
