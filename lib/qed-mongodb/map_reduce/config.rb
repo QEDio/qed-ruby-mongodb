@@ -619,25 +619,25 @@ module Qed
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
             ],
             :values => [
-              {:names => 'product_name',            :function => 'value.product_name'},
-              {:names => 'campaign_name',           :function => 'value.campaign_name'},
-              {:names => 'ad_group_name',           :function => 'value.ad_group_name'},
-              {:names => 'cost',                    :function => 'value.cost'},
-              {:names => 'turnover',                :function => 'value.turnover'},
-              {:names => 'conversions_adwords',     :function => 'value.conversions_adwords'},
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'cost',                     :function => 'value.cost'},
+              {:name => 'turnover',                 :function => 'value.turnover'},
+              {:name => 'conversions_adwords',      :function => 'value.conversions_adwords'},
               {:names => 'conversions_backends',    :function => 'value.conversions_backends'}
             ]
           },
 
           :reduce => {
             :values => [
-              {:names => 'cost'},
-              {:names => 'turnover'},
-              {:names => 'conversions_adwords'},
-              {:names => 'conversions_backend'},
-              {:names => 'product_name',              :function => 'value.product_name'},
-              {:names => 'campaign_name',             :function => 'value.campaign_name'},
-              {:names => 'ad_group_name',             :function => 'value.ad_group_name'}
+              {:name => 'cost'},
+              {:name => 'turnover'},
+              {:name => 'conversions_adwords'},
+              {:name => 'conversions_backend'},
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
             ],
             :code => {
               :text =>  <<-JS
