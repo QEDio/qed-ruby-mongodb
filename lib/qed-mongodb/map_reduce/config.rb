@@ -516,8 +516,8 @@ module Qed
           :finalize => {
             :values => [
               {:name => "inquiry_id",           :function => "value.inquiry_id"},
-              {:name => "turnover"},
-              {:name => "payed"},
+              {:name => "turnover",             :function => "value.turnover"},
+              {:name => "payed",                :function => "value.payed"},
               {:name => "created_at",           :function => "value.created_at"},
               {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
               {:name => "status_id",            :function => "value.status_id"}
