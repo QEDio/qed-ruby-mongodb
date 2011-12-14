@@ -619,14 +619,22 @@ module Qed
               {:name => 'ad_group_ad_id',           :function => 'value.ad_id'}
             ],
             :values => [
-              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'product_name',             :function => 'value.campaign_product'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
-              {:name => 'cost',                     :function => 'value.cost'},
-              {:name => 'turnover',                 :function => 'value.turnover'},
-              {:name => 'conversions_adwords',      :function => 'value.conversions_adwords'},
-              {:name => 'conversions_backends',    :function => 'value.conversions_backends'}
-            ]
+              {:name => 'cost',                     :function => 'cost'},
+              {:name => 'turnover',                 :function => '0'},
+              {:name => 'conversions_adwords',      :function => 'conversions'},
+              {:name => 'conversions_backends',     :function => '0'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          conversions   = value.ad_stat_conversions;
+                          cost          = value.ad_cost_micro_amount / 1000000.0;
+                          impressions   = value.ad_stat_impressions;
+                          clicks        = value.ad_stat_clicks;
+                        JS
+            }
           },
 
           :reduce => {
