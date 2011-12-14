@@ -674,7 +674,8 @@ module Qed
             :code => {
               :text =>  <<-JS
                           db         	  = value.turnover - value.cost;
-                          rel_db      	= (db/value.cost) * 100;
+                          rel_db        = 0;
+                          if( db > 0 && value.cost > 0 ){ rel_db = (db/value.cost) * 100 };
                           target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
                           current_cpa 	= value.cost / value.conversions_backend;
                         JS
@@ -755,7 +756,9 @@ module Qed
             :code => {
               :text =>  <<-JS
                           db         	  = value.turnover - value.cost;
-                          rel_db     	  = (db/value.cost) * 100;
+                          rel_db     	  = 0;
+                          if( db > 0 && value.cost > 0 ){ rel_db = (db/value.cost) * 100 };
+
                           target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
                           current_cpa 	= value.cost / value.conversions_backend;
                         JS
