@@ -71,7 +71,7 @@ module Qed
             @mapreduce_models.each do |mrm|
               builder = @builder_klass.new(mrm)
 
-              #log(Rails.logger, builder, mrm)
+              log(Rails.logger, builder, mrm)
               
               coll = coll.map_reduce(
                 builder.map, builder.reduce,
