@@ -75,7 +75,7 @@ module Qed
               coll = coll.map_reduce(
                 builder.map, builder.reduce,
                 {
-                  :query => builder.query, :out => {mrm.misc.output_operation.to_sym => "tmp."+mrm.misc.output_collection},
+                  :query => builder.query, :out => {mrm.misc.output_operation.to_sym => mrm.misc.output_collection},
                   :finalize => builder.finalize
                 }
               )
