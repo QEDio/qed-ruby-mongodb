@@ -70,16 +70,29 @@ module Qed
             @mapreduce_models.each do |mrm|
               builder = @builder_klass.new(mrm)
 
+              #log(Rails.logger, builder, mrm)
+              
               coll = coll.map_reduce(
                 builder.map, builder.reduce,
                 {
-                  :query => builder.query, :out => {:replace => "tmp."+mrm.misc.output_collection},
+                  :query => builder.query, :out => {mrm.misc.output_operation.to_sym => "tmp."+mrm.misc.output_collection},
                   :finalize => builder.finalize
                 }
               )
             end
 
             return coll
+          end
+
+          def log(logger, builder, mrm)
+            logger.info "#######################################################"
+            logger.info "input: #{mrm.misc.input_collection}"
+            logger.info "ouput: #{mrm.misc.output_collection}"
+            logger.info "map: #{builder.map}"
+            logger.info "reduce: #{builder.reduce}"
+            logger.info "finalize: #{builder.finalize}"
+            logger.info "query: #{builder.query}"
+            logger.info "#######################################################"
           end
       end
     end

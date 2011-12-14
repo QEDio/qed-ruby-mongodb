@@ -1,6 +1,6 @@
 GIT
   remote: git@github.com:QEDio/marbu.git
-  revision: 034dcb1e5e675178358fdbfe5308ab143046aa1c
+  revision: c83e33e15cd080cb6308ab2dd0043995077af93c
   branch: make_work
   submodules: true
   specs:
@@ -40,16 +40,17 @@ GEM
     activesupport (3.1.3)
       multi_json (~> 1.0)
     ansi (1.4.1)
-    bson (1.5.1)
-    bson_ext (1.5.1)
+    bson (1.5.2)
+    bson_ext (1.5.2)
+      bson (= 1.5.2)
     builder (3.0.0)
     diff-lcs (1.1.3)
     haml (3.1.4)
     i18n (0.6.0)
     macaddr (1.5.0)
       systemu (>= 2.4.0)
-    mongo (1.5.1)
-      bson (= 1.5.1)
+    mongo (1.5.2)
+      bson (= 1.5.2)
     mongoid (2.3.4)
       activemodel (~> 3.1)
       mongo (~> 1.3)
