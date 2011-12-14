@@ -69,7 +69,7 @@ module Qed
             coll = nil
             
             @mapreduce_models.each do |mrm|
-              coll = @db.collection(@mapreduce_models.first.misc.input_collection)
+              coll = @db.collection(mrm.misc.input_collection)
               builder = @builder_klass.new(mrm)
 
               log(Rails.logger, builder, mrm)
