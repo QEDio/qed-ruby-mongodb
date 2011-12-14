@@ -684,7 +684,8 @@ module Qed
           :misc => {
             :database           => "kp",
             :input_collection   => "adwords_early_warning_staging",
-            :output_collection  => "session_stat"
+            :output_collection  => "session_stat",
+            :output_operation   => "reduce"
           },
 
           :query => {
