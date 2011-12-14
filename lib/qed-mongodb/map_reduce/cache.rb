@@ -2,6 +2,8 @@ module Qed
   module Mongodb
     module MapReduce
       class Cache
+        COLLECTION_PREFIX = 'cache_'
+
         def self.find(options = {})
           data_array      = []
           cached          = false
@@ -9,7 +11,7 @@ module Qed
           fm              = options[:filter_model]
           mapreduce_model = options[:mapreduce_models].last
           query           = Qed::Mongodb::MongoidModel.where(:digest_with_date => fm.digest())
-          cursor          = db.collection("cache_"+mapreduce_model.misc.output_collection).find(query.selector)
+          cursor          = db.collection(COLLECTION_PREFIX+mapreduce_model.misc.output_collection).find(query.selector)
           
           if cursor.count > 0
             data_array  = cursor.find().to_a.first["result"]
@@ -28,7 +30,7 @@ module Qed
           mapreduce_model     = options[:mapreduce_models].first
           cursor              = options[:cursor]
 
-          collection = db.collection(mapreduce_model.misc.output_collection)
+          collection = db.collection(COLLECTION_PREFIX + mapreduce_model.misc.output_collection)
 
           data = {
             :digest_with_date       => fm.digest(),
