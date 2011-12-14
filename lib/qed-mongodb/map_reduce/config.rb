@@ -87,7 +87,7 @@ module Qed
           },
 
           :query => {
-            :time_params            => ["ad_from", "ad_till"]
+            :datetime_fields            => ["ad_from", "ad_till"]
           }
         }
 
@@ -184,7 +184,7 @@ module Qed
           },
 
           :query => {
-            :time_params            => ["created_at"]
+            :datetime_fields            => ["created_at"]
           }
         }
 
@@ -274,7 +274,7 @@ module Qed
           },
 
           :query => {
-            :time_params          => ["created_at"]
+            :datetime_fields          => ["created_at"]
           }
         }
 
@@ -361,7 +361,7 @@ module Qed
           },
 
           :query => {
-            :time_params          => ["created_at"]
+            :datetime_fields          => ["created_at"]
           }
         }
 
@@ -463,7 +463,7 @@ module Qed
           },
 
           :query => {
-            :time_params          => ["created_at"]
+            :datetime_fields          => ["created_at"]
           }
         }
 
@@ -531,7 +531,7 @@ module Qed
           },
 
           :query => {
-            :time_params => ['created_at']
+            :datetime_fields => ['created_at']
           }
         }
 
@@ -609,7 +609,7 @@ module Qed
           },
 
           :query => {
-            :time_params => ['created_at']
+            :datetime_fields => ['created_at']
           }
         }
 
@@ -685,7 +685,8 @@ module Qed
             :database           => "kp",
             :input_collection   => "adwords_early_warning_staging",
             :output_collection  => "session_stat",
-            :output_operation   => "reduce"
+            :output_operation   => "reduce",
+            :filter_data        => true
           },
 
           :query => {
