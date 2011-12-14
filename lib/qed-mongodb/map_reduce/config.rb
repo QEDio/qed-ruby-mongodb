@@ -616,7 +616,7 @@ module Qed
         KP_ADWORDS_DB_3 = {
           :map => {
             :keys => [
-              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
+              {:name => 'ad_id',                    :function => 'value.ad_id'}
             ],
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
