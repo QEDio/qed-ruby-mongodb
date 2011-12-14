@@ -689,7 +689,7 @@ module Qed
           },
 
           :query => {
-            :time_params => ['ad_from']
+            :datetime_fields => ['ad_from']
           }
         }
 
