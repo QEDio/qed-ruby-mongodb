@@ -40,20 +40,21 @@ module Qed
           if( cache )
             # TODO: mrapper should already be used here
             data_hsh = Qed::Mongodb::MapReduce::Cache.find(
-                { :filter_model           => @filter_model,
-                  :mapreduce_models       => @mapreduce_models,
-                  :database               => @db
-                }
+              { 
+                :filter_model           => @filter_model,
+                :mapreduce_models       => @mapreduce_models,
+                :database               => @db
+              }
             )
 
             if( !data_hsh[:cached] )
               data_hsh = Qed::Mongodb::MapReduce::Cache.save(
-                  {
-                      :cursor             => int_mapreduce,
-                      :filter_model       => @filter_model,
-                      :mapreduce_models   => @mapreduce_models,
-                      :database           => @db
-                  }
+                {
+                  :cursor             => int_mapreduce,
+                  :filter_model       => @filter_model,
+                  :mapreduce_models   => @mapreduce_models,
+                  :database           => @db
+                }
               )
             end
           else

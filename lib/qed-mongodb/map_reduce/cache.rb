@@ -7,9 +7,9 @@ module Qed
           cached          = false
           db              = options[:database]
           fm              = options[:filter_model]
-          mapreduce_model = options[:mapreduce_models].first
+          mapreduce_model = options[:mapreduce_models].last
           query           = Qed::Mongodb::MongoidModel.where(:digest_with_date => fm.digest())
-          cursor          = db.collection(mapreduce_model.misc.output_collection).find(query.selector)
+          cursor          = db.collection("cache_"+mapreduce_model.misc.output_collection).find(query.selector)
           
           if cursor.count > 0
             data_array  = cursor.find().to_a.first["result"]
