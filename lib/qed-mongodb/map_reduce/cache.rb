@@ -27,7 +27,7 @@ module Qed
         def self.save(options = {})
           db                  = options[:database]
           fm                  = options[:filter_model]
-          mapreduce_model     = options[:mapreduce_models].first
+          mapreduce_model     = options[:mapreduce_models].last
           cursor              = options[:cursor]
 
           collection = db.collection(COLLECTION_PREFIX + mapreduce_model.misc.output_collection)
