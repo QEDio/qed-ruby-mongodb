@@ -32,7 +32,7 @@ module Qed
           {
             :config         => Qed::Mongodb::StatisticViewConfigStore::PROFILE,
             :builder_klass  => Marbu::Builder,
-            :cache          => true
+            :cache          => false
           }
         end
 
