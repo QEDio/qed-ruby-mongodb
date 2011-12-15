@@ -622,8 +622,8 @@ module Qed
               {:name => 'ad_group_ad_id',           :function => 'value.ad_id'}
             ],
             :values => [
-              {:name => 'product_name',             :function => 'value.product_name'},
-              {:name => 'holding_name',             :function => 'value.holding_name'},
+              {:name => 'product_name',             :function => 'value.campaign_product'},
+              {:name => 'holding_name',             :function => 'value.campaign_holding'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'cost',                     :function => 'cost'},
