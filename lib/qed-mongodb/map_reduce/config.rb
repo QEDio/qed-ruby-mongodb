@@ -544,6 +544,7 @@ module Qed
               {:name => 'turnover',               :function => 'value.turnover'},
               {:name => 'cost',                   :function => '0'},
               {:name => 'product_name',           :function => '""'},
+              {:name => 'holding_name',           :function => '""'},
               {:name => 'campaign_name',          :function => '""'},
               {:name => 'ad_group_name',          :function => '""'},
               {:name => 'conversions_backend',    :function => '1'},
@@ -556,6 +557,7 @@ module Qed
               {:name => 'turnover'},
               {:name => 'cost'},
               {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend',    :function => 'conversions_backend'},
@@ -583,6 +585,7 @@ module Qed
               {:name => 'turnover',               :function => 'value.turnover'},
               {:name => 'cost',                   :function => 'value.cost'},
               {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
@@ -619,7 +622,8 @@ module Qed
               {:name => 'ad_group_ad_id',           :function => 'value.ad_id'}
             ],
             :values => [
-              {:name => 'product_name',             :function => 'value.campaign_product'},
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'cost',                     :function => 'cost'},
@@ -645,7 +649,8 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'product_name',             :function => 'value.product_name'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
-              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'holding_name',             :function => 'value.holding_name'},
             ],
             :code => {
               :text =>  <<-JS
@@ -669,6 +674,7 @@ module Qed
               {:name => 'turnover',               :function => 'value.turnover'},
               {:name => 'cost',                   :function => 'value.cost'},
               {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
@@ -710,6 +716,7 @@ module Qed
             ],
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'cost',                     :function => 'value.cost'},
@@ -722,6 +729,7 @@ module Qed
           :reduce => {
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'cost'},
@@ -751,6 +759,7 @@ module Qed
               {:name => 'turnover',               :function => 'value.turnover'},
               {:name => 'cost',                   :function => 'value.cost'},
               {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
