@@ -31,7 +31,8 @@ module Qed
         def default_options
           {
             :config         => Qed::Mongodb::StatisticViewConfigStore::PROFILE,
-            :builder_klass  => Marbu::Builder
+            :builder_klass  => Marbu::Builder,
+            :cache          => true
           }
         end
 
