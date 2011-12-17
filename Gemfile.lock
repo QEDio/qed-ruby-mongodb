@@ -1,7 +1,6 @@
 GIT
   remote: git@github.com:QEDio/marbu.git
-  revision: 1f96b4e76f9b0920c94ca00e5e09556c13eae2f3
-  branch: make_work
+  revision: 99ff01b39c6465394778f2fdd0787347c16bc0eb
   submodules: true
   specs:
     marbu (0.0.1)
