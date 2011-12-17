@@ -1,9 +1,10 @@
-# -*- encoding: utf-8 -*-
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/spec/"
+end
 
 require 'rubygems'
 require 'spork'
-require 'simplecov'
-SimpleCov.start
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,
@@ -50,32 +51,16 @@ end
 $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'test/unit'
-require 'shoulda'
 require 'qstate'
 require 'qed-mongodb'
+require 'rspec'
+require 'fixtures/fixtures'
+require 'factories/factories'
 
+RSpec.configure do |config|
 
-unless Kernel.const_defined?("FROM_DATE")
-  require 'fixtures/qstate_fixture'
-  require 'fixtures/fixtures'
-  require 'factory/factory'
-  
-  include Qstate::Test::Base
-
-  QARAM_PARAMS_1    =
-    {
-      PREFIXED_VIEW                   => VIEW_VALUE,
-      PREFIXED_ACTION                 => ACTION_VALUE,
-      PREFIXED_CONTROLLER             => CONTROLLER_VALUE,
-      PREFIXED_STEP_SIZE              => STEP_SIZE_VALUE,
-      PREFIXED_FROM                   => FROM_VALUE,
-      PREFIXED_TILL                   => TILL_VALUE,
-      PREFIXED_PRODUCT_NAME           => PRODUCT_NAME_VALUE,
-      PREFIXED_EMIT_KEY_PRODUCT       => EMIT_KEY_PRODUCT_VALUE_DEFAULT_VALUE
-    }
 end
 
-class Test::Unit::TestCase
-  include Qed::Mongodb
+def spec_helper_get_mr_key(performer, options = {:index => -1})
+  performer.mapreduce_models[options[:index]].map.keys.collect(&:name)
 end

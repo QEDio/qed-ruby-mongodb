@@ -14,30 +14,22 @@ module Qed
           new("variable view in filter_model is not allowed to be nil!") if filter_model.confidential.user.nil?
 
         # get the mapreduce-configurations
-        mapreduce_configurations = get_config(config, filter_model)[:mapreduce]
+        mapreduce_configurations = get_mapreduce_config(config, filter_model)
 
-        if mapreduce_configurations.nil?
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
-            new("Either the user: #{filter_model.confidential.user} or the view: #{filter_model.view.view} doesn't exist'")
-        elsif !mapreduce_configurations.is_a?(Array)
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.
-            new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
-        elsif mapreduce_configurations.size == 0
-          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
-            new("Couldn't get mapreduce configuration for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
+
+        mapreduce_configurations.each_with_index do |mapreduce_configuration, i|
+          # build query, do it:
+          # ALWAYS for the first mapreduce configuration
+          # for every other configuration that has misc.filter_data == true
+          if( i == 0 || mapreduce_configuration.misc.filter_data )
+            mapreduce_configuration.query.condition =
+              Qed::Mongodb::QueryBuilder.selector(filter_model, :query => mapreduce_configuration.query )
+          end
+
+          set_map_emit_keys(mapreduce_configuration, filter_model)
         end
 
-        mapreduce_configuration = mapreduce_configurations[0]
-        options = {}
-
-        if mapreduce_configuration[:time_params]
-          options.merge!({:time_params => mapreduce_configuration[:time_params]})
-        end
-
-        mapreduce_configuration[:query] = Qed::Mongodb::QueryBuilder.selector(filter_model, {:clasz => Qed::Mongodb::MongoidModel}.merge(options))
-
-        # set externally provided map emit keys
-        [set_map_emit_keys(Marbu::MapReduceModel.new(mapreduce_configuration), filter_model)]
+        return mapreduce_configurations
       end
 
       def self.set_map_emit_keys(mrm, fm)
@@ -60,7 +52,7 @@ module Qed
         user = filter_model.confidential.user.to_sym
 
         if( filter_model.view.view.nil? && filter_model.view.action.nil? )
-          raise Exception.new("filter_model view and action are both nil! This is not allowd!")
+          raise Exception.new("filter_model view and action are both nil! This is not allowed!")
         end
 
         raise Exception.new("Unknown user #{user}") unless config.key?(user)
@@ -72,6 +64,23 @@ module Qed
         end
 
         config[user][accessor] || {}
+      end
+
+      def self.get_mapreduce_config(config, filter_model)
+        mapreduce_configurations = get_config(config, filter_model)[:mapreduce]
+
+        if mapreduce_configurations.nil?
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
+            new("Either the user: #{filter_model.confidential.user} or the view: #{filter_model.view.view} doesn't exist'")
+        elsif !mapreduce_configurations.is_a?(Array)
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationUnknownError.
+            new("Excpected an array as return type, got #{mapreduce_configurations.class} for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
+        elsif mapreduce_configurations.size == 0
+          raise Qed::Mongodb::Exceptions::MapReduceConfigurationNotFound.
+            new("Couldn't get mapreduce configuration for user: #{filter_model.confidential.user} and view: #{filter_model.view.view}")
+        end
+
+        mapreduce_configurations.collect{|c|Marbu::Models::MapReduceFinalize.new(c)}
       end
     end
   end

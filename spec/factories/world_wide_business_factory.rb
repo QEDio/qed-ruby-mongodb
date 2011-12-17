@@ -1,8 +1,8 @@
 require 'mongo'
 
 module Qed
-  module Test
-    module Mongodb
+  module Mongodb
+    module Test
       class Factory
         module WorldWideBusinessMixins
           attr_accessor :options
@@ -51,8 +51,6 @@ module Qed
 
 
         class WorldWideBusiness
-          include Qstate::Test::Base
-          
           @@db_name         = 'qed_ruby_mongodb_test'
           @@mongo           = Mongo::Connection.new('127.0.0.1', 27017)
           @@db              = @@mongo.db(@@db_name)
@@ -592,19 +590,16 @@ module Qed
 
           PARAMS_WORLD_WIDE_BUSINESS =
           {
-            PREFIXED_ACTION                            =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            PREFIXED_CONTROLLER                        =>  CONTROLLER_VALUE
+            'v_action'                            =>  'world_wide_business',
+            'v_controller'                        =>  'dashboard'
           }
-
-          M_DIM_LOC_3                       =   "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"
-          M_DIM_LOC_2                       =   "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "2"
 
           PARAMS_WORLD_WIDE_BUSINESS_WITH_MAP_EMIT_KEYS =
           {
-            PREFIXED_ACTION                   =>  ACTION_NAME_WORLD_WIDE_BUSINESS,
-            PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE,
-            M_DIM_LOC_3                       =>  1,
-            M_DIM_LOC_2                       =>  2
+            'v_action'                                                        =>  'world_wide_business',
+            'v_controller'                                                    =>  'dashboard',
+            "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "3"   =>  1,
+            "m_" + GeographicDimension::DIMENSION_PREFIXES[:location] + "2"   =>  2
           }
 
           # dimension (;location, :revenue, :devision, ...)
@@ -651,7 +646,7 @@ module Qed
 
           def self.expanded_line_item_hsh(line_item, dimension = nil)
             hsh = {}
-            
+
             line_item.each do |line_item_part|
               if( dimension.nil? || line_item_part[:class].eql?(dimension))
                 hsh = hsh.merge(line_item_part[:class].new(line_item_part[:options]).to_hash)

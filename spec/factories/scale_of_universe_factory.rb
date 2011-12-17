@@ -1,8 +1,8 @@
 require 'mongo'
 
 module Qed
-  module Test
-    module Mongodb
+  module Mongodb
+    module Test
       class Factory
         module ScaleOfUniversClassMixins
           # markup represents the different dimensions for this object in a datacube
@@ -19,8 +19,6 @@ module Qed
         end
 
         class ScaleOfUniverse
-          include Qstate::Test::Base
-
           PLANCK_LENGTH = :planck_length
           NEUTRINO      = :neutriono
           PREON         = :preon
@@ -68,14 +66,12 @@ module Qed
             sleep(0.4)
           end
 
-          # since this makes for a cyclic univers it's a nice fit here
+          # since this makes for a cyclic universe it's a nice fit here
           def self.big_crunch
             ScaleOfUniverse.mongo.drop_database(@@db_name)
           end
 
           class Meaning
-            include Qstate::Test::Base
-
             def self.generate_fabrice(base_clasz)
               h = {:markup => [], :attributes => {}}
 
@@ -208,13 +204,11 @@ module Qed
           EXAMPLE_UNIVERS_PARTICLES = AMOUNT_PLANCK_LENGTHS + AMOUNT_NEUTRINOS + AMOUNT_PREONS + AMOUNT_QUARKS + AMOUNT_ELECTRONS + AMOUNT_PROTONS + AMOUNT_NEUTRONS + AMOUNT_ATOMS + AMOUNT_ATOMS1 + AMOUNT_ATOMS2
 
           # ========================= WEB PARAMETER =============================================================
-          ACTION_NAME_SCALE_OF_UNIVERSE         = "scale_of_universe"
-
           PARAMS_SCALE_OF_UNIVERSE =
             {
-              PREFIXED_VIEW                     =>  VIEW_VALUE,
-              PREFIXED_ACTION                   =>  ACTION_NAME_SCALE_OF_UNIVERSE,
-              PREFIXED_CONTROLLER               =>  CONTROLLER_VALUE
+              'v_view'                     =>  'something else',
+              'v_action'                   =>  'scale_of_universe',
+              'v_controller'               =>  'dashboard'
             }
         end
       end

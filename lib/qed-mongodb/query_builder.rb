@@ -1,42 +1,39 @@
 module Qed
   module Mongodb
     class QueryBuilder
-      QUERY_DATE_FIELD = :created_at
-
       def self.selector(fm, ext_options = {})
-        raise Exception.new("key time_params is not allowed to have a nil object as value!") if (ext_options.key?(:time_params) and ext_options[:time_params].nil?)
+        options     = default_options.merge(ext_options.delete_if{|k,v|v.nil?})
+        klass       = options[:klass]
+        query       = options[:query]
 
-        options     = default_options.merge(ext_options)
-        query       = options[:clasz]
+        klass       = build_from_date_time(klass, fm.datetime, :datetime_fields => query.datetime_fields)
+        klass       = build_from_query(klass, fm.query)
 
-        query = build_from_date_time(query, fm.datetime, :time_params => options[:time_params])
-        query = build_from_query(query, fm.query)
-
-        if( query.is_a?(Mongoid::Criteria) )
-          query = query.selector
+        if( klass.is_a?(Mongoid::Criteria) )
+          klass = klass.selector
         else
-          query = nil
+          klass = nil
         end
-        return query
+        
+        return klass
       end
 
       def self.default_options
         {
-            :time_params        => [QUERY_DATE_FIELD],
-            :clasz              => Qed::Mongodb::MongoidModel
+          :klass              => Qed::Mongodb::MongoidModel
         }
       end
 
-      def self.build_from_date_time(query, plugin, ext_options = {})
+      def self.build_from_date_time(klass, plugin, ext_options = {})
         options   = ext_options
 
         if( plugin && plugin.from && plugin.till )
-          options[:time_params].each do |param|
-            query = query.between((Marbu::MapReduceModel::DOCUMENT_OFFSET+param.to_s).to_sym, plugin.from, plugin.till)
+          options[:datetime_fields].each do |datetime_field|
+            klass = klass.between((Marbu::Models::Misc::DOCUMENT_OFFSET+datetime_field.to_s).to_sym, plugin.from, plugin.till)
           end
         end
 
-        return query
+        return klass
       end
 
       def self.build_from_query(query, plugin, ext_options = {})
@@ -44,7 +41,7 @@ module Qed
 
         if( plugin && plugin.values )
           plugin.values.each do |value|
-            att = (Marbu::MapReduceModel::DOCUMENT_OFFSET+value.key.to_s).to_sym
+            att = (Marbu::Models::Misc::DOCUMENT_OFFSET+value.key.to_s).to_sym
 
             if value.value.is_a?(Array) && value.value.size > 0
               if( value.value.size == 1)
