@@ -526,8 +526,8 @@ module Qed
 
           :misc => {
             :database           => "kp",
-            :input_collection   => "my_first_staging_collection",
-            :output_collection  => "my_first_staging_collection_mr"
+            :input_collection   => "kp_backend_staging",
+            :output_collection  => "kp_backend_staging_mr"
           },
 
           :query => {
@@ -607,7 +607,7 @@ module Qed
 
           :misc => {
             :database           => "kp",
-            :input_collection   => "my_first_staging_collection_mr",
+            :input_collection   => "kp_backend_staging_mr",
             :output_collection  => "session_stat"
           },
 
