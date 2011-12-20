@@ -713,11 +713,11 @@ module Qed
           :map => {
             :keys => [
               {:name => 'holding_name',             :function => 'value.holding_name'},
-              {:name => 'ad_group_name',            :function => 'value.ad_group_name'}
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'}
             ],
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
-              {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'cost',                     :function => 'value.cost'},
               {:name => 'turnover',                 :function => 'value.turnover'},
               {:name => 'conversions_adwords',      :function => 'value.conversions_adwords'},
@@ -728,7 +728,6 @@ module Qed
           :reduce => {
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
-              {:name => 'campaign_name',            :function => 'value.campaign_name'},
               {:name => 'cost'},
               {:name => 'turnover'},
               {:name => 'conversions_adwords'},
@@ -764,8 +763,7 @@ module Qed
               {:name => 'target_cpa'},
               {:name => 'current_cpa'},
               {:name => 'cr2',                    :function => '"N/A"'},
-              {:name => 'qali_cost',              :function => '"N/A"'},
-              {:name => 'campaign_name',          :function => 'value.campaign_name'}
+              {:name => 'qali_cost',              :function => '"N/A"'}
             ],
 
             :code => {
