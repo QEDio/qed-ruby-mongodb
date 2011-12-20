@@ -760,11 +760,11 @@ module Qed
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'db'},
               {:name => 'rel_db'},
-              {:name => 'db2',                    :function => 'N/A'},
+              {:name => 'db2',                    :function => '"N/A"'},
               {:name => 'target_cpa'},
               {:name => 'current_cpa'},
-              {:name => 'cr2',                    :function => 'N/A'},
-              {:name => 'qali_cost',              :function => 'N/A'},
+              {:name => 'cr2',                    :function => '"N/A"'},
+              {:name => 'qali_cost',              :function => '"N/A"'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'}
             ],
 
