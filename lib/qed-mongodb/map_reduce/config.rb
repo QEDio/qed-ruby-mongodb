@@ -629,7 +629,7 @@ module Qed
               {:name => 'cost',                     :function => 'cost'},
               {:name => 'turnover',                 :function => '0'},
               {:name => 'conversions_adwords',      :function => 'conversions'},
-              {:name => 'conversions_backends',     :function => '0'}
+              {:name => 'conversions_backend',      :function => '0'}
             ],
             :code => {
               :text =>  <<-JS
