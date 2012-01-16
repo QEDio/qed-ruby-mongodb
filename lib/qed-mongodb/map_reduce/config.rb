@@ -546,7 +546,9 @@ module Qed
               {:name => 'product_name',           :function => '""'},
               {:name => 'holding_name',           :function => '""'},
               {:name => 'campaign_name',          :function => '""'},
+              {:name => 'campaign_id',            :function => '""'},
               {:name => 'ad_group_name',          :function => '""'},
+              {:name => 'ad_group_id',            :function => '""'},
               {:name => 'conversions_backend',    :function => '1'},
               {:name => 'conversions_adwords',    :function => '0'},
             ]
@@ -559,7 +561,9 @@ module Qed
               {:name => 'product_name',           :function => 'value.product_name'},
               {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'campaign_id',            :function => 'value.campaign_id'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend',    :function => 'conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'conversions_adwords'},
             ],
@@ -587,7 +591,9 @@ module Qed
               {:name => 'product_name',           :function => 'value.product_name'},
               {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'campaign_id',            :function => 'value.campaign_id'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'db'},
@@ -625,7 +631,9 @@ module Qed
               {:name => 'product_name',             :function => 'value.campaign_product'},
               {:name => 'holding_name',             :function => 'value.campaign_holding'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'campaign_id',              :function => 'value.campaign_id'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'cost',                     :function => 'cost'},
               {:name => 'turnover',                 :function => '0'},
               {:name => 'conversions_adwords',      :function => 'conversions'},
@@ -649,7 +657,9 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'product_name',             :function => 'value.product_name'},
               {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'campaign_id',              :function => 'value.campaign_id'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'holding_name',             :function => 'value.holding_name'},
             ],
             :code => {
@@ -676,7 +686,9 @@ module Qed
               {:name => 'product_name',           :function => 'value.product_name'},
               {:name => 'holding_name',           :function => 'value.holding_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'campaign_id',            :function => 'value.campaign_id'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'db'},
@@ -713,10 +725,12 @@ module Qed
           :map => {
             :keys => [
               {:name => 'holding_name',             :function => 'value.holding_name'},
-              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
-              {:name => 'campaign_name',            :function => 'value.campaign_name'}
+              {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
+              {:name => 'campaign_id',              :function => 'value.campaign_id'}
             ],
             :values => [
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'product_name',             :function => 'value.product_name'},
               {:name => 'cost',                     :function => 'value.cost'},
               {:name => 'turnover',                 :function => 'value.turnover'},
@@ -728,6 +742,8 @@ module Qed
           :reduce => {
             :values => [
               {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'cost'},
               {:name => 'turnover'},
               {:name => 'conversions_adwords'},
@@ -752,6 +768,8 @@ module Qed
 
           :finalize => {
             :values => [
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'product_name',           :function => 'value.product_name'},
               {:name => 'turnover',               :function => 'value.turnover'},
               {:name => 'cost',                   :function => 'value.cost'},
