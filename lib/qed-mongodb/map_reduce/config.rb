@@ -863,24 +863,23 @@ module Qed
 
           :finalize => {
             :values => [
-              {:name => 'campaign_name',          :function => 'value.campaign_name'},
-              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
-              {:name => 'product_name',           :function => 'value.product_name'},
-              {:name => 'turnover',               :function => 'Math.round(value.turnover*10)/10'},
-              {:name => 'cost',                   :function => 'Math.round(value.cost*10)/10'},
-              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
-              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
-              {:name => 'payed',                  :function => 'Math.round(value.payed*10)/10'},
-              {:name => 'worked',                 :function => 'value.worked'},
-              {:name => 'qualified',              :function => 'value.qualified'},
-              {:name => 'test',                   :function => 'value.test'},
-              {:name => 'db',                     :function => 'Math.round(db*10)/10'},
-              {:name => 'rel_db',                 :function => 'Math.round(rel_db*10)/10'},
-              {:name => 'db2',                    :function => 'Math.round(db2*10)/10'},
-              {:name => 'target_cpa',             :function => 'Math.round(target_cpa*10)/10'},
-              {:name => 'current_cpa',            :function => 'Math.round(current_cpa*10)/10'},
-              {:name => 'cr2',                    :function => 'Math.round(cr2*10)/10'},
-              {:name => 'qual_cost',              :function => 'Math.round(qual_cost*10)/10'}
+              {:name => 'Kampagnie',            :function => 'value.campaign_name'},
+              {:name => 'Anzeigengruppe',       :function => 'value.ad_group_name'},
+              {:name => 'Produkt',              :function => 'value.product_name'},
+              {:name => 'Umsatz (€)',           :function => 'Math.round(value.turnover*100)/100'},
+              {:name => 'Adwords Kosten (€)',   :function => 'Math.round(value.cost*100)/100'},
+              {:name => 'Konversions Backend',  :function => 'value.conversions_backend'},
+              {:name => 'Konversions Adwords',  :function => 'value.conversions_adwords'},
+              {:name => 'Bearbeitet',           :function => 'value.worked'},
+              {:name => 'Qualifiziert',         :function => 'value.qualified'},
+              {:name => 'DB (€)',               :function => 'Math.round(db*100)/100'},
+              {:name => 'Rel. DB (%)',          :function => 'Math.round(rel_db*10000)/100'}, #percentage
+              {:name => 'DB2 (€)',              :function => 'Math.round(db2*100)/100'},
+              {:name => 'Ziel CPA (€)',         :function => 'Math.round(target_cpa*100)/100'},
+              {:name => 'Aktueller CPA (€)',    :function => 'Math.round(current_cpa*100)/100'},
+              {:name => 'CR2 (%)',              :function => 'Math.round(cr2*100)/100'},
+              {:name => 'Qual.-Kosten (€)',     :function => 'Math.round(qual_cost*100)/100'},
+              {:name => 'Bezahlt (€)',          :function => 'Math.round(value.payed*100)/100'}
             ],
 
             :code => {
