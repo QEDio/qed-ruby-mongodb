@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 module Marbu
   module Test
     module Fixtures

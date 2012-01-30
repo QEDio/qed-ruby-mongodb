@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 #
 # Author:: Adam Jacob (<adam@opscode.com>)
 # Author:: Seth Falcon (<seth@opscode.com>)

@@ -1,3 +1,4 @@
+# -*- encoding: utf-8 -*-
 require 'fixtures/store_world_wide_business_fixture'
 
 module Qed
