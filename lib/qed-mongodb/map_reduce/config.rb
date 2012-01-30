@@ -582,8 +582,6 @@ module Qed
               {:name => 'campaign_id',            :function => 'value.campaign_id'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
-              #{:name => 'conversions_backend',    :function => 'conversions_backend'},
-              #{:name => 'conversions_adwords',    :function => 'conversions_adwords'},
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
               {:name => "worked"},
@@ -631,13 +629,13 @@ module Qed
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
-              {:name => 'db',                     :function => '-1'},
-              {:name => 'rel_db',                 :function => '-1'},
+              {:name => 'db',                     :function => '0'},
+              {:name => 'rel_db',                 :function => '0'},
               {:name => 'target_cpa'},
               {:name => 'cr2'},
               {:name => 'current_cpa',            :function => '0'},
-              {:name => 'db2',                    :function => '-1'},
-              {:name => 'qual_cost',              :function => '-1'}
+              {:name => 'db2',                    :function => '0'},
+              {:name => 'qual_cost',              :function => '0'}
             ],
             :code => {
                :text =>  <<-JS
@@ -676,7 +674,10 @@ module Qed
               {:name => 'conversions_backend',      :function => '0'},
               {:name => 'target_cpa',               :function => '0'},
               {:name => 'cr2',                      :function => '0'},
-              {:name => 'payed',                    :function => '0'}
+              {:name => 'payed',                    :function => '0'},
+              {:name => "worked",                   :function => '0'},
+              {:name => "test",                     :function => '0'},
+              {:name => "qualified",                :function => '0'},
             ],
             :code => {
               :text =>  <<-JS
@@ -702,7 +703,10 @@ module Qed
               {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'target_cpa'},
               {:name => 'cr2'},
-              {:name => 'payed',                    :function => 'value.payed'}
+              {:name => 'payed',                    :function => 'value.payed'},
+              {:name => "worked"},
+              {:name => "test"},
+              {:name => "qualified"},
             ],
             :code => {
               :text =>  <<-JS
@@ -712,6 +716,9 @@ module Qed
                           var conversions_backend	= 0;
                           var cr2                 = 0;
                           var target_cpa          = 0;
+                          var worked              = 0;
+                          var test                = 0;
+                          var qualified           = 0;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
@@ -721,6 +728,9 @@ module Qed
                             // all but one entry should be 0, so this should work
                             cr2                 += v.cr2;
                             target_cpa          += v.target_cpa;
+                            worked              += v.worked;
+                            test                += v.test;
+                            qualified           += v.qualified;
                           });
                         JS
             }
@@ -875,7 +885,7 @@ module Qed
                           target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
                           cr2           = value.qualified / value.worked;
                           db         	  = value.turnover - value.cost;
-                          rel_db        = (db/value.cost) * 100;
+                          rel_db        = (db/value.cost);
                           current_cpa 	= value.cost / value.conversions_backend;
                           qual_cost     = value.qualified*6;
                           db2           = db - qual_cost;
