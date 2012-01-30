@@ -835,6 +835,7 @@ module Qed
                           var worked              = 0;
                           var test                = 0;
                           var qualified           = 0;
+                          var payed               = 0;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
@@ -844,6 +845,7 @@ module Qed
                             worked              += v.worked;
                             test                += v.test;
                             qualified           += v.qualified;
+                            payed               += v.payed;
                           });
                         JS
             }
@@ -858,6 +860,7 @@ module Qed
               {:name => 'cost',                   :function => 'value.cost'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'payed',                  :function => 'value.payed'},
               {:name => 'db'},
               {:name => 'rel_db'},
               {:name => 'db2'},
