@@ -675,7 +675,8 @@ module Qed
               {:name => 'conversions_adwords',      :function => 'conversions'},
               {:name => 'conversions_backend',      :function => '0'},
               {:name => 'target_cpa',               :function => '0'},
-              {:name => 'cr2',                      :function => '0'}
+              {:name => 'cr2',                      :function => '0'},
+              {:name => 'payed',                    :function => '0'}
             ],
             :code => {
               :text =>  <<-JS
@@ -700,7 +701,8 @@ module Qed
               {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'target_cpa'},
-              {:name => 'cr2'}
+              {:name => 'cr2'},
+              {:name => 'payed',                    :function => 'value.payed'}
             ],
             :code => {
               :text =>  <<-JS
