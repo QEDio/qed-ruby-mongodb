@@ -522,17 +522,14 @@ module Qed
               {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
               {:name => "status_id",            :function => "value.status_id"},
               {:name => "worked"},
-              {:name => "test"},
               {:name => "qualified"}
             ],
             :code => {
               :text =>  <<-JS
                           worked    = 1;
                           qualified = 1;
-                          test      = 0;
 
-                          if(value.status_id == 0 || value.status_id == 4){worked=0};
-                          if(value.status_id == 4){test=1};
+                          if(value.status_id == 0){worked=0};
                           if(value.status_id != 1){qualified=0};
                         JS
             },
@@ -566,7 +563,6 @@ module Qed
               {:name => 'ad_group_id',            :function => '""'},
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'}
             ]
           },
@@ -584,7 +580,6 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => "worked"},
-              {:name => "test"},
               {:name => "qualified"}
             ],
             :code => {
@@ -595,16 +590,14 @@ module Qed
                           var conversions_backend	= 0;
                           var worked              = 0;
                           var qualified           = 0;
-                          var test                = 0;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
                             payed               += v.payed;
                             turnover 		        += v.turnover;
-                            //if( v.test != 1 ){ conversions_backend	+= v.conversions_backend };
+                            conversions_backend	+= v.conversions_backend;
                             worked              += v.worked;
                             qualified           += v.qualified;
-                            test                += v.test;
                           });
                         JS
             }
@@ -624,7 +617,6 @@ module Qed
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
               #{:name => 'db',                     :function => '0'},
               #{:name => 'rel_db',                 :function => '0'},
@@ -673,7 +665,6 @@ module Qed
               #{:name => 'cr2',                      :function => '0'},
               {:name => 'payed',                    :function => '0'},
               {:name => "worked",                   :function => '0'},
-              {:name => "test",                     :function => '0'},
               {:name => "qualified",                :function => '0'},
             ]
             #:code => {
@@ -701,7 +692,6 @@ module Qed
               #{:name => 'cr2'},
               {:name => 'payed',                    :function => 'value.payed'},
               {:name => "worked"},
-              {:name => "test"},
               {:name => "qualified"},
             ],
             :code => {
@@ -713,7 +703,6 @@ module Qed
                           //var cr2                 = 0;
                           //var target_cpa          = 0;
                           var worked              = 0;
-                          var test                = 0;
                           var qualified           = 0;
 
                           values.forEach(function(v){
@@ -725,7 +714,6 @@ module Qed
                             //cr2                 += v.cr2;
                             //target_cpa          += v.target_cpa;
                             worked              += v.worked;
-                            test                += v.test;
                             qualified           += v.qualified;
                           });
                         JS
@@ -745,7 +733,6 @@ module Qed
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
               #{:name => 'db'},
               #{:name => 'rel_db'},
@@ -799,7 +786,6 @@ module Qed
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
               #{:name => 'db',                     :function => 'value.db'},
               #{:name => 'rel_db',                 :function => 'value.rel_db'},
@@ -822,7 +808,6 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
               {:name => "worked"},
-              {:name => "test"},
               {:name => "qualified"},
               #{:name => 'db',                     :function => '-1'},
               #{:name => 'rel_db',                 :function => '-1'},
@@ -839,7 +824,6 @@ module Qed
                           var conversions_adwords	= 0;
                           var conversions_backend	= 0;
                           var worked              = 0;
-                          var test                = 0;
                           var qualified           = 0;
                           var payed               = 0;
 
@@ -849,7 +833,6 @@ module Qed
                             conversions_adwords	+= v.conversions_adwords;
                             conversions_backend	+= v.conversions_backend;
                             worked              += v.worked;
-                            test                += v.test;
                             qualified           += v.qualified;
                             payed               += v.payed;
                           });
