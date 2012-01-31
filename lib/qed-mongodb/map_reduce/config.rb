@@ -562,6 +562,7 @@ module Qed
               {:name => 'ad_group_name',          :function => '""'},
               {:name => 'ad_group_id',            :function => '""'},
               {:name => 'conversions_adwords',    :function => '0'},
+              {:name => 'conversions_backend',    :function => '1'},
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "qualified",              :function => 'value.qualified'}
             ]
