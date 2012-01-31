@@ -626,20 +626,20 @@ module Qed
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
-              {:name => 'db',                     :function => '0'},
-              {:name => 'rel_db',                 :function => '0'},
-              {:name => 'target_cpa'},
-              {:name => 'cr2'},
-              {:name => 'current_cpa',            :function => '0'},
-              {:name => 'db2',                    :function => '0'},
-              {:name => 'qual_cost',              :function => '0'}
+              #{:name => 'db',                     :function => '0'},
+              #{:name => 'rel_db',                 :function => '0'},
+              #{:name => 'target_cpa'},
+              #{:name => 'cr2'},
+              #{:name => 'current_cpa',            :function => '0'},
+              #{:name => 'db2',                    :function => '0'},
+              #{:name => 'qual_cost',              :function => '0'}
             ],
-            :code => {
-               :text =>  <<-JS
-                          target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
-                          cr2           = value.qualified / value.worked;
-                        JS
-            }
+            #:code => {
+            #   :text =>  <<-JS
+            #              target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
+            #              cr2           = value.qualified / value.worked;
+            #            JS
+            #}
           },
 
           :misc => {
@@ -669,8 +669,8 @@ module Qed
               {:name => 'turnover',                 :function => '0'},
               {:name => 'conversions_adwords',      :function => 'value.ad_stat_conversions'},
               {:name => 'conversions_backend',      :function => '0'},
-              {:name => 'target_cpa',               :function => '0'},
-              {:name => 'cr2',                      :function => '0'},
+              #{:name => 'target_cpa',               :function => '0'},
+              #{:name => 'cr2',                      :function => '0'},
               {:name => 'payed',                    :function => '0'},
               {:name => "worked",                   :function => '0'},
               {:name => "test",                     :function => '0'},
@@ -697,8 +697,8 @@ module Qed
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'holding_name',             :function => 'value.holding_name'},
-              {:name => 'target_cpa'},
-              {:name => 'cr2'},
+              #{:name => 'target_cpa'},
+              #{:name => 'cr2'},
               {:name => 'payed',                    :function => 'value.payed'},
               {:name => "worked"},
               {:name => "test"},
@@ -710,8 +710,8 @@ module Qed
                           var cost			          = 0;
                           var conversions_adwords	= 0;
                           var conversions_backend	= 0;
-                          var cr2                 = 0;
-                          var target_cpa          = 0;
+                          //var cr2                 = 0;
+                          //var target_cpa          = 0;
                           var worked              = 0;
                           var test                = 0;
                           var qualified           = 0;
@@ -722,8 +722,8 @@ module Qed
                             conversions_adwords	+= v.conversions_adwords;
                             conversions_backend	+= v.conversions_backend;
                             // all but one entry should be 0, so this should work
-                            cr2                 += v.cr2;
-                            target_cpa          += v.target_cpa;
+                            //cr2                 += v.cr2;
+                            //target_cpa          += v.target_cpa;
                             worked              += v.worked;
                             test                += v.test;
                             qualified           += v.qualified;
@@ -747,13 +747,13 @@ module Qed
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
-              {:name => 'db'},
-              {:name => 'rel_db'},
-              {:name => 'target_cpa',             :function => 'value.target_cpa'},
-              {:name => 'cr2',                    :function => 'value.cr2'},
-              {:name => 'current_cpa'},
-              {:name => 'db2'},
-              {:name => 'qual_cost'}
+              #{:name => 'db'},
+              #{:name => 'rel_db'},
+              #{:name => 'target_cpa',             :function => 'value.target_cpa'},
+              #{:name => 'cr2',                    :function => 'value.cr2'},
+              #{:name => 'current_cpa'},
+              #{:name => 'db2'},
+              #{:name => 'qual_cost'}
             ],
 
             #:code => {
@@ -801,13 +801,13 @@ module Qed
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "test",                   :function => 'value.test'},
               {:name => "qualified",              :function => 'value.qualified'},
-              {:name => 'db',                     :function => 'value.db'},
-              {:name => 'rel_db',                 :function => 'value.rel_db'},
-              {:name => 'target_cpa',             :function => 'value.target_cpa'},
-              {:name => 'cr2',                    :function => 'value.cr2'},
-              {:name => 'current_cpa',            :function => 'value.current_cpa'},
-              {:name => 'db2',                    :function => 'value.db2'},
-              {:name => 'qual_cost',              :function => 'value.qual_cost'}
+              #{:name => 'db',                     :function => 'value.db'},
+              #{:name => 'rel_db',                 :function => 'value.rel_db'},
+              #{:name => 'target_cpa',             :function => 'value.target_cpa'},
+              #{:name => 'cr2',                    :function => 'value.cr2'},
+              #{:name => 'current_cpa',            :function => 'value.current_cpa'},
+              #{:name => 'db2',                    :function => 'value.db2'},
+              #{:name => 'qual_cost',              :function => 'value.qual_cost'}
             ],
           },
 
@@ -824,13 +824,13 @@ module Qed
               {:name => "worked"},
               {:name => "test"},
               {:name => "qualified"},
-              {:name => 'db',                     :function => '-1'},
-              {:name => 'rel_db',                 :function => '-1'},
-              {:name => 'target_cpa',             :function => '-1'},
-              {:name => 'cr2',                    :function => '-1'},
-              {:name => 'current_cpa',            :function => '-1'},
-              {:name => 'db2',                    :function => '-1'},
-              {:name => 'qual_cost',              :function => '-1'}
+              #{:name => 'db',                     :function => '-1'},
+              #{:name => 'rel_db',                 :function => '-1'},
+              #{:name => 'target_cpa',             :function => '-1'},
+              #{:name => 'cr2',                    :function => '-1'},
+              #{:name => 'current_cpa',            :function => '-1'},
+              #{:name => 'db2',                    :function => '-1'},
+              #{:name => 'qual_cost',              :function => '-1'}
             ],
             :code => {
               :text =>  <<-JS
