@@ -15,8 +15,8 @@ module Qed
           cursor          = db.collection(COLLECTION_PREFIX+mapreduce_model.misc.output_collection).find(query.selector)
           
           if cursor.count > 0
-            cursor.find().each do |cached_result|
-              data_array << cached_result[:result]
+            cursor.each do |cached_result|
+              data_array << cached_result['result']
             end
             cached      = !(options[:saved] || false)
           end

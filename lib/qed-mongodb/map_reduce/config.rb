@@ -564,7 +564,6 @@ module Qed
               {:name => 'campaign_id',            :function => '""'},
               {:name => 'ad_group_name',          :function => '""'},
               {:name => 'ad_group_id',            :function => '""'},
-              {:name => 'conversions_backend',    :function => '1'},
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "test",                   :function => 'value.test'},
@@ -583,7 +582,7 @@ module Qed
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend'},
-              {:name => 'conversions_adwords'},
+              {:name => 'conversions_adwords',    :function => '0'},
               {:name => "worked"},
               {:name => "test"},
               {:name => "qualified"}
@@ -593,7 +592,6 @@ module Qed
                           var turnover			      = 0;
                           var payed               = 0;
                           var cost			          = 0;
-                          var conversions_adwords	= 0;
                           var conversions_backend	= 0;
                           var worked              = 0;
                           var qualified           = 0;
@@ -603,8 +601,7 @@ module Qed
                             cost     		        += v.cost;
                             payed               += v.payed;
                             turnover 		        += v.turnover;
-                            conversions_adwords	+= v.conversions_adwords;
-                            conversions_backend	+= v.conversions_backend;
+                            if( v.test != 1 ){ conversions_backend	+= v.conversions_backend };
                             worked              += v.worked;
                             qualified           += v.qualified;
                             test                += v.test;
@@ -668,9 +665,9 @@ module Qed
               {:name => 'campaign_id',              :function => 'value.campaign_id'},
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
-              {:name => 'cost',                     :function => 'cost'},
+              {:name => 'cost',                     :function => 'value.ad_cost_micro_amount / 1000000.0'},
               {:name => 'turnover',                 :function => '0'},
-              {:name => 'conversions_adwords',      :function => 'conversions'},
+              {:name => 'conversions_adwords',      :function => 'value.ad_stat_conversions'},
               {:name => 'conversions_backend',      :function => '0'},
               {:name => 'target_cpa',               :function => '0'},
               {:name => 'cr2',                      :function => '0'},
@@ -678,15 +675,14 @@ module Qed
               {:name => "worked",                   :function => '0'},
               {:name => "test",                     :function => '0'},
               {:name => "qualified",                :function => '0'},
-            ],
-            :code => {
-              :text =>  <<-JS
-                          conversions   = value.ad_stat_conversions;
-                          cost          = value.ad_cost_micro_amount / 1000000.0;
-                          impressions   = value.ad_stat_impressions;
-                          clicks        = value.ad_stat_clicks;
-                        JS
-            }
+            ]
+            #:code => {
+            #  :text =>  <<-JS
+            #              cost          = value.ad_cost_micro_amount / 1000000.0;
+            #              impressions   = value.ad_stat_impressions;
+            #              clicks        = value.ad_stat_clicks;
+            #            JS
+            #}
           },
 
           :reduce => {
