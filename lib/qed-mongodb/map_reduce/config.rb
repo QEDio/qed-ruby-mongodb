@@ -601,7 +601,7 @@ module Qed
                             cost     		        += v.cost;
                             payed               += v.payed;
                             turnover 		        += v.turnover;
-                            if( v.test != 1 ){ conversions_backend	+= v.conversions_backend };
+                            //if( v.test != 1 ){ conversions_backend	+= v.conversions_backend };
                             worked              += v.worked;
                             qualified           += v.qualified;
                             test                += v.test;
