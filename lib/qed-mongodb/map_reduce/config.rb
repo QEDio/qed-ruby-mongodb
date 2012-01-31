@@ -756,17 +756,17 @@ module Qed
               {:name => 'qual_cost'}
             ],
 
-            :code => {
-              :text =>  <<-JS
-                          db         	  = value.turnover - value.cost;
-                          //rel_db        = 0;
-                          //if( db > 0 && value.cost > 0 ){ rel_db = (db/value.cost) * 100 };
-                          rel_db = (db/value.cost) * 100;
-                          current_cpa 	= value.cost / value.conversions_backend;
-                          qual_cost     = value.qualified*6;
-                          db2           = db - qual_cost;
-                        JS
-            }
+            #:code => {
+            #  :text =>  <<-JS
+            #              db         	  = value.turnover - value.cost;
+            #              //rel_db        = 0;
+            #              //if( db > 0 && value.cost > 0 ){ rel_db = (db/value.cost) * 100 };
+            #              rel_db = (db/value.cost) * 100;
+            #              current_cpa 	= value.cost / value.conversions_backend;
+            #              qual_cost     = value.qualified*6;
+            #              db2           = db - qual_cost;
+            #            JS
+            #}
           },
 
           :misc => {
@@ -819,8 +819,8 @@ module Qed
               {:name => 'product_name',           :function => 'value.product_name'},
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
-              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
-              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'conversions_backend'},
+              {:name => 'conversions_adwords'},
               {:name => "worked"},
               {:name => "test"},
               {:name => "qualified"},
