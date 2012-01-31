@@ -15,7 +15,7 @@ module Qed
           cursor          = db.collection(COLLECTION_PREFIX+mapreduce_model.misc.output_collection).find(query.selector)
           
           if cursor.count > 0
-            data_array  = cursor.find().to_a.first["result"]
+            data_array  = cursor.find().to_a.collect{|cached_result| cached_result[:result]}
             cached      = !(options[:saved] || false)
           end
                   
@@ -32,13 +32,15 @@ module Qed
           cursor              = options[:cursor]
 
           collection = db.collection(COLLECTION_PREFIX + mapreduce_model.misc.output_collection)
+          digest = fm.digest()
 
-          data = {
-            :digest_with_date       => fm.digest(),
-            :result                 => cursor.find().to_a
-          }
-
-          collection.insert(data)
+          cursor.find().each do |result_to_cache|
+           data = {
+            :digest_with_date       => digest,
+            :result                 => result_to_cache
+            }
+            collection.insert(data)
+          end
 
           find(options.merge({:saved => true}))
         end
