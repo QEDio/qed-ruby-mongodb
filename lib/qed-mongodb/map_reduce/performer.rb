@@ -73,7 +73,7 @@ module Qed
               coll = @db.collection(mrm.misc.input_collection)
               builder = @builder_klass.new(mrm)
 
-              log(Rails.logger, builder, mrm)
+              #log(Rails.logger, builder, mrm)
               
               coll = coll.map_reduce(
                 builder.map, builder.reduce,

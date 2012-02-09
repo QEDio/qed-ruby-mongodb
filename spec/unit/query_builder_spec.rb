@@ -6,7 +6,7 @@ describe Qed::Mongodb::QueryBuilder do
 
   context "a builder" do
     let(:fm) do
-      fm = Qstate::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      fm = Qstate::FilterModel.new(Mongodb::Testdata::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       fm.view.view = :query_only_scale_of_universe
       fm.confidential.user = :test
       fm

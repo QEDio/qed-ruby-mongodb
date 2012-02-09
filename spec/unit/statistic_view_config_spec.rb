@@ -6,7 +6,7 @@ describe Qed::Mongodb::StatisticViewConfig do
 
   context "Creating a StatisticViewConfig" do
     let(:fm) do
-      fm = Qstate::FilterModel.new(Qed::Mongodb::Test::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
+      fm = Qstate::FilterModel.new(Mongodb::Testdata::Factory::ScaleOfUniverse::PARAMS_SCALE_OF_UNIVERSE)
       fm.confidential.user = :test
       fm
     end
