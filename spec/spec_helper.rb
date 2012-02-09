@@ -56,7 +56,7 @@ require 'qstate'
 require 'qed-mongodb'
 require 'rspec'
 require 'fixtures/fixtures'
-require 'factories/factories'
+require 'mongodb-testdata-factory'
 
 RSpec.configure do |config|
 
