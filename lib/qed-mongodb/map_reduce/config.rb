@@ -767,8 +767,7 @@ module Qed
           },
 
           :query => {
-            :datetime_fields => ['ad_from'],
-            :condition => [{field: "value.adlink", value: [true]}]
+            :datetime_fields => ['ad_from']
           }
         }
 
