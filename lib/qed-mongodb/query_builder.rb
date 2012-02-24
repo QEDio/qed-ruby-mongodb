@@ -9,6 +9,7 @@ module Qed
 
         klass       = build_from_date_time(klass, fm.datetime, :datetime_fields => query.datetime_fields)
         klass       = build_from_query(klass, fm.query)
+        klass       = add_condition(klass, query.condition)
 
         if( klass.is_a?(Mongoid::Criteria) )
           klass = klass.selector
@@ -36,6 +37,16 @@ module Qed
         end
 
         return klass
+      end
+
+      def self.add_condition(query, conditions)
+        if( conditions.present? )
+          conditions.each do |condition|
+            klass = klass.where(condition[:field].to_sym.in => condition[:value])
+          end
+        end
+
+        klass
       end
 
       def self.build_from_query(query, plugin, ext_options = {})

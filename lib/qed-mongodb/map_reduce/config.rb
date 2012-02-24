@@ -767,7 +767,7 @@ module Qed
 
           :query => {
             :datetime_fields => ['ad_from'],
-            :condition => '"value.tracking_ag": "solaranlagen_solar-foerderung_20012012b_L00"'
+            :condition => [{field: "value.tracking_ag", value: ["solaranlagen_solar-foerderung_20012012b_L00"]}]
           }
         }
 
