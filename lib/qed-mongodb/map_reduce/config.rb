@@ -543,7 +543,7 @@ module Qed
 
           :query => {
             :datetime_fields => ['created_at'],
-            :condition => [{field: "value.adlink", value: [true]}]
+            :condition => [{field: "value.adlink", value: [false]}]
           }
         }
 
