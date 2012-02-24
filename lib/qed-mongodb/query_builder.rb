@@ -13,7 +13,6 @@ module Qed
 
         if( klass.is_a?(Mongoid::Criteria) )
           klass = klass.selector
-          klass += " , " + query.condition if query.condition.present?
         else
           klass = nil
         end
