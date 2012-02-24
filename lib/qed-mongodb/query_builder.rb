@@ -42,11 +42,11 @@ module Qed
       def self.add_condition(query, conditions)
         if( conditions.present? )
           conditions.each do |condition|
-            klass = klass.where(condition[:field].to_sym.in => condition[:value])
+            query = query.where(condition[:field].to_sym.in => condition[:value])
           end
         end
 
-        klass
+        query
       end
 
       def self.build_from_query(query, plugin, ext_options = {})
