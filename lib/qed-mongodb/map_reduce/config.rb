@@ -766,7 +766,8 @@ module Qed
           },
 
           :query => {
-            :datetime_fields => ['ad_from']
+            :datetime_fields => ['ad_from'],
+            :condition => '"value.tracking_ag": "solaranlagen_solar-foerderung_20012012b_L00"'
           }
         }
 
@@ -868,7 +869,7 @@ module Qed
                           cr2           = value.qualified / value.worked;
                           db         	  = value.turnover - value.cost;
                           rel_db        = (db/value.cost);
-                          current_cpa 	= value.cost / value.conversions_backend;
+                          current_cpa 	= value.cost / value.conversions_adwords;
                           qual_cost     = value.qualified*6;
                           db2           = db - qual_cost;
                         JS
