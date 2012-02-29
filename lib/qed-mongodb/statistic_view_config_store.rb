@@ -19,6 +19,15 @@ module Qed
             ]
           },
 
+          :optimize => {
+            :mapreduce => [
+              Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_1,
+              Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_2,
+              Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_3,
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_1
+            ]
+          },
+
           :conversion_by_channel => {
             # the order is important here, the first mapreduce will be done first, then the second and so on
             :mapreduce => [

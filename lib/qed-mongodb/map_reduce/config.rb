@@ -882,6 +882,92 @@ module Qed
             :output_collection  => "session_stat_mr"
           }
         }
+
+        KP_OPTIMIZE_1 = {
+          :map => {
+            :keys => [
+              {:name => 'partner',                :function => 'value.partner'}
+            ],
+            :values => [
+              {:name => 'partner',                :function => 'value.partner'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'cost',                   :function => 'value.cost'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => "qualified",              :function => 'value.qualified'},
+              {:name => "worked",                 :function => 'value.worked'}
+            ],
+          },
+
+          :reduce => {
+            :values => [
+              {:name => 'partner',                :function => 'value.partner'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'turnover'},
+              {:name => 'cost'},
+              {:name => 'conversions_backend'},
+              {:name => 'conversions_adwords'},
+              {:name => "qualified"},
+              {:name => "worked"}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover			      = 0;
+                          var cost			          = 0;
+                          var conversions_adwords	= 0;
+                          var conversions_backend	= 0;
+                          var worked              = 0;
+                          var qualified           = 0;
+
+                          values.forEach(function(v){
+                            cost     		        += v.cost;
+                            turnover 		        += v.turnover;
+                            conversions_adwords	+= v.conversions_adwords;
+                            conversions_backend	+= v.conversions_backend;
+                            worked              += v.worked;
+                            qualified           += v.qualified;
+                          });
+              JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => 'partner',                :function => 'value.partner'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+
+              {:name => 'turnover',               :function => 'Math.round(value.turnover*100)/100'},
+              {:name => 'adwords_cost',           :function => 'Math.round(value.cost*100)/100'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'db',                     :function => 'Math.round(db*100)/100'},
+              {:name => 'db2',                    :function => 'Math.round(db2*100)/100'},
+              {:name => 'cr2',                    :function => 'Math.round(cr2*100)/100'},
+              {:name => 'qual_cost',              :function => 'Math.round(qual_cost*100)/100'},
+            ],
+
+            :code => {
+              :text =>  <<-JS
+                          db         	  = value.turnover - value.cost;
+                          db2           = db - qual_cost;
+                          qual_cost     = value.qualified*6;
+                          cr2           = value.qualified / value.worked;
+              JS
+            }
+          },
+
+          :misc => {
+            :database           => "kp",
+            :input_collection   => "optimize_1",
+            :output_collection  => "optimize_1_mr"
+          }
+        }
       end
     end
   end
