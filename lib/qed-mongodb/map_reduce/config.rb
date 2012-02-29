@@ -955,8 +955,8 @@ module Qed
             :code => {
               :text =>  <<-JS
                           db         	  = value.turnover - value.cost;
-                          db2           = db - qual_cost;
                           qual_cost     = value.qualified*6;
+                          db2           = db - qual_cost;
                           cr2           = value.qualified / value.worked;
               JS
             }
