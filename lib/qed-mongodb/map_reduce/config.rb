@@ -478,7 +478,8 @@ module Qed
               {:name => "payed"},
               {:name => "created_at",           :function => "value.created_at"},
               {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
-              {:name => "status_id",            :function => "value.status_id"}
+              {:name => "status_id",            :function => "value.status_id"},
+              {:name => "partner",              :function => "value.partner"},
             ],
             :code => {
               :text =>  <<-JS
@@ -498,7 +499,8 @@ module Qed
               {:name => "payed"},
               {:name => "created_at",           :function => "value.created_at"},
               {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
-              {:name => "status_id",            :function => "value.status_id"}
+              {:name => "status_id",            :function => "value.status_id"},
+              {:name => "partner",              :function => "value.partner"}
             ],
             :code => {
               :text =>  <<-JS
@@ -522,7 +524,8 @@ module Qed
               {:name => "ad_group_ad_id",       :function => "value.ad_group_ad_id"},
               {:name => "status_id",            :function => "value.status_id"},
               {:name => "worked"},
-              {:name => "qualified"}
+              {:name => "qualified"},
+              {:name => "partner",              :function => "value.partner"}
             ],
             :code => {
               :text =>  <<-JS
@@ -565,7 +568,8 @@ module Qed
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => 'conversions_backend',    :function => '1'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'}
+              {:name => "qualified",              :function => 'value.qualified'},
+              {:name => "partner",              :function => "value.partner"}
             ]
           },
 
@@ -582,7 +586,8 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => "worked"},
-              {:name => "qualified"}
+              {:name => "qualified"},
+              {:name => "partner",                :function => "value.partner"}
             ],
             :code => {
               :text =>  <<-JS
@@ -620,20 +625,8 @@ module Qed
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => "worked",                 :function => 'value.worked'},
               {:name => "qualified",              :function => 'value.qualified'},
-              #{:name => 'db',                     :function => '0'},
-              #{:name => 'rel_db',                 :function => '0'},
-              #{:name => 'target_cpa'},
-              #{:name => 'cr2'},
-              #{:name => 'current_cpa',            :function => '0'},
-              #{:name => 'db2',                    :function => '0'},
-              #{:name => 'qual_cost',              :function => '0'}
-            ],
-            #:code => {
-            #   :text =>  <<-JS
-            #              target_cpa 	  = (value.turnover / value.conversions_backend) / 2;
-            #              cr2           = value.qualified / value.worked;
-            #            JS
-            #}
+              {:name => "partner",                :function => "value.partner"}
+            ]
           },
 
           :misc => {
@@ -663,19 +656,11 @@ module Qed
               {:name => 'turnover',                 :function => '0'},
               {:name => 'conversions_adwords',      :function => 'value.ad_stat_conversions'},
               {:name => 'conversions_backend',      :function => '0'},
-              #{:name => 'target_cpa',               :function => '0'},
-              #{:name => 'cr2',                      :function => '0'},
               {:name => 'payed',                    :function => '0'},
               {:name => "worked",                   :function => '0'},
               {:name => "qualified",                :function => '0'},
+              {:name => "partner",                  :function => 'null'},
             ]
-            #:code => {
-            #  :text =>  <<-JS
-            #              cost          = value.ad_cost_micro_amount / 1000000.0;
-            #              impressions   = value.ad_stat_impressions;
-            #              clicks        = value.ad_stat_clicks;
-            #            JS
-            #}
           },
 
           :reduce => {
@@ -690,11 +675,10 @@ module Qed
               {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
               {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'holding_name',             :function => 'value.holding_name'},
-              #{:name => 'target_cpa'},
-              #{:name => 'cr2'},
               {:name => 'payed',                    :function => 'value.payed'},
               {:name => "worked"},
               {:name => "qualified"},
+              {:name => "partner",                  :function => "partner"}
             ],
             :code => {
               :text =>  <<-JS
@@ -706,6 +690,7 @@ module Qed
                           //var target_cpa          = 0;
                           var worked              = 0;
                           var qualified           = 0;
+                          var partner             = null;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
@@ -717,6 +702,7 @@ module Qed
                             //target_cpa          += v.target_cpa;
                             worked              += v.worked;
                             qualified           += v.qualified;
+                            if(partner == null && v.partner != null && v.partner != ''){partner = v.partner}
                           });
                         JS
             }
@@ -734,28 +720,10 @@ module Qed
               {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
-              {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'},
-              #{:name => 'db'},
-              #{:name => 'rel_db'},
-              #{:name => 'target_cpa',             :function => 'value.target_cpa'},
-              #{:name => 'cr2',                    :function => 'value.cr2'},
-              #{:name => 'current_cpa'},
-              #{:name => 'db2'},
-              #{:name => 'qual_cost'}
-            ],
-
-            #:code => {
-            #  :text =>  <<-JS
-            #              db         	  = value.turnover - value.cost;
-            #              //rel_db        = 0;
-            #              //if( db > 0 && value.cost > 0 ){ rel_db = (db/value.cost) * 100 };
-            #              rel_db = (db/value.cost) * 100;
-            #              current_cpa 	= value.cost / value.conversions_backend;
-            #              qual_cost     = value.qualified*6;
-            #              db2           = db - qual_cost;
-            #            JS
-            #}
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'partner',                :function => 'value.partner'}
+            ]
           },
 
           :misc => {
@@ -788,14 +756,7 @@ module Qed
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'},
-              #{:name => 'db',                     :function => 'value.db'},
-              #{:name => 'rel_db',                 :function => 'value.rel_db'},
-              #{:name => 'target_cpa',             :function => 'value.target_cpa'},
-              #{:name => 'cr2',                    :function => 'value.cr2'},
-              #{:name => 'current_cpa',            :function => 'value.current_cpa'},
-              #{:name => 'db2',                    :function => 'value.db2'},
-              #{:name => 'qual_cost',              :function => 'value.qual_cost'}
+              {:name => "qualified",              :function => 'value.qualified'}
             ],
           },
 
@@ -810,14 +771,7 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
               {:name => "worked"},
-              {:name => "qualified"},
-              #{:name => 'db',                     :function => '-1'},
-              #{:name => 'rel_db',                 :function => '-1'},
-              #{:name => 'target_cpa',             :function => '-1'},
-              #{:name => 'cr2',                    :function => '-1'},
-              #{:name => 'current_cpa',            :function => '-1'},
-              #{:name => 'db2',                    :function => '-1'},
-              #{:name => 'qual_cost',              :function => '-1'}
+              {:name => "qualified"}
             ],
             :code => {
               :text =>  <<-JS
