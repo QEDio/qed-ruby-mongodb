@@ -964,7 +964,7 @@ module Qed
 
           :misc => {
             :database           => "kp",
-            :input_collection   => "optimize_1",
+            :input_collection   => "session_stat",
             :output_collection  => "optimize_1_mr"
           }
         }
