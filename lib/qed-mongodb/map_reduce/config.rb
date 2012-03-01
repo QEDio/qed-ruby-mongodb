@@ -1086,7 +1086,7 @@ module Qed
                       total_pafs                    = value.qualified + value.not_qualified;
                       cr2                           = Math.round((value.qualified / total_pafs)*10000)/100;
                       cr2_real                      = Math.round((value.qualified / (value.qualified + not_qualified_no_good_reason))*10000)/100;
-                      m                             = ((cr2_target - cr2_real + 1)*value.qualified)-value.qualified;
+                      m                             = (((cr2_target - cr2_real + 100)/100)*value.qualified)-value.qualified;
 
                       if( m < 0){m=0;};
                       money_burner                  = m * revenue_per_paf;
