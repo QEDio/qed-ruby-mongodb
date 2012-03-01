@@ -567,9 +567,9 @@ module Qed
               {:name => 'ad_group_id',            :function => '""'},
               {:name => 'conversions_adwords',    :function => '0'},
               {:name => 'conversions_backend',    :function => '1'},
-              {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'},
-              {:name => "partner",              :function => "value.partner"}
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'partner',                :function => 'value.partner'}
             ]
           },
 
@@ -585,9 +585,9 @@ module Qed
               {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords',    :function => '0'},
-              {:name => "worked"},
-              {:name => "qualified"},
-              {:name => "partner",                :function => "value.partner"}
+              {:name => 'worked'},
+              {:name => 'qualified'},
+              {:name => 'partner',                :function => 'value.partner'}
             ],
             :code => {
               :text =>  <<-JS
@@ -623,16 +623,16 @@ module Qed
               {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
-              {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'},
-              {:name => "partner",                :function => "value.partner"}
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'partner',                :function => 'value.partner'}
             ]
           },
 
           :misc => {
-            :database           => "kp",
-            :input_collection   => "kp_backend_staging_mr",
-            :output_collection  => "session_stat"
+            :database           => 'kp',
+            :input_collection   => 'kp_backend_staging_mr',
+            :output_collection  => 'session_stat'
           },
 
           :query => {
@@ -657,9 +657,9 @@ module Qed
               {:name => 'conversions_adwords',      :function => 'value.ad_stat_conversions'},
               {:name => 'conversions_backend',      :function => '0'},
               {:name => 'payed',                    :function => '0'},
-              {:name => "worked",                   :function => '0'},
-              {:name => "qualified",                :function => '0'},
-              {:name => "partner",                  :function => 'null'},
+              {:name => 'worked',                   :function => '0'},
+              {:name => 'qualified',                :function => '0'},
+              {:name => 'partner',                  :function => 'null'},
             ]
           },
 
@@ -676,9 +676,9 @@ module Qed
               {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
               {:name => 'holding_name',             :function => 'value.holding_name'},
               {:name => 'payed',                    :function => 'value.payed'},
-              {:name => "worked"},
-              {:name => "qualified"},
-              {:name => "partner",                  :function => "partner"}
+              {:name => 'worked'},
+              {:name => 'qualified'},
+              {:name => 'partner',                  :function => 'partner'}
             ],
             :code => {
               :text =>  <<-JS
@@ -727,10 +727,10 @@ module Qed
           },
 
           :misc => {
-            :database           => "kp",
-            :input_collection   => "adwords_early_warning_staging",
-            :output_collection  => "session_stat",
-            :output_operation   => "reduce",
+            :database           => 'kp',
+            :input_collection   => 'adwords_early_warning_staging',
+            :output_collection  => 'session_stat',
+            :output_operation   => 'reduce',
             :filter_data        => true
           },
 
@@ -755,8 +755,8 @@ module Qed
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
-              {:name => "worked",                 :function => 'value.worked'},
-              {:name => "qualified",              :function => 'value.qualified'}
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'qualified',              :function => 'value.qualified'}
             ],
           },
 
@@ -770,8 +770,8 @@ module Qed
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
-              {:name => "worked"},
-              {:name => "qualified"}
+              {:name => 'worked'},
+              {:name => 'qualified'}
             ],
             :code => {
               :text =>  <<-JS
@@ -831,9 +831,9 @@ module Qed
           },
 
           :misc => {
-            :database           => "kp",
-            :input_collection   => "session_stat",
-            :output_collection  => "session_stat_mr"
+            :database           => 'kp',
+            :input_collection   => 'session_stat',
+            :output_collection  => 'session_stat_mr'
           }
         }
 
@@ -850,8 +850,8 @@ module Qed
               {:name => 'cost',                   :function => 'value.cost'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
-              {:name => "qualified",              :function => 'value.qualified'},
-              {:name => "worked",                 :function => 'value.worked'}
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'worked',                 :function => 'value.worked'}
             ],
           },
 
@@ -864,8 +864,8 @@ module Qed
               {:name => 'cost'},
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
-              {:name => "qualified"},
-              {:name => "worked"}
+              {:name => 'qualified'},
+              {:name => 'worked'}
             ],
             :code => {
               :text =>  <<-JS
@@ -917,9 +917,185 @@ module Qed
           },
 
           :misc => {
-            :database           => "kp",
-            :input_collection   => "session_stat",
-            :output_collection  => "optimize_1_mr"
+            :database           => 'kp',
+            :input_collection   => 'session_stat',
+            :output_collection  => 'optimize_1_mr'
+          }
+        }
+
+        KP_PRODUKTANFRAGEN = {
+          :map => {
+            :keys => [
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id', :exchangeable => false}
+            ],
+            :values => [
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'turnover'},
+              {:name => 'payed'},
+              {:name => 'created_at',           :function => 'value.created_at'},
+              {:name => 'ad_group_ad_id',       :function => 'value.ad_group_ad_id'},
+              {:name => 'status_id',            :function => 'value.status_id'},
+              {:name => 'extended_status_id',   :function => 'value.extended_status_id'},
+              {:name => 'partner',              :function => 'value.partner'},
+              {:name => 'qualifier',            :function => 'value.qualifier'},
+              {:name => 'product_name',         :function => 'value.product_name'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover 		= 0;
+                          var payed 		  = 0;
+
+                          if(value.lead_status_id == 1){turnover = value.leaddetails_price};
+                          if(value.leaddetails_billing_status_id == 2){payed = value.leaddetails_price};
+                        JS
+            }
+          },
+
+          :reduce => {
+            :values => [
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'turnover'},
+              {:name => 'payed'},
+              {:name => 'created_at',           :function => 'value.created_at'},
+              {:name => 'ad_group_ad_id',       :function => 'value.ad_group_ad_id'},
+              {:name => 'status_id',            :function => 'value.status_id'},
+              {:name => 'extended_status_id',   :function => 'value.extended_status_id'},
+              {:name => 'partner',              :function => 'value.partner'},
+              {:name => 'qualifier',            :function => 'value.qualifier'},
+              {:name => 'product_name',         :function => 'value.product_name'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover  = 0;
+                          var payed     = 0;
+
+                          values.forEach(function(v){
+                            turnover 	+= v.turnover;
+                            payed 	  += v.payed;
+                          });
+                        JS
+            }
+          },
+
+          :finalize => {
+            :values => [
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'turnover',             :function => 'value.turnover'},
+              {:name => 'payed',                :function => 'value.payed'},
+              {:name => 'created_at',           :function => 'value.created_at'},
+              {:name => 'ad_group_ad_id',       :function => 'value.ad_group_ad_id'},
+              {:name => 'status_id',            :function => 'value.status_id'},
+              {:name => 'extended_status_id',   :function => 'value.extended_status_id'},
+              {:name => 'worked'},
+              {:name => 'qualified'},
+              {:name => 'not_qualified'},
+              {:name => 'not_qualified_good_reason'},
+              {:name => 'partner',              :function => 'value.partner'},
+              {:name => 'qualifier',            :function => 'value.qualifier'},
+              {:name => 'product_name',         :function => 'value.product_name'}
+            ],
+            :code => {
+              :text =>  <<-JS
+                          worked                      = 1;
+                          qualified                   = 1;
+                          not_qualified               = 0;
+                          not_qualified_good_reason   = 0;
+
+                          if(value.status_id == 0){worked=0};
+                          if(value.status_id != 1){qualified=0};
+                          if(value.status_id == 2){
+                            not_qualified = 1;
+                            if(value.extended_status_id == 2001 || value.extended_status_id == 2010 || value.extended_status_id == 2016 || value.extended_status_id == 2013 || value.extended_status_id == 2014 || value.extended_status_id == 2011 || value.extended_status_id == 2012 || value.extended_status_id == 2005 ){
+                              not_qualifed_good_reason = 1;
+                            };
+                          };
+                        JS
+            },
+          },
+
+          :misc => {
+            :database           => 'kp',
+            :input_collection   => 'kp_backend_staging',
+            :output_collection  => 'kp_cr2_comparison_mr'
+          },
+
+          :query => {
+            :datetime_fields => ['created_at']
+          }
+        }
+
+        KP_CR2_COMPARISON_1 = {
+          map: {
+            keys: [
+              {name: 'qualifier',                     function: 'value.qualifier'},
+              {name: 'product',                       function: 'value.product'}
+            ],
+            values: [
+              {name: 'turnover',                      function: 'value.turnover'},
+              {name: 'payed',                         function: 'value.payed'},
+              {name: 'qualified',                     function: 'value.qualified'},
+              {name: 'not_qualified',                 function: 'value.not_qualified'},
+              {name: 'not_qualified_good_reason',     function: 'value.not_qualified_good_reason'},
+            ]
+          },
+
+          reduce: {
+            values: [
+              {name: 'turnover'},
+              {name: 'payed'},
+              {name: 'qualified'},
+              {name: 'not_qualified'},
+              {name: 'not_qualified_good_reason'}
+            ],
+            code: {
+              text:  <<-JS
+                          var turnover                    = 0;
+                          var payed                       = 0;
+                          var qualified                   = 0;
+                          var not_qualified               = 0;
+                          var not_qualified_good_reason   = 0;
+
+                          values.forEach(function(v){
+                            turnover                      += v.turnover;
+                            payed                         += v.payed;
+                            qualified                     += v.qualified;
+                            not_qualified                 += v.not_qualified;
+                            not_qualified_good_reason     += v.not_qualified_good_reason;
+                          });
+                        JS
+            }
+          },
+
+          finalize: {
+            values: [
+              {name: 'qualified',                     function: 'value.qualified'},
+              {name: 'not_qualified',                 function: 'value.not_qualified'},
+              {name: 'total_pafs'},
+              {name: 'cr2'},
+              {name: 'not_qualified_good_reason',     function: 'value.not_qualified_good_reason'},
+              {name: 'not_qualified_no_good_reason,'},
+              {name: 'cr2_real'},
+              {name: 'm'},
+              {name: 'money_burner'}
+            ],
+            code: {
+              text: <<-JS
+                      cr2_target                    = 0.85;
+                      revenue_per_paf               = 68;
+                      not_qualified_no_good_reason  = value.not_qualified - value.not_qualified_good_reason;
+                      total_pafs                    = value.qualified + value.not_qualified;
+                      cr2                           = value.qualified / total_pafs;
+                      cr2_real                      = value.qualified / (value.qualified + value.not_qualified_good_reason);
+                      m                             = ((cr2_target - cr2_real + 1)*value.qualified)-value.qualified;
+                      money_burner                  = m * revenue_per_paf;
+                    JS
+            },
+          },
+
+          misc: {
+            database:           'kp',
+            input_collection:   'kp_cr2_comparison_mr',
+            output_collection:  'kp_cr2_comparison_2_mr'
           }
         }
       end

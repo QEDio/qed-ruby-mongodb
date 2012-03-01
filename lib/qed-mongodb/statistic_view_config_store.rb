@@ -28,6 +28,13 @@ module Qed
             ]
           },
 
+          cr2_comparision: {
+            mapreduce: [
+              Qed::Mongodb::MapReduce::Config::KP_PRODUKTANFRAGEN,
+              Qed::Mongodb::MapReduce::Config::KP_CR2_COMPARISON_1
+            ]
+          },
+
           :conversion_by_channel => {
             # the order is important here, the first mapreduce will be done first, then the second and so on
             :mapreduce => [
