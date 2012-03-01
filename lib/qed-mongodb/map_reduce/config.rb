@@ -1089,7 +1089,7 @@ module Qed
                       m                             = (((cr2_target - cr2_real + 100)/100)*value.qualified)-value.qualified;
                       m                             = Math.round(m*100)/100;
                       if( m < 0){m=0;};
-                      money_burner                  = m * revenue_per_paf;
+                      money_burner                  = Math.round((m * revenue_per_paf)*100)/100;
 
                     JS
             },
