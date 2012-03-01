@@ -1006,7 +1006,7 @@ module Qed
                           if(value.status_id == 2){
                             not_qualified = 1;
                             if(value.extended_status_id == 2001 || value.extended_status_id == 2010 || value.extended_status_id == 2016 || value.extended_status_id == 2013 || value.extended_status_id == 2014 || value.extended_status_id == 2011 || value.extended_status_id == 2012 || value.extended_status_id == 2005 ){
-                              not_qualifed_good_reason = 1;
+                              not_qualified_good_reason = 1;
                             };
                           };
                         JS
@@ -1028,7 +1028,7 @@ module Qed
           map: {
             keys: [
               {name: 'qualifier',                     function: 'value.qualifier'},
-              {name: 'product',                       function: 'value.product'}
+              {name: 'product_name',                  function: 'value.product_name'}
             ],
             values: [
               {name: 'turnover',                      function: 'value.turnover'},
@@ -1085,7 +1085,7 @@ module Qed
                       not_qualified_no_good_reason  = value.not_qualified - value.not_qualified_good_reason;
                       total_pafs                    = value.qualified + value.not_qualified;
                       cr2                           = value.qualified / total_pafs;
-                      cr2_real                      = value.qualified / (value.qualified + value.not_qualified_good_reason);
+                      cr2_real                      = value.qualified / (value.qualified + not_qualified_no_good_reason);
                       m                             = ((cr2_target - cr2_real + 1)*value.qualified)-value.qualified;
                       money_burner                  = m * revenue_per_paf;
                     JS
