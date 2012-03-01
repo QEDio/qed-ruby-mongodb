@@ -1080,7 +1080,7 @@ module Qed
             ],
             code: {
               text: <<-JS
-                      cr2_target                    = 0.85;
+                      cr2_target                    = 85.0;
                       revenue_per_paf               = 68;
                       not_qualified_no_good_reason  = value.not_qualified - value.not_qualified_good_reason;
                       total_pafs                    = value.qualified + value.not_qualified;
