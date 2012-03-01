@@ -1073,7 +1073,7 @@ module Qed
               {name: 'total_pafs'},
               {name: 'cr2'},
               {name: 'not_qualified_good_reason',     function: 'value.not_qualified_good_reason'},
-              {name: 'not_qualified_no_good_reason,'},
+              {name: 'not_qualified_no_good_reason'},
               {name: 'cr2_real'},
               {name: 'm'},
               {name: 'money_burner'}
