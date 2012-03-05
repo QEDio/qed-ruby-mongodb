@@ -625,7 +625,8 @@ module Qed
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'worked',                 :function => 'value.worked'},
               {:name => 'qualified',              :function => 'value.qualified'},
-              {:name => 'partner',                :function => 'value.partner'}
+              {:name => 'partner',                :function => 'value.partner'},
+              {:name => 'clicks',                 :function => '0'}
             ]
           },
 
@@ -857,7 +858,7 @@ module Qed
               {:name => 'worked',                   :function => '0'},
               {:name => 'qualified',                :function => '0'},
               {:name => 'partner',                  :function => 'null'},
-              {:name => 'clicks',                   :function => 'value.ad_stats_clicks'},
+              {:name => 'clicks',                   :function => 'value.ad_stat_clicks'},
             ]
           },
 
@@ -1030,7 +1031,7 @@ module Qed
           :misc => {
             :database           => 'kp',
             :input_collection   => 'session_stat',
-            :output_collection  => 'optimize_1_mr'
+            :output_collection  => 'optimize_2_mr'
           }
         }
 
