@@ -23,8 +23,8 @@ module Qed
             :mapreduce => [
               Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_1,
               Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_2,
-              Qed::Mongodb::MapReduce::Config::KP_ADWORDS_DB_3,
-              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_1
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_1,
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_2
             ]
           },
 

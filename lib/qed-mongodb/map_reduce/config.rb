@@ -840,6 +840,110 @@ module Qed
         KP_OPTIMIZE_1 = {
           :map => {
             :keys => [
+              {:name => 'ad_group_ad_id',           :function => 'value.ad_id'}
+            ],
+            :values => [
+              {:name => 'product_name',             :function => 'value.campaign_product'},
+              {:name => 'holding_name',             :function => 'value.campaign_holding'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'campaign_id',              :function => 'value.campaign_id'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
+              {:name => 'cost',                     :function => 'value.ad_cost_micro_amount / 1000000.0'},
+              {:name => 'turnover',                 :function => '0'},
+              {:name => 'conversions_adwords',      :function => 'value.ad_stat_conversions'},
+              {:name => 'conversions_backend',      :function => '0'},
+              {:name => 'payed',                    :function => '0'},
+              {:name => 'worked',                   :function => '0'},
+              {:name => 'qualified',                :function => '0'},
+              {:name => 'partner',                  :function => 'null'},
+              {:name => 'clicks',                   :function => 'value.ad_stats_clicks'},
+            ]
+          },
+
+          :reduce => {
+            :values => [
+              {:name => 'cost'},
+              {:name => 'turnover'},
+              {:name => 'conversions_adwords'},
+              {:name => 'conversions_backend'},
+              {:name => 'product_name',             :function => 'value.product_name'},
+              {:name => 'campaign_name',            :function => 'value.campaign_name'},
+              {:name => 'campaign_id',              :function => 'value.campaign_id'},
+              {:name => 'ad_group_name',            :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',              :function => 'value.ad_group_id'},
+              {:name => 'holding_name',             :function => 'value.holding_name'},
+              {:name => 'payed',                    :function => 'value.payed'},
+              {:name => 'worked'},
+              {:name => 'qualified'},
+              {:name => 'partner',                  :function => 'partner'},
+              {:name => 'clicks'},
+            ],
+            :code => {
+              :text =>  <<-JS
+                          var turnover            = 0;
+                          var cost                = 0;
+                          var conversions_adwords = 0;
+                          var conversions_backend = 0;
+                          //var cr2                 = 0;
+                          //var target_cpa          = 0;
+                          var worked              = 0;
+                          var qualified           = 0;
+                          var partner             = null;
+                          var clicks              = 0;
+
+                          values.forEach(function(v){
+                            cost                += v.cost;
+                            turnover            += v.turnover;
+                            conversions_adwords += v.conversions_adwords;
+                            conversions_backend += v.conversions_backend;
+                            // all but one entry should be 0, so this should work
+                            //cr2                 += v.cr2;
+                            //target_cpa          += v.target_cpa;
+                            worked              += v.worked;
+                            qualified           += v.qualified;
+                            clicks              += v.clicks;
+                            if(partner == null && v.partner != null && v.partner != ''){partner = v.partner}
+                          });
+                        JS
+            }
+          },
+          :finalize => {
+            :values => [
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'payed',                  :function => 'value.payed'},
+              {:name => 'cost',                   :function => 'value.cost'},
+              {:name => 'product_name',           :function => 'value.product_name'},
+              {:name => 'holding_name',           :function => 'value.holding_name'},
+              {:name => 'campaign_name',          :function => 'value.campaign_name'},
+              {:name => 'campaign_id',            :function => 'value.campaign_id'},
+              {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
+              {:name => 'ad_group_id',            :function => 'value.ad_group_id'},
+              {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
+              {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'qualified',              :function => 'value.qualified'},
+              {:name => 'partner',                :function => 'value.partner'},
+              {:name => 'clicks',                 :function => 'value.clicks'}
+            ]
+          },
+
+          :misc => {
+            :database           => 'kp',
+            :input_collection   => 'adwords_early_warning_staging',
+            :output_collection  => 'session_stat',
+            :output_operation   => 'reduce',
+            :filter_data        => true
+          },
+
+          :query => {
+            :datetime_fields => ['ad_from']
+          }
+        }
+
+        KP_OPTIMIZE_2 = {
+          :map => {
+            :keys => [
               {:name => 'partner',                :function => 'value.partner'}
             ],
             :values => [
@@ -851,7 +955,8 @@ module Qed
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'qualified',              :function => 'value.qualified'},
-              {:name => 'worked',                 :function => 'value.worked'}
+              {:name => 'worked',                 :function => 'value.worked'},
+              {:name => 'clicks',                 :function => 'value.clicks'}
             ],
           },
 
@@ -865,7 +970,8 @@ module Qed
               {:name => 'conversions_backend'},
               {:name => 'conversions_adwords'},
               {:name => 'qualified'},
-              {:name => 'worked'}
+              {:name => 'worked'},
+              {:name => 'clicks'}
             ],
             :code => {
               :text =>  <<-JS
@@ -875,6 +981,7 @@ module Qed
                           var conversions_backend	= 0;
                           var worked              = 0;
                           var qualified           = 0;
+                          var clicks              = 0;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
@@ -883,6 +990,7 @@ module Qed
                             conversions_backend	+= v.conversions_backend;
                             worked              += v.worked;
                             qualified           += v.qualified;
+                            clicks              += v.clicks;
                           });
               JS
             }
@@ -902,8 +1010,10 @@ module Qed
               {:name => 'qualified',              :function => 'value.qualified'},
               {:name => 'db',                     :function => 'Math.round(db*100)/100'},
               {:name => 'db2',                    :function => 'Math.round(db2*100)/100'},
-              {:name => 'cr2',                    :function => 'Math.round(cr2*100)/100'},
+              {:name => 'cr2',                    :function => 'Math.round(cr2*1000)/10'},
               {:name => 'qual_cost',              :function => 'Math.round(qual_cost*100)/100'},
+              {:name => 'clicks',                 :function => 'value.clicks'},
+              {:name => 'cr1',                    :function => 'Math.round(cr1*1000)/10'}
             ],
 
             :code => {
@@ -912,6 +1022,7 @@ module Qed
                           qual_cost     = value.qualified*6;
                           db2           = db - qual_cost;
                           cr2           = value.qualified / value.worked;
+                          cr1           = value.conversions_backend / value.clicks;
               JS
             }
           },
