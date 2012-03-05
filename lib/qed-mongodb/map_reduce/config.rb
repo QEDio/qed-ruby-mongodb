@@ -1050,7 +1050,8 @@ module Qed
               {:name => 'extended_status_id',   :function => 'value.extended_status_id'},
               {:name => 'partner',              :function => 'value.partner'},
               {:name => 'qualifier',            :function => 'value.qualifier'},
-              {:name => 'product_name',         :function => 'value.product_name'}
+              {:name => 'product_name',         :function => 'value.product_name'},
+              {:name => 'product_id',           :function => 'value.product_id'}
             ],
             :code => {
               :text =>  <<-JS
@@ -1074,7 +1075,8 @@ module Qed
               {:name => 'extended_status_id',   :function => 'value.extended_status_id'},
               {:name => 'partner',              :function => 'value.partner'},
               {:name => 'qualifier',            :function => 'value.qualifier'},
-              {:name => 'product_name',         :function => 'value.product_name'}
+              {:name => 'product_name',         :function => 'value.product_name'},
+              {:name => 'product_id',           :function => 'value.product_id'}
             ],
             :code => {
               :text =>  <<-JS
@@ -1104,7 +1106,8 @@ module Qed
               {:name => 'not_qualified_good_reason'},
               {:name => 'partner',              :function => 'value.partner'},
               {:name => 'qualifier',            :function => 'value.qualifier'},
-              {:name => 'product_name',         :function => 'value.product_name'}
+              {:name => 'product_name',         :function => 'value.product_name'},
+              {:name => 'product_id',           :function => 'value.product_id'}
             ],
             :code => {
               :text =>  <<-JS
@@ -1148,6 +1151,7 @@ module Qed
               {name: 'qualified',                     function: 'value.qualified'},
               {name: 'not_qualified',                 function: 'value.not_qualified'},
               {name: 'not_qualified_good_reason',     function: 'value.not_qualified_good_reason'},
+              {name: 'product_id',                    function: 'value.product_id'}
             ]
           },
 
@@ -1157,7 +1161,8 @@ module Qed
               {name: 'payed'},
               {name: 'qualified'},
               {name: 'not_qualified'},
-              {name: 'not_qualified_good_reason'}
+              {name: 'not_qualified_good_reason'},
+              {name: 'product_id',                    function: 'value.product_id'}
             ],
             code: {
               text:  <<-JS
@@ -1192,7 +1197,9 @@ module Qed
             ],
             code: {
               text: <<-JS
-                      cr2_target                    = 85.0;
+                      cr2_target                    = 75.0;
+                      if( value.product_id == 30 || value.product_id == 29){cr2_target = 85.0;};
+
                       revenue_per_paf               = 68;
                       not_qualified_no_good_reason  = value.not_qualified - value.not_qualified_good_reason;
                       total_pafs                    = value.qualified + value.not_qualified;
