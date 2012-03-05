@@ -25,6 +25,7 @@ module Qed
               Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_2,
               Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_3,
               Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_4,
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_5,
             ]
           },
 
