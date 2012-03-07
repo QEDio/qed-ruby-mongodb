@@ -1060,7 +1060,7 @@ module Qed
               {name: 'conversions_adwords'},
               {name: 'worked'},
               {name: 'qualified'},
-              {name: 'partner',                function: 'value.partner'},
+              {name: 'partner'},
               {name: 'clicks'}
             ],
 
@@ -1075,6 +1075,7 @@ module Qed
                       var qualified           = 0;
                       var clicks              = 0;
 
+                      var partner             = null;
                       var product_name        = null;
                       var holding_name        = null;
                       var campaign_name       = null;
@@ -1092,6 +1093,7 @@ module Qed
                         qualified           += v.qualified;
                         clicks              += v.clicks;
 
+                        if(partner == null && v.partner != null && v.partner != ''){partner = v.partner;};  
                         if(product_name == null && v.product_name != null){product_name = v.product_name;};
                         if(holding_name == null && v.holding_name != null){holding_name = v.holding_name;};
                         if(campaign_name == null && v.campaign_name != null){campaign_name = v.campaign_name;};
@@ -1132,7 +1134,8 @@ module Qed
           },
 
           query: {
-            datetime_fields: ['created_at']
+            datetime_fields: ['created_at'],
+            #condition: [{field: "value.ad_group_ad_id", value: [false]}],
           }
         }
 

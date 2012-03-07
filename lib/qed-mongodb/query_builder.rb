@@ -41,7 +41,11 @@ module Qed
       def self.add_condition(query, conditions)
         if( conditions.present? )
           conditions.each do |condition|
-            query = query.where(condition[:field].to_sym.in => condition[:value])
+            if(condition[:negative])
+              query = query.where(condition[:field].to_sym.not_in => condition[:value])
+            else
+              query = query.where(condition[:field].to_sym.in => condition[:value])
+            end
           end
         end
 
