@@ -1024,8 +1024,8 @@ module Qed
                         qualified = 1;
                         leads_for_sale = 0;
 
-                        if(value.status_id == 0){worked=0};
-                        if(value.status_id != 1){qualified=0};
+                        if(value.status_id == 0){worked=0;};
+                        if(value.status_id != 1){qualified=0;};
                         if(value.status_id == 1){leads_for_sale=value.leads_for_sale;};
                       JS
               },
