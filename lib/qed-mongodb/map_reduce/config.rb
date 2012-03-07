@@ -922,7 +922,10 @@ module Qed
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: '0'},
+              {name: 'leads_proposed',         function: '0'},
+              {name: 'leads_for_sale',         function: '0'}
             ]
           },
 
@@ -951,13 +954,19 @@ module Qed
               {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
               {name: 'status_id',            function: 'value.status_id'},
               {name: 'partner',              function: 'value.partner'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed',       function: '1'},
+              {name: 'leads_for_sale',       function: 'value.number_leads'}
+
             ],
             code: {
               text:  <<-JS
-                      var turnover 		= 0;
-                      var payed 		  = 0;
+                      var turnover 		  = 0;
+                      var payed 		    = 0;
+                      var leads_bought  = 0;
 
                       if(value.lead_status_id == 1){turnover = value.leaddetails_price};
+                      if(value.lead_status_id == 1){leads_bought = 1;};
                       if(value.leaddetails_billing_status_id == 2){payed = value.leaddetails_price};
                     JS
             }
@@ -971,16 +980,23 @@ module Qed
               {name: 'created_at',           function: 'value.created_at'},
               {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
               {name: 'status_id',            function: 'value.status_id'},
-              {name: 'partner',              function: 'value.partner'}
+              {name: 'partner',              function: 'value.partner'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale',       function: 'value.leads_for_sale'}
             ],
             code: {
               text:  <<-JS
-                      var turnover  = 0;
-                      var payed     = 0;
+                      var turnover          = 0;
+                      var payed             = 0;
+                      var leads_proposed    = 0;
+                      var leads_bought      = 0;
 
                       values.forEach(function(v){
-                        turnover 	+= v.turnover;
-                        payed 	  += v.payed;
+                        turnover 	      += v.turnover;
+                        payed 	        += v.payed;
+                        leads_proposed  += v.leads_proposed;
+                        leads_bought    += v.leads_bought;
                       });
                     JS
             }
@@ -997,15 +1013,20 @@ module Qed
                 {name: 'worked'},
                 {name: 'qualified'},
                 {name: 'partner',              function: 'value.partner'},
-                {name: 'conversions_backend',  function: '1'}
+                {name: 'conversions_backend',  function: '1'},
+                {name: 'leads_bought',         function: 'value.leads_bought'},
+                {name: 'leads_proposed',       function: 'value.leads_proposed'},
+                {name: 'leads_for_sale'}
               ],
               code: {
                 text:  <<-JS
                         worked    = 1;
                         qualified = 1;
+                        leads_for_sale = 0;
 
                         if(value.status_id == 0){worked=0};
                         if(value.status_id != 1){qualified=0};
+                        if(value.status_id == 1){leads_for_sale=value.leads_for_sale;};
                       JS
               },
           },
@@ -1042,7 +1063,10 @@ module Qed
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
             ]
           },
 
@@ -1061,7 +1085,10 @@ module Qed
               {name: 'worked'},
               {name: 'qualified'},
               {name: 'partner'},
-              {name: 'clicks'}
+              {name: 'clicks'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale'}
             ],
 
             code: {
@@ -1074,6 +1101,9 @@ module Qed
                       var worked              = 0;
                       var qualified           = 0;
                       var clicks              = 0;
+                      var leads_proposed      = 0;
+                      var leads_bought        = 0;
+                      var leads_for_sale      = 0;
 
                       var partner             = null;
                       var product_name        = null;
@@ -1092,6 +1122,9 @@ module Qed
                         worked              += v.worked;
                         qualified           += v.qualified;
                         clicks              += v.clicks;
+                        leads_bought        += v.leads_bought;
+                        leads_proposed      += v.leads_proposed;
+                        leads_for_sale      += v.leads_for_sale;
 
                         if(partner == null && v.partner != null && v.partner != ''){partner = v.partner;};  
                         if(product_name == null && v.product_name != null){product_name = v.product_name;};
@@ -1122,7 +1155,10 @@ module Qed
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
             ]
           },
 
@@ -1130,12 +1166,13 @@ module Qed
             database: 'kp',
             input_collection: 'kp_backend_staging_mr',
             output_collection: 'session_stat',
-            output_operation: 'reduce'
+            output_operation: 'reduce',
+            filter_data: true
           },
 
           query: {
             datetime_fields: ['created_at'],
-            #condition: [{field: "value.ad_group_ad_id", value: [false]}],
+            condition: [{field: "value.ad_group_ad_id", value: [nil], negative: true}],
           }
         }
 
@@ -1157,7 +1194,10 @@ module Qed
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
             ]
           },
 
@@ -1174,7 +1214,10 @@ module Qed
               {name: 'worked'},
               {name: 'qualified'},
               {name: 'partner'},
-              {name: 'clicks'}
+              {name: 'clicks'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale'}
             ],
 
             code: {
@@ -1188,6 +1231,9 @@ module Qed
                       var qualified           = 0;
                       var clicks              = 0;
                       var partner             = null;
+                      var leads_proposed      = 0;
+                      var leads_bought        = 0;
+                      var leads_for_sale      = 0;
 
                       values.forEach(function(v){
                         cost     		        += v.cost;
@@ -1198,6 +1244,9 @@ module Qed
                         worked              += v.worked;
                         qualified           += v.qualified;
                         clicks              += v.clicks;
+                        leads_proposed      += v.leads_proposed;
+                        leads_bought        += v.leads_bought;
+                        leads_for_sale      += v.leads_for_sale;
                         if(partner == null && v.partner != null){partner = v.partner;};
                       });
                     JS
@@ -1220,7 +1269,10 @@ module Qed
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
             ]
           },
 
@@ -1251,7 +1303,10 @@ module Qed
               {name: 'conversions_adwords',    function: 'value.conversions_adwords'},
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'worked',                 function: 'value.worked'},
-              {name: 'clicks',                 function: 'value.clicks'}
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
             ],
           },
 
@@ -1266,7 +1321,10 @@ module Qed
               {name: 'conversions_adwords'},
               {name: 'qualified'},
               {name: 'worked'},
-              {name: 'clicks'}
+              {name: 'clicks'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale'}
             ],
             code: {
               text:  <<-JS
@@ -1277,6 +1335,9 @@ module Qed
                       var worked              = 0;
                       var qualified           = 0;
                       var clicks              = 0;
+                      var leads_proposed      = 0;
+                      var leads_bought        = 0;
+                      var leads_for_sale      = 0;
 
                       values.forEach(function(v){
                         cost     		        += v.cost;
@@ -1286,6 +1347,9 @@ module Qed
                         worked              += v.worked;
                         qualified           += v.qualified;
                         clicks              += v.clicks;
+                        leads_proposed      += v.leads_proposed;
+                        leads_bought        += v.leads_bought;
+                        leads_for_sale      += v.leads_for_sale;
                       });
                     JS
             }
@@ -1296,19 +1360,18 @@ module Qed
               {name: 'partner',                function: 'value.partner'},
               {name: 'holding_name',           function: 'value.holding_name'},
               {name: 'product_name',           function: 'value.product_name'},
-
               {name: 'turnover',               function: 'Math.round(value.turnover*100)/100'},
               {name: 'adwords_cost',           function: 'Math.round(value.cost*100)/100'},
               {name: 'conversions_backend',    function: 'value.conversions_backend'},
               {name: 'conversions_adwords',    function: 'value.conversions_adwords'},
-
               {name: 'qualified',              function: 'value.qualified'},
               {name: 'db',                     function: 'Math.round(db*100)/100'},
               {name: 'db2',                    function: 'Math.round(db2*100)/100'},
               {name: 'cr2',                    function: 'Math.round(cr2*1000)/10'},
               {name: 'qual_cost',              function: 'Math.round(qual_cost*100)/100'},
               {name: 'clicks',                 function: 'value.clicks'},
-              {name: 'cr1',                    function: 'Math.round(cr1*1000)/10'}
+              {name: 'cr1',                    function: 'Math.round(cr1*1000)/10'},
+              {name: 'lar',                    function: 'Math.round(lar*1000)/10'}
             ],
 
               code: {
@@ -1318,6 +1381,7 @@ module Qed
                         db2           = db - qual_cost;
                         cr2           = value.qualified / value.worked;
                         cr1           = value.conversions_backend / value.clicks;
+                        lar           = value.leads_bought / value.leads_for_sale;
                       JS
               }
           },
