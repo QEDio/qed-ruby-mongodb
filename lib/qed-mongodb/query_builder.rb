@@ -42,7 +42,8 @@ module Qed
         if( conditions.present? )
           conditions.each do |condition|
             if(condition[:negative])
-              query = query.where(condition[:field].to_sym.not_in => condition[:value])
+              #query = query.where(condition[:field].to_sym.not_in => condition[:value])
+              query = query.not_in(condition[:field].to_sym => condition[:value])
             else
               query = query.where(condition[:field].to_sym.in => condition[:value])
             end
