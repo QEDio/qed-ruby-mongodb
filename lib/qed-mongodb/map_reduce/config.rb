@@ -539,14 +539,14 @@ module Qed
           },
 
           :misc => {
-            :database           => "kp",
-            :input_collection   => "kp_backend_staging",
-            :output_collection  => "kp_backend_staging_mr"
+            :database           => 'kp',
+            :input_collection   => 'kp_backend_staging',
+            :output_collection  => 'tmp.adwords_db_1'
           },
 
           :query => {
             :datetime_fields => ['created_at'],
-            :condition => [{field: "value.adlink", value: [false]}]
+            :condition => [{field: 'value.adlink', value: [false]}]
           }
         }
 
@@ -632,8 +632,8 @@ module Qed
 
           :misc => {
             :database           => 'kp',
-            :input_collection   => 'kp_backend_staging_mr',
-            :output_collection  => 'session_stat'
+            :input_collection   => 'tmp.adwords_db_1',
+            :output_collection  => 'tmp.adwords_db_2'
           },
 
           :query => {
@@ -730,7 +730,7 @@ module Qed
           :misc => {
             :database           => 'kp',
             :input_collection   => 'adwords_early_warning_staging',
-            :output_collection  => 'session_stat',
+            :output_collection  => 'tmp.adwords_db_2',
             :output_operation   => 'reduce',
             :filter_data        => true
           },
@@ -802,20 +802,20 @@ module Qed
               {:name => 'campaign_name',          :function => 'value.campaign_name'},
               {:name => 'ad_group_name',          :function => 'value.ad_group_name'},
               {:name => 'product_name',           :function => 'value.product_name'},
-              {:name => 'turnover',               :function => 'Math.round(value.turnover*100)/100'},
-              {:name => 'adwords_cost',           :function => 'Math.round(value.cost*100)/100'},
+              {:name => 'turnover',               :function => 'value.turnover'},
+              {:name => 'adwords_cost',           :function => 'value.cost'},
               {:name => 'conversions_backend',    :function => 'value.conversions_backend'},
               {:name => 'conversions_adwords',    :function => 'value.conversions_adwords'},
               {:name => 'worked',                 :function => 'value.worked'},
               {:name => 'qualified',              :function => 'value.qualified'},
-              {:name => 'db',                     :function => 'Math.round(db*100)/100'},
-              {:name => 'rel_db',                 :function => 'Math.round(rel_db*10000)/100'},
-              {:name => 'db2',                    :function => 'Math.round(db2*100)/100'},
-              {:name => 'target_cpa',             :function => 'Math.round(target_cpa*100)/100'},
-              {:name => 'current_cpa',            :function => 'Math.round(current_cpa*100)/100'},
-              {:name => 'cr2',                    :function => 'Math.round(cr2*100)/100'},
-              {:name => 'qual_cost',              :function => 'Math.round(qual_cost*100)/100'},
-              {:name => 'payed',                  :function => 'Math.round(value.payed*100)/100'}
+              {:name => 'db',                     :function => 'db'},
+              {:name => 'rel_db',                 :function => 'rel_db'},
+              {:name => 'db2',                    :function => 'db2'},
+              {:name => 'target_cpa',             :function => 'target_cpa'},
+              {:name => 'current_cpa',            :function => 'current_cpa'},
+              {:name => 'cr2',                    :function => 'cr2'},
+              {:name => 'qual_cost',              :function => 'qual_cost'},
+              {:name => 'payed',                  :function => 'value.payed'}
             ],
 
             :code => {
@@ -833,8 +833,8 @@ module Qed
 
           :misc => {
             :database           => 'kp',
-            :input_collection   => 'session_stat',
-            :output_collection  => 'session_stat_mr'
+            :input_collection   => 'tmp.adwords_db_2',
+            :output_collection  => 'adwords_db'
           }
         }
 
