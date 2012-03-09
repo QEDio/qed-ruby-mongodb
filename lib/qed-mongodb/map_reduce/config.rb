@@ -932,7 +932,7 @@ module Qed
           misc: {
             database:           'kp',
             input_collection:   'adwords_early_warning_staging',
-            output_collection:  'session_stat',
+            output_collection:  'tmp.optimize_sheet_2',
             filter_data:        true
           },
 
@@ -1034,7 +1034,7 @@ module Qed
           misc: {
             database: 'kp',
             input_collection: 'kp_backend_staging',
-            output_collection: 'kp_backend_staging_mr',
+            output_collection: 'tmp.optimize_sheet_1',
             filter_data: true
           },
 
@@ -1164,8 +1164,8 @@ module Qed
 
           misc: {
             database: 'kp',
-            input_collection: 'kp_backend_staging_mr',
-            output_collection: 'session_stat',
+            input_collection: 'tmp.optimize_sheet_1',
+            output_collection: 'tmp.optimize_sheet_2',
             output_operation: 'reduce',
             filter_data: true
           },
@@ -1278,8 +1278,8 @@ module Qed
 
           misc: {
             database: 'kp',
-            input_collection: 'session_stat',
-            output_collection: 'session_stat_mr',
+            input_collection: 'tmp.optimize_sheet_2',
+            output_collection: 'tmp.optimize_sheet_3',
           },
 
           query: {
@@ -1388,8 +1388,8 @@ module Qed
 
           misc: {
             database: 'kp',
-            input_collection: 'session_stat_mr',
-            output_collection: 'optimize_2_mr'
+            input_collection: 'tmp.optimize_sheet_3',
+            output_collection: 'optimize_sheet'
           }
         }
 
@@ -1489,7 +1489,7 @@ module Qed
           :misc => {
             :database           => 'kp',
             :input_collection   => 'kp_backend_staging',
-            :output_collection  => 'kp_cr2_comparison_mr'
+            :output_collection  => 'tmp.cr2_comparison_1'
           },
 
           :query => {
@@ -1574,8 +1574,8 @@ module Qed
 
           misc: {
             database:           'kp',
-            input_collection:   'kp_cr2_comparison_mr',
-            output_collection:  'kp_cr2_comparison_2_mr'
+            input_collection:   'tmp.cr2_comparison_1',
+            output_collection:  'cr2_comparison'
           }
         }
       end
