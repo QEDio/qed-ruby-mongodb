@@ -46,7 +46,7 @@ module Qed
         mrm
       end
 
-      # Todo: this is bad shortcut, but for now I just need it to work
+      # Todo: this is a bad shortcut, but for now I just need it to work
       def self.get_config(config, filter_model)
         #puts "FilterModel: #{filter_model.inspect}"
         raise Exception.new("filter_model has no user! This is not allowed") if filter_model.confidential.user.nil?
