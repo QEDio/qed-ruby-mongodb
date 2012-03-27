@@ -951,7 +951,7 @@ module Qed
               {name: 'created_at',           function: 'value.created_at'},
               {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
               {name: 'status_id',            function: 'value.status_id'},
-              {name: 'partner',              function: 'value.partner'},
+              {name: 'partner',              function: '""'},
               {name: 'leads_bought'},
               {name: 'leads_proposed',       function: '1'},
               {name: 'leads_for_sale',       function: 'value.number_leads'}
