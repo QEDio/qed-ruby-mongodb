@@ -847,7 +847,7 @@ module Qed
               {name: 'product_name',             function: 'value.campaign_product'},
               {name: 'holding_name',             function: 'value.campaign_holding'},
               {name: 'campaign_name',            function: 'value.campaign_name'},
-              {name: 'partner',                  function: 'value.partner'},
+              {name: 'partner',                  function: 'value.ad_partner'},
               {name: 'campaign_id',              function: 'value.campaign_id'},
               {name: 'ad_group_name',            function: 'value.ad_group_name'},
               {name: 'ad_group_id',              function: 'value.ad_group_id'},
