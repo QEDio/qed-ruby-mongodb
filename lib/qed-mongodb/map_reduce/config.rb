@@ -847,6 +847,7 @@ module Qed
               {name: 'product_name',             function: 'value.campaign_product'},
               {name: 'holding_name',             function: 'value.campaign_holding'},
               {name: 'campaign_name',            function: 'value.campaign_name'},
+              {name: 'partner',                  function: 'value.partner'},
               {name: 'campaign_id',              function: 'value.campaign_id'},
               {name: 'ad_group_name',            function: 'value.ad_group_name'},
               {name: 'ad_group_id',              function: 'value.ad_group_id'},
@@ -857,8 +858,7 @@ module Qed
               {name: 'payed',                    function: '0'},
               {name: 'worked',                   function: '0'},
               {name: 'qualified',                function: '0'},
-              {name: 'partner',                  function: 'null'},
-              {name: 'clicks',                   function: 'value.ad_stat_clicks'},
+              {name: 'clicks',                   function: 'value.ad_stat_clicks'}
             ]
           },
 
@@ -870,6 +870,7 @@ module Qed
               {name: 'ad_group_name',            function: 'value.ad_group_name'},
               {name: 'ad_group_id',              function: 'value.ad_group_id'},
               {name: 'holding_name',             function: 'value.holding_name'},
+              {name: 'partner',                  function: 'value.partner'},
               {name: 'cost'},
               {name: 'turnover'},
               {name: 'conversions_adwords'},
@@ -877,7 +878,6 @@ module Qed
               {name: 'payed'},
               {name: 'worked'},
               {name: 'qualified'},
-              {name: 'partner'},
               {name: 'clicks'},
             ],
             code: {
@@ -889,7 +889,6 @@ module Qed
                           var payed               = 0;
                           var worked              = 0;
                           var qualified           = 0;
-                          var partner             = null;
                           var clicks              = 0;
 
                           values.forEach(function(v){
@@ -901,7 +900,6 @@ module Qed
                             qualified           += v.qualified;
                             clicks              += v.clicks;
                             payed               += v.payed;
-                            if(partner == null && v.partner != null && v.partner != ''){partner = v.partner}
                           });
                         JS
             }
@@ -913,6 +911,7 @@ module Qed
               {name: 'cost',                   function: 'value.cost'},
               {name: 'product_name',           function: 'value.product_name'},
               {name: 'holding_name',           function: 'value.holding_name'},
+              {name: 'partner',                function: 'value.partner'},
               {name: 'campaign_name',          function: 'value.campaign_name'},
               {name: 'campaign_id',            function: 'value.campaign_id'},
               {name: 'ad_group_name',          function: 'value.ad_group_name'},
@@ -921,7 +920,6 @@ module Qed
               {name: 'conversions_adwords',    function: 'value.conversions_adwords'},
               {name: 'worked',                 function: 'value.worked'},
               {name: 'qualified',              function: 'value.qualified'},
-              {name: 'partner',                function: 'value.partner'},
               {name: 'clicks',                 function: 'value.clicks'},
               {name: 'leads_bought',           function: '0'},
               {name: 'leads_proposed',         function: '0'},
@@ -932,7 +930,7 @@ module Qed
           misc: {
             database:           'kp',
             input_collection:   'adwords_early_warning_staging',
-            output_collection:  'tmp.optimize_sheet_2',
+            output_collection:  'tmp.optimize_sheet_1',
             filter_data:        true
           },
 
@@ -1034,7 +1032,7 @@ module Qed
           misc: {
             database: 'kp',
             input_collection: 'kp_backend_staging',
-            output_collection: 'tmp.optimize_sheet_1',
+            output_collection: 'tmp.optimize_sheet_2',
             filter_data: true
           },
 
@@ -1164,129 +1162,17 @@ module Qed
 
           misc: {
             database: 'kp',
-            input_collection: 'tmp.optimize_sheet_1',
-            output_collection: 'tmp.optimize_sheet_2',
+            input_collection: 'tmp.optimize_sheet_2',
+            output_collection: 'tmp.optimize_sheet_1',
             output_operation: 'reduce',
             filter_data: true
           },
 
           query: {
             datetime_fields: ['created_at'],
-            condition: [{field: "value.ad_group_ad_id", value: [nil], negative: true}],
+            condition: [{field: 'value.ad_group_ad_id', value: [nil], negative: true}],
           }
         }
-
-        KP_OPTIMIZE_4 = {
-          map: {
-            keys: [
-              {name: 'campaign_id',         function: 'value.campaign_id'}
-            ],
-            values: [
-              {name: 'turnover',               function: 'value.turnover'},
-              {name: 'payed',                  function: 'value.payed'},
-              {name: 'cost',                   function: 'value.cost'},
-              {name: 'product_name',           function: 'value.product_name'},
-              {name: 'holding_name',           function: 'value.holding_name'},
-              {name: 'campaign_name',          function: 'value.campaign_name'},
-              {name: 'campaign_id',            function: 'value.campaign_id'},
-              {name: 'conversions_adwords',    function: 'value.conversions_adwords'},
-              {name: 'conversions_backend',    function: 'value.conversions_backend'},
-              {name: 'worked',                 function: 'value.worked'},
-              {name: 'qualified',              function: 'value.qualified'},
-              {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'},
-              {name: 'leads_bought',           function: 'value.leads_bought'},
-              {name: 'leads_proposed',         function: 'value.leads_proposed'},
-              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
-            ]
-          },
-
-          reduce: {
-            values: [
-              {name: 'product_name',            function: 'value.product_name'},
-              {name: 'holding_name',            function: 'value.holding_name'},
-              {name: 'campaign_name',           function: 'value.campaign_name'},
-              {name: 'campaign_id',             function: 'value.campaign_id'},
-              {name: 'turnover'},
-              {name: 'cost'},
-              {name: 'conversions_backend'},
-              {name: 'conversions_adwords'},
-              {name: 'worked'},
-              {name: 'qualified'},
-              {name: 'partner'},
-              {name: 'clicks'},
-              {name: 'leads_bought'},
-              {name: 'leads_proposed'},
-              {name: 'leads_for_sale'}
-            ],
-
-            code: {
-              text:  <<-JS
-                      var turnover			      = 0;
-                      var payed               = 0;
-                      var cost			          = 0;
-                      var conversions_backend	= 0;
-                      var conversions_adwords = 0;
-                      var worked              = 0;
-                      var qualified           = 0;
-                      var clicks              = 0;
-                      var partner             = null;
-                      var leads_proposed      = 0;
-                      var leads_bought        = 0;
-                      var leads_for_sale      = 0;
-
-                      values.forEach(function(v){
-                        cost     		        += v.cost;
-                        payed               += v.payed;
-                        turnover 		        += v.turnover;
-                        conversions_backend	+= v.conversions_backend;
-                        conversions_adwords += v.conversions_adwords;
-                        worked              += v.worked;
-                        qualified           += v.qualified;
-                        clicks              += v.clicks;
-                        leads_proposed      += v.leads_proposed;
-                        leads_bought        += v.leads_bought;
-                        leads_for_sale      += v.leads_for_sale;
-                        if(partner == null && v.partner != null){partner = v.partner;};
-                      });
-                    JS
-            }
-          },
-
-          finalize: {
-            values: [
-              {name: 'turnover',               function: 'value.turnover'},
-              {name: 'payed',                  function: 'value.payed'},
-              {name: 'cost',                   function: 'value.cost'},
-              {name: 'product_name',           function: 'value.product_name'},
-              {name: 'holding_name',           function: 'value.holding_name'},
-              {name: 'campaign_name',          function: 'value.campaign_name'},
-              {name: 'campaign_id',            function: 'value.campaign_id'},
-              {name: 'ad_group_name',          function: 'value.ad_group_name'},
-              {name: 'ad_group_id',            function: 'value.ad_group_id'},
-              {name: 'conversions_backend',    function: 'value.conversions_backend'},
-              {name: 'conversions_adwords',    function: 'value.conversions_adwords'},
-              {name: 'worked',                 function: 'value.worked'},
-              {name: 'qualified',              function: 'value.qualified'},
-              {name: 'partner',                function: 'value.partner'},
-              {name: 'clicks',                 function: 'value.clicks'},
-              {name: 'leads_bought',           function: 'value.leads_bought'},
-              {name: 'leads_proposed',         function: 'value.leads_proposed'},
-              {name: 'leads_for_sale',         function: 'value.leads_for_sale'}
-            ]
-          },
-
-          misc: {
-            database: 'kp',
-            input_collection: 'tmp.optimize_sheet_2',
-            output_collection: 'tmp.optimize_sheet_3',
-          },
-
-          query: {
-            datetime_fields: ['created_at']
-          }
-        }
-
 
         KP_OPTIMIZE_5 = {
           map: {
