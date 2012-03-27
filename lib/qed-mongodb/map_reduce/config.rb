@@ -1172,7 +1172,7 @@ module Qed
             datetime_fields: ['created_at'],
             condition: [{field: 'value.ad_group_ad_id', value: [nil], negative: true}],
           }
-        },
+        }
 
         KP_OPTIMIZE_4 = {
           map: {
