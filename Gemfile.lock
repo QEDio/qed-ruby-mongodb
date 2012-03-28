@@ -22,7 +22,7 @@ GIT
 
 GIT
   remote: git@github.com:QEDio/qstate.git
-  revision: 0030c5ce3e433fdf530b633f478389e98244b52b
+  revision: eb0dc20fe3cdb37af0a181b1b6a19904588b5f81
   submodules: true
   specs:
     qstate (0.0.1)

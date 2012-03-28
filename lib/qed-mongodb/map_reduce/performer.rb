@@ -27,7 +27,7 @@ module Qed
           @db                 = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].misc.database)
           @builder_klass      = options[:builder_klass]
 
-          Rails.logger.info("mr: ": + @filter_model.db.cache)
+          Rails.logger.info("mr: " + @filter_model.db.cache)
           if( @filter_model.db.present? && @filter_model.db.cache.present? )
             @cache              = @filter_model.db.cache
           else
