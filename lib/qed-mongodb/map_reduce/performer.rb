@@ -38,31 +38,20 @@ module Qed
           {
             :config         => Qed::Mongodb::StatisticViewConfigStore::PROFILE,
             :builder_klass  => Marbu::Builder,
-            :cache          => true
+            :cache          => Qstate::Plugin::Db.CACHE_VALUE_TRUE.first
           }
         end
 
         def mapreduce()
-          if cache
+          if Qstate::Plugin::Db.CACHE_VALUE_TRUE.include?(cache)
             # TODO: mrapper should already be used here
-            data_hsh = Qed::Mongodb::MapReduce::Cache.find(
-              { 
-                :filter_model           => @filter_model,
-                :mapreduce_models       => @mapreduce_models,
-                :database               => @db
-              }
-            )
+            data_hsh = mapreduce_cache_find
 
             if( !data_hsh[:cached] )
-              data_hsh = Qed::Mongodb::MapReduce::Cache.save(
-                {
-                  :cursor             => int_mapreduce,
-                  :filter_model       => @filter_model,
-                  :mapreduce_models   => @mapreduce_models,
-                  :database           => @db
-                }
-              )
+              data_hsh = mapreduce_cache_save
             end
+          elsif Qstate::Plugin::Db.CACHE_VALUE_RENEW.include?(cache)
+            data_hsh = mapreduce_cache_save
           else
             data_hsh = {:cached => false, :result => int_mapreduce.find().to_a }
           end
@@ -71,6 +60,27 @@ module Qed
         end
 
         private
+          def mapreduce_cache_find()
+            Qed::Mongodb::MapReduce::Cache.find(
+              {
+                :filter_model           => @filter_model,
+                :mapreduce_models       => @mapreduce_models,
+                :database               => @db
+              }
+            )
+          end
+
+          def mapreduce_cache_save()
+            Qed::Mongodb::MapReduce::Cache.save(
+              {
+                :cursor             => int_mapreduce,
+                :filter_model       => @filter_model,
+                :mapreduce_models   => @mapreduce_models,
+                :database           => @db
+              }
+            )
+          end
+
           def int_mapreduce
             coll = nil
             
