@@ -6,17 +6,16 @@ module Qed
       # the desired view/statistic
       def self.create_config(filter_model, config = Qed::Mongodb::StatisticViewConfigStore::PROFILE)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("filter_model param is not a FilterModel-Object!") if !filter_model.is_a?(Qstate::FilterModel)
+          new('filter_model param is not a FilterModel-Object!') if !filter_model.is_a?(Qstate::FilterModel)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("config param is not a hash!") if !config.is_a?(Hash)
+          new('config param is not a hash!') if !config.is_a?(Hash)
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("variable user in filter_model is not allowed to be nil!") if filter_model.view.view.nil?
+          new('variable user in filter_model is not allowed to be nil!') if filter_model.view.view.nil?
         raise Qed::Mongodb::Exceptions::FilterModelError.
-          new("variable view in filter_model is not allowed to be nil!") if filter_model.confidential.user.nil?
+          new('variable view in filter_model is not allowed to be nil!') if filter_model.confidential.user.nil?
 
         # get the mapreduce-configurations
         mapreduce_configurations = get_mapreduce_config(config, filter_model)
-
 
         mapreduce_configurations.each_with_index do |mapreduce_configuration, i|
           # build query, do it:
@@ -49,11 +48,11 @@ module Qed
       # Todo: this is a bad shortcut, but for now I just need it to work
       def self.get_config(config, filter_model)
         #puts "FilterModel: #{filter_model.inspect}"
-        raise Exception.new("filter_model has no user! This is not allowed") if filter_model.confidential.user.nil?
+        raise Exception.new('filter_model has no user! This is not allowed') if filter_model.confidential.user.nil?
         user = filter_model.confidential.user.to_sym
 
         if( filter_model.view.view.nil? && filter_model.view.action.nil? )
-          raise Exception.new("filter_model view and action are both nil! This is not allowed!")
+          raise Exception.new('filter_model view and action are both nil! This is not allowed!')
         end
 
         raise Exception.new("Unknown user #{user}") unless config.key?(user)

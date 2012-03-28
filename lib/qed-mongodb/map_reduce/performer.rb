@@ -13,7 +13,7 @@ module Qed
           options       = default_options.merge( ext_options.delete_if{|k,v|v.nil?} )
 
           unless filter_model.is_a?(Qstate::FilterModel)
-            raise Qed::Mongodb::Exceptions::OptionMisformed.new("Provided filter is not a FilterModel-Object!")
+            raise Qed::Mongodb::Exceptions::OptionMisformed.new('Provided filter is not a FilterModel-Object!')
           end
 
           @filter_model       = filter_model
@@ -21,12 +21,17 @@ module Qed
                                   create_config(@filter_model, options[:config])
 
           if @mapreduce_models.size == 0
-            raise MapReduceConfigurationNotFound.new("Couldn't find any mapreduce configuration for this request.")
+            raise MapReduceConfigurationNotFound.new('Couldnt find any mapreduce configuration for this request.')
           end
 
           @db                 = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].misc.database)
           @builder_klass      = options[:builder_klass]
-          @cache              = options[:cache]
+
+          if( @filter_model.db.present? && @filter_model.db.cache.present? )
+            @cache              = @filter_model.db.cache
+          else
+            @cache              = options[:cache]
+          end
         end
 
         def default_options
@@ -38,7 +43,7 @@ module Qed
         end
 
         def mapreduce()
-          if( cache )
+          if cache
             # TODO: mrapper should already be used here
             data_hsh = Qed::Mongodb::MapReduce::Cache.find(
               { 
