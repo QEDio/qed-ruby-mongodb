@@ -38,19 +38,19 @@ module Qed
           {
             :config         => Qed::Mongodb::StatisticViewConfigStore::PROFILE,
             :builder_klass  => Marbu::Builder,
-            :cache          => Qstate::Plugin::Db.CACHE_VALUE_TRUE.first
+            :cache          => Qstate::Plugin::Db::CACHE_VALUE_TRUE.first
           }
         end
 
         def mapreduce()
-          if Qstate::Plugin::Db.CACHE_VALUE_TRUE.include?(cache)
+          if Qstate::Plugin::Db::CACHE_VALUE_TRUE.include?(cache)
             # TODO: mrapper should already be used here
             data_hsh = mapreduce_cache_find
 
             if( !data_hsh[:cached] )
               data_hsh = mapreduce_cache_save
             end
-          elsif Qstate::Plugin::Db.CACHE_VALUE_RENEW.include?(cache)
+          elsif Qstate::Plugin::Db::CACHE_VALUE_RENEW.include?(cache)
             data_hsh = mapreduce_cache_save
           else
             data_hsh = {:cached => false, :result => int_mapreduce.find().to_a }
