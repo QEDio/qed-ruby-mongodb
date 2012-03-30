@@ -710,8 +710,8 @@ module Qed
                             //target_cpa          += v.target_cpa;
                             worked              += v.worked;
                             qualified           += v.qualified;
-                            if(partner == null && v.partner != null && v.partner != ''){partner = v.partner}
-                            ad_group_status     = v.ad_group_status;
+                            if(partner == null && v.partner != null && v.partner != ''){partner = v.partner;};
+                            if(ad_group_status == null && v.ad_group_status != null && v.ad_group_status != ''){ad_group_status = v.ad_group_status;};
                           });
                         JS
             }
