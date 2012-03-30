@@ -698,7 +698,7 @@ module Qed
                           var worked              = 0;
                           var qualified           = 0;
                           var partner             = null;
-                          var ad_group_status     = '';
+                          var ad_group_status     = null;
 
                           values.forEach(function(v){
                             cost     		        += v.cost;
