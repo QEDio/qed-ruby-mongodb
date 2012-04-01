@@ -33,6 +33,29 @@ module Qed
       end
 
       def self.set_map_emit_keys(mrm, fm)
+        # legacy                                                      mapreduceaggregation
+        mrm = set_map_emit_keys_legacy(mrm,fm)
+
+        # pimped version
+        if fm.mapreduceaggregation.values.size > 0
+          # do we have params for this mr-id?
+          map_reduce_aggregation_keys = fm.mapreduceaggregation.values.select{|key_value|key_value.key.eql?(mrm.misc.id.to_sym)}.first
+
+          if map_reduce_aggregation_keys.present?
+            map_obj = mrm.map
+            # first delete all currently defined emit keys, because we have some shinier ones
+            map_obj.keys = []
+
+            map_reduce_aggregation_keys.value.each do |emit_key|
+              map_obj.add_key(emit_key.to_s)
+            end
+          end
+        end
+
+        mrm
+      end
+
+      def self.set_map_emit_keys_legacy(mrm,fm)
         if( fm.mapreduce.values.size > 0 )
           map_obj = mrm.map
           # first delete all currently defined emit keys, because we have some shinier ones

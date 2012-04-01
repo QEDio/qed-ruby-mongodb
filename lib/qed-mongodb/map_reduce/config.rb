@@ -1288,7 +1288,8 @@ module Qed
           misc: {
             database: 'kp',
             input_collection: 'tmp.optimize_sheet_1',
-            output_collection: 'optimize_sheet'
+            output_collection: 'optimize_sheet',
+            id: 'o4'
           }
         }
 
