@@ -1457,6 +1457,7 @@ module Qed
               text: <<-JS
                       cr2_target                    = 75.0;
                       if( value.product_id == 30 || value.product_id == 29){cr2_target = 85.0;};
+                      if( value.product_id == 558 ){cr2_target = 50.0;};
 
                       revenue_per_paf               = 68;
                       not_qualified_no_good_reason  = value.not_qualified - value.not_qualified_good_reason;
