@@ -28,6 +28,13 @@ module Qed
             ]
           },
 
+          :optimize_seo => {
+            :mapreduce => [
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_SEO_1,
+              Qed::Mongodb::MapReduce::Config::KP_OPTIMIZE_SEO_2
+            ]
+          },
+
           cr2_comparision: {
             mapreduce: [
               Qed::Mongodb::MapReduce::Config::KP_PRODUKTANFRAGEN,
