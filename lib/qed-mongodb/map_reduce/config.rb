@@ -1584,7 +1584,7 @@ module Qed
 
           query: {
             datetime_fields: ['created_at'],
-            condition: [{field: 'value.ad_group_ad_id', value: 'seo'}],
+            condition: [{field: 'value.channel', value: 'seo'}],
           }
         }
 
