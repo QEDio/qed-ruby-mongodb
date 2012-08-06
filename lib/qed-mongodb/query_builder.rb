@@ -42,7 +42,7 @@ module Qed
         if conditions.present?
           conditions.each do |condition|
             if condition[:op].present?
-              query = query.where( (condition[:field].to_s + '.' + condition[:op].to_s).to_sym => condition[:value])
+              query = query.where( condition[:field].to_sym.send(condition[:op].to_s) => condition[:value] )
             else
               if condition[:negative]
                 #query = query.where(condition[:field].to_sym.not_in => condition[:value])
