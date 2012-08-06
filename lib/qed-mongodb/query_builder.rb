@@ -29,7 +29,7 @@ module Qed
       def self.build_from_date_time(klass, plugin, ext_options = {})
         options   = ext_options
 
-        if( plugin && plugin.from && plugin.till )
+        if plugin && plugin.from && plugin.till
           options[:datetime_fields].each do |datetime_field|
             klass = klass.between((Marbu::Models::Misc::DOCUMENT_OFFSET+datetime_field.to_s).to_sym, plugin.from, plugin.till)
           end
@@ -39,13 +39,17 @@ module Qed
       end
 
       def self.add_condition(query, conditions)
-        if( conditions.present? )
+        if conditions.present?
           conditions.each do |condition|
-            if(condition[:negative])
-              #query = query.where(condition[:field].to_sym.not_in => condition[:value])
-              query = query.not_in(condition[:field].to_sym => condition[:value])
+            if condition[:op].present?
+              query = query.where( (condition[:field].to_s + '.' + condition[:op].to_s).to_sym => condition[:value])
             else
-              query = query.where(condition[:field].to_sym.in => condition[:value])
+              if condition[:negative]
+                #query = query.where(condition[:field].to_sym.not_in => condition[:value])
+                query = query.not_in(condition[:field].to_sym => condition[:value])
+              else
+                query = query.where(condition[:field].to_sym.in => condition[:value])
+              end
             end
           end
         end

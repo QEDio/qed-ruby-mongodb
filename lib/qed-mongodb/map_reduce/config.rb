@@ -948,7 +948,8 @@ module Qed
           },
 
           query: {
-            datetime_fields: ['ad_from']
+            datetime_fields: ['ad_from'],
+            condition: [{field: 'value.ad_stat_impressions', value: 0, op: :gt}]
           }
         }
 
