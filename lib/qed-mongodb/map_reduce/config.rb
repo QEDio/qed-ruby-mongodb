@@ -948,7 +948,8 @@ module Qed
           },
 
           query: {
-            datetime_fields: ['ad_from']
+            datetime_fields: ['ad_from'],
+            condition: [{field: 'value.ad_stat_impressions', value: 0, op: :gt}]
           }
         }
 
@@ -1477,6 +1478,208 @@ module Qed
             database:           'kp',
             input_collection:   'tmp.cr2_comparison_1',
             output_collection:  'cr2_comparison'
+          }
+        }
+
+        KP_OPTIMIZE_SEO_1 = {
+          map: {
+            keys: [
+              {name: 'inquiry_id',           function: 'value.inquiry_id', exchangeable: false}
+            ],
+            values: [
+              {name: 'inquiry_id',           function: 'value.inquiry_id'},
+              {name: 'turnover'},
+              {name: 'payed'},
+              {name: 'created_at',           function: 'value.created_at'},
+              {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
+              {name: 'status_id',            function: 'value.status_id'},
+              {name: 'partner',              function: 'value.partner'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed',       function: '1'},
+              {name: 'leads_for_sale',       function: 'value.number_leads'},
+              {name: 'product_name',         function: 'value.product_name'}
+
+            ],
+            code: {
+              text:  <<-JS
+                      var turnover 		  = 0;
+                      var payed 		    = 0;
+                      var leads_bought  = 0;
+
+                      if(value.lead_status_id == 1){turnover = value.leaddetails_price};
+                      if(value.lead_status_id == 1){leads_bought = 1;};
+                      if(value.leaddetails_billing_status_id == 2){payed = value.leaddetails_price};
+                    JS
+            }
+          },
+
+          reduce: {
+            values: [
+              {name: 'inquiry_id',           function: 'value.inquiry_id'},
+              {name: 'turnover'},
+              {name: 'payed'},
+              {name: 'created_at',           function: 'value.created_at'},
+              {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
+              {name: 'status_id',            function: 'value.status_id'},
+              {name: 'partner',              function: 'value.partner'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale',       function: 'value.leads_for_sale'},
+              {name: 'product_name',         function: 'value.product_name'}
+            ],
+            code: {
+              text:  <<-JS
+                      var turnover          = 0;
+                      var payed             = 0;
+                      var leads_proposed    = 0;
+                      var leads_bought      = 0;
+
+                      values.forEach(function(v){
+                        turnover 	      += v.turnover;
+                        payed 	        += v.payed;
+                        leads_proposed  += v.leads_proposed;
+                        leads_bought    += v.leads_bought;
+                      });
+                    JS
+            }
+          },
+
+          finalize: {
+            values: [
+              {name: 'inquiry_id',           function: 'value.inquiry_id'},
+              {name: 'turnover',             function: 'value.turnover'},
+              {name: 'payed',                function: 'value.payed'},
+              {name: 'created_at',           function: 'value.created_at'},
+              {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
+              {name: 'status_id',            function: 'value.status_id'},
+              {name: 'worked'},
+              {name: 'qualified'},
+              {name: 'partner',              function: 'value.partner'},
+              {name: 'product_name',         function: 'value.product_name'},
+              {name: 'conversions_backend',  function: '1'},
+              {name: 'leads_bought',         function: 'value.leads_bought'},
+              {name: 'leads_proposed',       function: 'value.leads_proposed'},
+              {name: 'leads_for_sale'},
+              {name: 'cost',                 function: '0'}
+            ],
+            code: {
+              text:  <<-JS
+                        worked    = 1;
+                        qualified = 1;
+                        leads_for_sale = 0;
+
+                        if(value.status_id == 0){worked=0;};
+                        if(value.status_id != 1){qualified=0;};
+                        if(value.status_id == 1){leads_for_sale=value.leads_for_sale;};
+                      JS
+            },
+          },
+
+          misc: {
+            database:           'kp',
+            input_collection:   'kp_backend_staging',
+            output_collection:  'tmp.optimize_sheet_seo_1',
+            filter_data:        true,
+            id:                 'os1'
+          },
+
+          query: {
+            datetime_fields: ['created_at'],
+            condition: [{field: 'value.channel', value: ['seo']}]
+          }
+        }
+
+        KP_OPTIMIZE_SEO_2 = {
+          map: {
+            keys: [
+              {name: 'partner',                function: 'value.partner'}
+            ],
+            values: [
+              {name: 'partner',                function: 'value.partner'},
+              {name: 'product_name',           function: 'value.product_name'},
+              {name: 'turnover',               function: 'value.turnover'},
+              {name: 'cost',                   function: 'value.cost'},
+              {name: 'conversions_backend',    function: 'value.conversions_backend'},
+              {name: 'qualified',              function: 'value.qualified'},
+              {name: 'worked',                 function: 'value.worked'},
+              {name: 'clicks',                 function: 'value.clicks'},
+              {name: 'leads_bought',           function: 'value.leads_bought'},
+              {name: 'leads_proposed',         function: 'value.leads_proposed'},
+              {name: 'leads_for_sale',         function: 'value.leads_for_sale'},
+              {name: 'cost',                   function: 'value.cost'}
+            ],
+          },
+
+          reduce: {
+            values: [
+              {name: 'partner',                function: 'value.partner'},
+              {name: 'product_name',           function: 'value.product_name'},
+              {name: 'turnover'},
+              {name: 'cost'},
+              {name: 'conversions_backend'},
+              {name: 'qualified'},
+              {name: 'worked'},
+              {name: 'clicks'},
+              {name: 'leads_bought'},
+              {name: 'leads_proposed'},
+              {name: 'leads_for_sale'}
+            ],
+            code: {
+              text:  <<-JS
+                        var turnover			      = 0;
+                        var cost			          = 0;
+                        var conversions_backend	= 0;
+                        var worked              = 0;
+                        var qualified           = 0;
+                        var clicks              = 0;
+                        var leads_proposed      = 0;
+                        var leads_bought        = 0;
+                        var leads_for_sale      = 0;
+
+                        values.forEach(function(v){
+                          cost     		        += v.cost;
+                          turnover 		        += v.turnover;
+                          conversions_backend	+= v.conversions_backend;
+                          worked              += v.worked;
+                          qualified           += v.qualified;
+                          leads_proposed      += v.leads_proposed;
+                          leads_bought        += v.leads_bought;
+                          leads_for_sale      += v.leads_for_sale;
+                        });
+                      JS
+            }
+          },
+
+          finalize: {
+            values: [
+              {name: 'partner',                function: 'value.partner'},
+              {name: 'product_name',           function: 'value.product_name'},
+              {name: 'turnover',               function: 'Math.round(value.turnover*100)/100'},
+              {name: 'conversions_backend',    function: 'value.conversions_backend'},
+              {name: 'qualified',              function: 'value.qualified'},
+              {name: 'db',                     function: 'Math.round(db*100)/100'},
+              {name: 'db2',                    function: 'Math.round(db2*100)/100'},
+              {name: 'cr2',                    function: 'Math.round(cr2*1000)/10'},
+              {name: 'qual_cost',              function: 'Math.round(qual_cost*100)/100'},
+              {name: 'lar',                    function: 'Math.round(lar*1000)/10'}
+            ],
+
+            code: {
+              text:  <<-JS
+                      db         	  = value.turnover - value.cost;
+                      qual_cost     = value.qualified*6;
+                      db2           = db - qual_cost;
+                      cr2           = value.qualified / value.worked;
+                      lar           = value.leads_bought / value.leads_for_sale;
+                    JS
+            }
+          },
+
+          misc: {
+            database: 'kp',
+            input_collection: 'tmp.optimize_sheet_seo_1',
+            output_collection: 'optimize_sheet_seo',
+            id: 'os2'
           }
         }
       end
