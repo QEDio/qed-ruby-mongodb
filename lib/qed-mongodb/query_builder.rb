@@ -60,7 +60,7 @@ module Qed
       def self.build_from_query(query, plugin, ext_options = {})
         options       = ext_options
 
-        if( plugin && plugin.values )
+        if plugin && plugin.values
           plugin.values.each do |value|
             att = (Marbu::Models::Misc::DOCUMENT_OFFSET+value.key.to_s).to_sym
 

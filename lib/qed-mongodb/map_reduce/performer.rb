@@ -85,18 +85,31 @@ module Qed
             coll = nil
             
             @mapreduce_models.each do |mrm|
-              coll = @db.collection(mrm.misc.input_collection)
-              builder = @builder_klass.new(mrm)
+              retries = 0
+              max_retries = 5
 
-              #log(Rails.logger, builder, mrm)
-              
-              coll = coll.map_reduce(
-                builder.map, builder.reduce,
-                {
-                  :query => builder.query, :out => {mrm.misc.output_operation.to_sym => mrm.misc.output_collection},
-                  :finalize => builder.finalize
-                }
-              )
+              begin
+                coll = @db.collection(mrm.misc.input_collection)
+                builder = @builder_klass.new(mrm)
+
+                #log(Rails.logger, builder, mrm)
+
+                coll = coll.map_reduce(
+                  builder.map, builder.reduce,
+                  {
+                    :query => builder.query, :out => {mrm.misc.output_operation.to_sym => mrm.misc.output_collection},
+                    :finalize => builder.finalize
+                  }
+                )
+              rescue Mongo::ConnectionFailure => e
+                if retries < max_retries
+                  retries += 1
+                  sleep 0.2*retries*retries
+                  retry
+                else
+                  raise e
+                end
+              end
             end
 
             return coll
