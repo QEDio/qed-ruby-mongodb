@@ -50,26 +50,26 @@ module Qed
             ]
           },
 
-          :conversion_by_product => {
-            :mapreduce => [
-              Qed::Mongodb::MapReduce::Config::KP_CBP_1,
-              Qed::Mongodb::MapReduce::Config::KP_CBP_2
-            ]
-          },
-
-          :topseller => {
-            :mapreduce => [
-              Qed::Mongodb::MapReduce::Config::KP_CBP_1,
-              Qed::Mongodb::MapReduce::Config::KP_CBP_2
-            ]
-          },
-
-          :tracking => {
-            :mapreduce => [
-              Qed::Mongodb::MapReduce::Config::KP_CBP_1,
-              Qed::Mongodb::MapReduce::Config::KP_TRA_2
-            ]
-          }
+          #:conversion_by_product => {
+          #  :mapreduce => [
+          #    Qed::Mongodb::MapReduce::Config::KP_CBP_1,
+          #    Qed::Mongodb::MapReduce::Config::KP_CBP_2
+          #  ]
+          #},
+          #
+          #:topseller => {
+          #  :mapreduce => [
+          #    Qed::Mongodb::MapReduce::Config::KP_CBP_1,
+          #    Qed::Mongodb::MapReduce::Config::KP_CBP_2
+          #  ]
+          #},
+          #
+          #:tracking => {
+          #  :mapreduce => [
+          #    Qed::Mongodb::MapReduce::Config::KP_CBP_1,
+          #    Qed::Mongodb::MapReduce::Config::KP_TRA_2
+          #  ]
+          #}
         }
       }
     end

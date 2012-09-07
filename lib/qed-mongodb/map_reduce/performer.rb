@@ -56,6 +56,7 @@ module Qed
             data_hsh = {:cached => false, :result => int_mapreduce.find().to_a }
           end
 
+
           return data_hsh
         end
 
@@ -81,12 +82,13 @@ module Qed
             )
           end
 
-          def int_mapreduce
-            coll = nil
+          def int_mapreduce(options = {})
+            coll                       = nil
+            created_output_collections = []
             
             @mapreduce_models.each do |mrm|
               retries = 0
-              max_retries = 5
+              max_retries = 10
 
               begin
                 coll = @db.collection(mrm.misc.input_collection)

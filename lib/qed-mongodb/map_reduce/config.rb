@@ -178,9 +178,9 @@ module Qed
           },
 
           :misc => {
-            :database             => 'qed_production',
-            :input_collection     => 'inquiries',
-            :output_collection    => 'mr_inquiries_jak4'
+            database:           'kp',
+            input_collection:   'kp_backend_staging',
+            output_collection:  'tmp.kp_backend_staging_1'
           },
 
           :query => {
@@ -202,7 +202,8 @@ module Qed
               {:name => 'turnover'},
               {:name => 'payed'},
               {:name => 'product_uuid',         :function => 'value.product_uuid'},
-              {:name => 'inquiry_id',           :function => 'value.inquiry_id'}
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'count'}
             ],
             :code => {
               :text =>   <<-JS
@@ -285,14 +286,15 @@ module Qed
             ],
             :values =>  [
               {:name => 'tracking_ag',          :function => 'value.tracking_ag'},
-              {:name => 'count'},
-              {:name => 'worked_on'},
+              {:name => 'worked'},
               {:name => 'qualified'},
               {:name => 'test'},
-              {:name => 'turnover'},
-              {:name => 'payed'},
+              {:name => 'turnover',             :function => 'value.turnover'},
+              {:name => 'payed',                :function => 'value.payed'},
               {:name => 'product_uuid',         :function => 'value.product_uuid'},
-              {:name => 'inquiry_id',           :function => 'value.inquiry_id'}
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'count',                :function => '1'},
+              {:name => 'partner',              :function => 'value.partner'}
             ],
             :code => {
               :text =>  <<-JS
@@ -311,18 +313,19 @@ module Qed
             :values =>  [
               {:name => 'tracking_ag',          :function => 'value.tracking_ag'},
               {:name => 'count'},
-              {:name => 'worked_on'},
+              {:name => 'worked'},
               {:name => 'qualified'},
               {:name => 'test'},
               {:name => 'turnover'},
               {:name => 'payed'},
               {:name => 'product_uuid',         :function => 'value.product_uuid'},
-              {:name => 'inquiry_id',           :function => 'value.inquiry_id'}
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'partner',              :function => 'value.partner'}
             ],
             :code => {
               :text =>  <<-JS
                           var count = 0;
-                          var worked_on = 0;
+                          var worked = 0;
                           var qualified = 0;
                           var test = 0;
                           var turnover = 0;
@@ -330,7 +333,7 @@ module Qed
 
                           values.forEach(function(v){
                             count += v.count;
-                            worked_on += v.worked_on;
+                            worked += v.worked;
                             qualified += v.qualified;
                             test += v.test;
                             turnover += v.turnover;
@@ -344,24 +347,27 @@ module Qed
             :values => [
               {:name => 'tracking_ag',          :function => 'value.tracking_ag'},
               {:name => 'count',                :function => 'value.count'},
-              {:name => 'worked_on',            :function => 'value.worked_on'},
+              {:name => 'worked',               :function => 'value.worked'},
               {:name => 'qualified',            :function => 'value.qualified'},
               {:name => 'test',                 :function => 'value.test'},
               {:name => 'turnover',             :function => 'value.turnover'},
               {:name => 'payed',                :function => 'value.payed'},
               {:name => 'product_uuid',         :function => 'value.product_uuid'},
-              {:name => 'inquiry_id',           :function => 'value.inquiry_id'}
+              {:name => 'inquiry_id',           :function => 'value.inquiry_id'},
+              {:name => 'partner',              :function => 'value.partner'}
             ]
           },
 
           :misc => {
-            :database             => 'qed_production',
-            :input_collection     => 'mr_inquiries_jak4',
-            :output_collection    => 'mr_suppa_jak4'
+            database:           'kp',
+            input_collection:   'tmp.kp_backend_staging_1',
+            output_collection:  'conversion_by_channel',
+            filter_data:        true
           },
 
           :query => {
-            :datetime_fields          => ['created_at']
+            :datetime_fields          => ['created_at'],
+            condition: [{field: 'value.tracking_ag', value: [nil], negative: true}],
           }
         }
 
@@ -922,9 +928,9 @@ module Qed
               {name: 'turnover',               function: 'value.turnover'},
               {name: 'payed',                  function: 'value.payed'},
               {name: 'cost',                   function: 'value.cost'},
-              {name: 'product_name',           function: 'value.product_name'},
+              {name: 'product_name',           function: 'null'},
               {name: 'holding_name',           function: 'value.holding_name'},
-              {name: 'partner',                function: 'value.partner'},
+              {name: 'partner',                function: 'null'},
               {name: 'campaign_name',          function: 'value.campaign_name'},
               {name: 'campaign_id',            function: 'value.campaign_id'},
               {name: 'ad_group_name',          function: 'value.ad_group_name'},
@@ -965,7 +971,8 @@ module Qed
               {name: 'created_at',           function: 'value.created_at'},
               {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
               {name: 'status_id',            function: 'value.status_id'},
-              {name: 'partner',              function: '""'},
+              {name: 'partner',              function: 'value.partner'},
+              {name: 'product_name',         function: 'value.product_name'},
               {name: 'leads_bought'},
               {name: 'leads_proposed',       function: '1'},
               {name: 'leads_for_sale',       function: 'value.number_leads'}
@@ -993,6 +1000,7 @@ module Qed
               {name: 'ad_group_ad_id',       function: 'value.ad_group_ad_id'},
               {name: 'status_id',            function: 'value.status_id'},
               {name: 'partner',              function: 'value.partner'},
+              {name: 'product_name',         function: 'value.product_name'},
               {name: 'leads_bought'},
               {name: 'leads_proposed'},
               {name: 'leads_for_sale',       function: 'value.leads_for_sale'}
@@ -1025,12 +1033,14 @@ module Qed
                 {name: 'worked'},
                 {name: 'qualified'},
                 {name: 'partner',              function: 'value.partner'},
+                {name: 'product_name',         function: 'value.product_name'},
                 {name: 'conversions_backend',  function: '1'},
                 {name: 'leads_bought',         function: 'value.leads_bought'},
                 {name: 'leads_proposed',       function: 'value.leads_proposed'},
                 {name: 'leads_for_sale'}
               ],
               code: {
+
                 text:  <<-JS
                         worked    = 1;
                         qualified = 1;
@@ -1064,7 +1074,7 @@ module Qed
               {name: 'turnover',               function: 'value.turnover'},
               {name: 'payed',                  function: 'value.payed'},
               {name: 'cost',                   function: 'value.cost'},
-              {name: 'product_name',           function: 'null'},
+              {name: 'product_name',           function: 'value.product_name'},
               {name: 'holding_name',           function: 'null'},
               {name: 'campaign_name',          function: 'null'},
               {name: 'campaign_id',            function: 'null'},
