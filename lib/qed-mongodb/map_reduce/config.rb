@@ -1705,6 +1705,52 @@ module Qed
             id: 'os2'
           }
         }
+
+        VIDIBUS_TEST = {
+          map: {
+            keys: [
+              {name: 'video_uuid',                function: 'value.video_uuid'}
+            ],
+            values: [
+              {name: 'video_uuid',                function: 'value.video_uuid'},
+              {name: 'seconds',                   function: 'value.seconds'},
+            ],
+          },
+
+          reduce: {
+            values: [
+              {name: 'video_uuid',                function: 'value.video_uuid'},
+              {name: 'seconds'}
+            ],
+            code: {
+              text:  <<-JS
+                var seconds = 0;
+                values.forEach(function(v){
+                  seconds     += v.seconds;
+                })
+              JS
+            }
+          },
+
+          finalize: {
+            values: [
+              {name: 'video_uuid',                function: 'value.video_uuid'},
+              {name: 'seconds',                   function: 'value.seconds'}
+            ],
+
+            code: {
+              text:  <<-JS
+              JS
+            }
+          },
+
+          misc: {
+            database: 'vidibus',
+            input_collection: 'vidibus_video_staging',
+            output_collection: 'vidibus_video_test',
+            id: 'vt'
+          }
+        }
       end
     end
   end

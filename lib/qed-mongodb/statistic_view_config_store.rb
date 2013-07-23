@@ -70,6 +70,14 @@ module Qed
           #    Qed::Mongodb::MapReduce::Config::KP_TRA_2
           #  ]
           #}
+        },
+
+        :vidibus => {
+          :vidibus_test => {
+            :mapreduce => [
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_TEST
+            ]
+          }
         }
       }
     end
