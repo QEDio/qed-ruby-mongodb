@@ -27,7 +27,7 @@ module Qed
           @db                 = Mongo::Connection.new(MONGO_HOST, MONGO_PORT).db(@mapreduce_models[0].misc.database)
           @builder_klass      = options[:builder_klass]
 
-          if( @filter_model.db.present? && @filter_model.db.cache.present? )
+          if @filter_model.db.present? && @filter_model.db.cache.present?
             @cache              = @filter_model.db.cache
           else
             @cache              = options[:cache]
@@ -47,7 +47,7 @@ module Qed
             # TODO: mrapper should already be used here
             data_hsh = mapreduce_cache_find
 
-            if( !data_hsh[:cached] )
+            unless data_hsh[:cached]
               data_hsh = mapreduce_cache_save
             end
           elsif Qstate::Plugin::Db::CACHE_VALUE_RENEW.include?(cache)
@@ -94,7 +94,7 @@ module Qed
                 coll = @db.collection(mrm.misc.input_collection)
                 builder = @builder_klass.new(mrm)
 
-                #log(Rails.logger, builder, mrm)
+                log(Rails.logger, builder, mrm)
 
                 coll = coll.map_reduce(
                   builder.map, builder.reduce,
