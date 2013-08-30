@@ -1709,24 +1709,28 @@ module Qed
         VIDIBUS_TEST = {
           map: {
             keys: [
-              {name: 'video_uuid',                function: 'value.video_uuid'}
+              {name: 'asset_id',                  function: 'value.asset_id'}
             ],
             values: [
-              {name: 'video_uuid',                function: 'value.video_uuid'},
-              {name: 'seconds',                   function: 'value.seconds'},
+              {name: 'asset_id',                  function: 'value.asset_id'},
             ],
+            code: {
+              text: <<-JS
+
+              JS
+            },
           },
 
           reduce: {
             values: [
-              {name: 'video_uuid',                function: 'value.video_uuid'},
-              {name: 'seconds'}
+              {name: 'asset_id',                  function: 'value.asset_id'},
+              {name: 'times_watched'}
             ],
             code: {
               text:  <<-JS
-                var seconds = 0;
+                var times_watched = 0;
                 values.forEach(function(v){
-                  seconds     += v.seconds;
+                  times_watched     += 1;
                 })
               JS
             }
@@ -1734,8 +1738,8 @@ module Qed
 
           finalize: {
             values: [
-              {name: 'video_uuid',                function: 'value.video_uuid'},
-              {name: 'seconds',                   function: 'value.seconds'}
+              {name: 'asset_id',                   function: 'value.asset_id'},
+              {name: 'times_watched',              function: 'value.times_watched'}
             ],
 
             code: {
@@ -1749,7 +1753,99 @@ module Qed
             input_collection: 'vidibus_video_staging',
             output_collection: 'vidibus_video_test',
             id: 'vt'
+          },
+
+          query: {
+            datetime_fields: ['created_at']
           }
+        }
+
+        VIDIBUS_VIDEO_HISTOGRAM = {
+            map: {
+                keys: [
+                    {name: 'asset',                  function: 'value.asset'}
+                ],
+                values: [
+                    {name: 'asset',                  function: 'value.asset'},
+                ],
+                code: {
+                    text: <<-JS
+                      histogram = new Array(100);
+                      step_size = 1;
+
+                      value.timeline.forEach(function(p){
+                        i = 0;
+
+                        from_head_percent = p.from_head_percent * 100.0;
+                        till_head_percent = p.till_head_percent * 100.0;
+
+                        while(from_head_percent + i < till_head_percent){
+                          histo_id = Math.floor(from_head_percent + i);
+                          histogram[histo_id] = {active: true, bitrate: p.bitrate};
+                          i += step_size;
+                        }
+                      });
+
+                      i = 0;
+                      while(i < 100){
+                        watched = 0;
+
+                        if( histogram[i] != undefined && histogram[i].active == true){
+                          watched = 1;
+                          bitrate = histogram[i].bitrate;
+                        }
+
+                        emit({ asset: value.asset, bucket: i}, {watched: watched, bitrate: bitrate} );
+                        i += 1;
+                      }
+                    JS
+                },
+                options: {
+                  emit_in_code: true
+                }
+            },
+
+            reduce: {
+                values: [
+                    {name: 'watched'},
+                    {name: 'bitrate'}
+                ],
+                code: {
+                    text:  <<-JS
+                    var watched = 0;
+
+                      values.forEach(function(v){
+                        watched     += v.watched;
+                      })
+                    JS
+                }
+            },
+
+            finalize: {
+                values: [
+                    {name: 'watched',              function: 'value.watched'},
+                    {name: 'bitrate'},
+                    {name: 'traffic'}
+                ],
+
+                code: {
+                    text:  <<-JS
+                      bitrate = value.bitrate / (1024*1024);
+                      traffic = value.watched * bitrate;
+                    JS
+                }
+            },
+
+            misc: {
+                database: 'vidibus',
+                input_collection: 'timeline',
+                output_collection: 'histogram',
+                id: 'vt'
+            },
+
+            query: {
+                datetime_fields: ['created_at']
+            }
         }
       end
     end
