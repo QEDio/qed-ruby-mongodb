@@ -1766,72 +1766,102 @@ module Qed
                     {name: 'asset',                  function: 'value.asset'}
                 ],
                 values: [
-                    {name: 'asset',                  function: 'value.asset'},
+                    {name: 'histogram'},
+                    {name: 'mega_traffic'},
+                    {name: 'total_seconds_watched'}
                 ],
                 code: {
                     text: <<-JS
-                      histogram = new Array(100);
-                      step_size = 1;
+                      step_size               = 1;
+                      histogram               = new Array(100);
+                      mega_traffic            = 0;
+                      total_seconds_watched   = 0;
 
                       value.timeline.forEach(function(p){
-                        i = 0;
+                        i             = 0;
+                        mega_byterate = p.byterate / (1024*1024);
+                        duration      = p.till_head - p.from_head;
+
+                        if( isNaN(duration) || duration < 0.0001 ){
+                          duration = 0;
+                        }
+
+                        if (isNaN(mega_byterate) || mega_byterate < 0.0001 ){
+                          mega_byterate = 0;
+                        }
+
+                        mega_traffic              += mega_byterate * duration;
+                        total_seconds_watched     += duration;
 
                         from_head_percent = p.from_head_percent * 100.0;
                         till_head_percent = p.till_head_percent * 100.0;
 
-                        while(from_head_percent + i < till_head_percent){
-                          histo_id = Math.floor(from_head_percent + i);
-                          histogram[histo_id] = {active: true, bitrate: p.bitrate};
-                          i += step_size;
+                        //livestreams are still a problem, such a problem as having byterate == 1 and duration == 1
+                        // which leads to from_head_percentage > 100 and this in turn produces bson-Objects that are above
+                        // the max bson Document size
+                        if( from_head_percent <= 100 && till_head_percent <= 100){
+                          // on the first run i = 0
+                          percent               = till_head_percent - from_head_percent;
+                          seconds_per_percent   = duration / percent;
+
+                          while(from_head_percent + i < till_head_percent){
+                            histo_id = Math.floor(from_head_percent + i);
+                            histogram[histo_id] = {watched: 1, i: histo_id, duration: seconds_per_percent, mega_byterate: mega_byterate};
+                            i += step_size;
+                          }
                         }
                       });
-
-                      i = 0;
-                      while(i < 100){
-                        watched = 0;
-
-                        if( histogram[i] != undefined && histogram[i].active == true){
-                          watched = 1;
-                          bitrate = histogram[i].bitrate;
-                        }
-
-                        emit({ asset: value.asset, bucket: i}, {watched: watched, bitrate: bitrate} );
-                        i += 1;
-                      }
                     JS
                 },
                 options: {
-                  emit_in_code: true
                 }
             },
 
             reduce: {
                 values: [
-                    {name: 'watched'},
-                    {name: 'bitrate'}
+                    {name: 'histogram'},
+                    {name: 'mega_traffic'},
+                    {name: 'total_seconds_watched'}
                 ],
                 code: {
                     text:  <<-JS
-                    var watched = 0;
+                    var histogram = new Array(100);
+                    var mega_traffic = 0;
+                    var total_seconds_watched = 0;
 
-                      values.forEach(function(v){
-                        watched     += v.watched;
-                      })
+                    values.forEach(function(v){
+                      i = 0;
+                      mega_traffic            += v.mega_traffic;
+                      total_seconds_watched   += v.total_seconds_watched;
+
+                      while(i < 100){
+                        if (histogram[i] != undefined) {
+                          if( v.histogram[i] != undefined){
+                            histogram[i].watched      += v.histogram[i].watched;
+                            histogram[i].duration     += v.histogram[i].duration;
+                          }
+                        }
+                        else{
+                          if( v.histogram[i] != undefined ){
+                            histogram[i] = v.histogram[i];
+                          }
+                        }
+                        i += 1;
+                      }
+                    })
                     JS
                 }
             },
 
             finalize: {
                 values: [
-                    {name: 'watched',              function: 'value.watched'},
-                    {name: 'bitrate'},
-                    {name: 'traffic'}
+                    {name: 'histogram', function: 'value.histogram'},
+                    {name: 'total_mega_traffic', function: 'value.mega_traffic'},
+                    {name: 'total_seconds_watched', function: 'value.total_seconds_watched'}
                 ],
 
                 code: {
                     text:  <<-JS
-                      bitrate = value.bitrate / (1024*1024);
-                      traffic = value.watched * bitrate;
                     JS
                 }
             },
