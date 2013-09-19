@@ -1704,61 +1704,7 @@ module Qed
             output_collection: 'optimize_sheet_seo',
             id: 'os2'
           }
-        }
-
-        VIDIBUS_TEST = {
-          map: {
-            keys: [
-              {name: 'asset_id',                  function: 'value.asset_id'}
-            ],
-            values: [
-              {name: 'asset_id',                  function: 'value.asset_id'},
-            ],
-            code: {
-              text: <<-JS
-
-              JS
-            },
-          },
-
-          reduce: {
-            values: [
-              {name: 'asset_id',                  function: 'value.asset_id'},
-              {name: 'times_watched'}
-            ],
-            code: {
-              text:  <<-JS
-                var times_watched = 0;
-                values.forEach(function(v){
-                  times_watched     += 1;
-                })
-              JS
-            }
-          },
-
-          finalize: {
-            values: [
-              {name: 'asset_id',                   function: 'value.asset_id'},
-              {name: 'times_watched',              function: 'value.times_watched'}
-            ],
-
-            code: {
-              text:  <<-JS
-              JS
-            }
-          },
-
-          misc: {
-            database: 'vidibus',
-            input_collection: 'vidibus_video_staging',
-            output_collection: 'vidibus_video_test',
-            id: 'vt'
-          },
-
-          query: {
-            datetime_fields: ['created_at']
-          }
-        }
+        },
 
         VIDIBUS_VIDEO_HISTOGRAM = {
             map: {
@@ -1876,7 +1822,63 @@ module Qed
             query: {
                 datetime_fields: ['created_at']
             }
-        }
+        },
+
+        VIDIBUS_SERVER_TRAFFIC = {
+          map: {
+              keys: [
+                  {name: 'realm',                  function: 'value.realm'}
+              ],
+              values: [
+                  {name: 'bytes',                  function: 'value.bytes'},
+              ],
+              code: {
+                  text: <<-JS
+                  JS
+              },
+              options: {
+              }
+          },
+
+          reduce: {
+              values: [
+                  {name: 'bytes'},
+              ],
+              code: {
+                  text:  <<-JS
+                  var bytes = 0;
+
+                  values.forEach(function(v){
+                    bytes += parseInt(v.bytes);
+                  })
+                  JS
+              }
+          },
+
+          finalize: {
+              values: [
+                  {name: 'giga_bytes'},
+              ],
+
+              code: {
+                  text:  <<-JS
+                    var giga_bytes = value.bytes / (1024*1024*1024);
+
+                  JS
+              }
+          },
+
+          misc: {
+              database: 'vidibus',
+              input_collection: 'server_stats',
+              output_collection: 'server_stats_mr',
+              id: 'ss'
+          },
+
+          query: {
+              datetime_fields: ['server_time']
+          }
+          }
       end
     end
   end

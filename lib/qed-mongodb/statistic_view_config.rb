@@ -21,7 +21,7 @@ module Qed
           # build query, do it:
           # ALWAYS for the first mapreduce configuration
           # for every other configuration that has misc.filter_data == true
-          if( i == 0 || mapreduce_configuration.misc.filter_data )
+          if i == 0 || mapreduce_configuration.misc.filter_data
             mapreduce_configuration.query.condition =
               Qed::Mongodb::QueryBuilder.selector(filter_model, :query => mapreduce_configuration.query )
           end
@@ -34,7 +34,7 @@ module Qed
 
       def self.set_map_emit_keys(mrm, fm)
         # legacy                                                      mapreduceaggregation
-        mrm = set_map_emit_keys_legacy(mrm,fm)
+        #mrm = set_map_emit_keys_legacy(mrm,fm)
 
         # pimped version
         if fm.mapreduceaggregation.values.size > 0
@@ -55,18 +55,18 @@ module Qed
         mrm
       end
 
-      def self.set_map_emit_keys_legacy(mrm,fm)
-        if( fm.mapreduce.values.size > 0 )
-          map_obj = mrm.map
-          # first delete all currently defined emit keys, because we have some shinier ones
-          map_obj.keys = []
-
-          fm.mapreduce.values.each do |emit_key|
-            map_obj.add_key(emit_key.key)
-          end
-        end
-        mrm
-      end
+      #def self.set_map_emit_keys_legacy(mrm,fm)
+      #  if fm.mapreduce.values.size > 0
+      #    map_obj = mrm.map
+      #    # first delete all currently defined emit keys, because we have some shinier ones
+      #    map_obj.keys = []
+      #
+      #    fm.mapreduce.values.each do |emit_key|
+      #      map_obj.add_key(emit_key.key)
+      #    end
+      #  end
+      #  mrm
+      #end
 
       # Todo: this is a bad shortcut, but for now I just need it to work
       def self.get_config(config, filter_model)
@@ -74,13 +74,13 @@ module Qed
         raise Exception.new('filter_model has no user! This is not allowed') if filter_model.confidential.user.nil?
         user = filter_model.confidential.user.to_sym
 
-        if( filter_model.view.view.nil? && filter_model.view.action.nil? )
+        if filter_model.view.view.nil? && filter_model.view.action.nil?
           raise Exception.new('filter_model view and action are both nil! This is not allowed!')
         end
 
         raise Exception.new("Unknown user #{user}") unless config.key?(user)
 
-        if(filter_model.view.view && config[user.to_sym].key?(filter_model.view.view.to_sym))
+        if filter_model.view.view && config[user.to_sym].key?(filter_model.view.view.to_sym)
           accessor = filter_model.view.view.to_sym
         else
           accessor = filter_model.view.action.to_sym

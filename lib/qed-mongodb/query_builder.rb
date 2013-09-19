@@ -12,7 +12,7 @@ module Qed
         klass       = build_from_query(klass, fm.query)
         klass       = add_condition(klass, query.condition)
 
-        if( klass.is_a?(Mongoid::Criteria) )
+        if klass.is_a?(Qed::Mongodb::MongoidModel)
           klass = klass.selector
         else
           klass = nil
@@ -23,7 +23,7 @@ module Qed
 
       def self.default_options
         {
-          :klass              => Qed::Mongodb::MongoidModel
+          :klass              => Qed::Mongodb::MongoidModel.new()
         }
       end
 
@@ -32,7 +32,7 @@ module Qed
 
         if plugin && plugin.from && plugin.till
           options[:datetime_fields].each do |datetime_field|
-            klass = klass.between((Marbu::Models::Misc::DOCUMENT_OFFSET+datetime_field.to_s).to_sym, plugin.from, plugin.till)
+            klass = klass.between((Marbu::Models::Misc::DOCUMENT_OFFSET+datetime_field.to_s).to_sym => plugin.from..plugin.till)
           end
         end
 
@@ -66,7 +66,7 @@ module Qed
             att = (Marbu::Models::Misc::DOCUMENT_OFFSET+value.key.to_s).to_sym
 
             if value.value.is_a?(Array) && value.value.size > 0
-              if( value.value.size == 1)
+              if value.value.size == 1
                 query = query.where(att.to_s => value.value[0])
               else
                 query = query.where(att.in => value.value)
