@@ -1878,7 +1878,135 @@ module Qed
           query: {
               datetime_fields: ['server_time']
           }
-          }
+        },
+
+        VIDIBUS_SERVER_ASSET_VIEWS_1 = {
+            map: {
+                keys: [
+                    {name: 'realm',                  function: 'value.realm'},
+                    {name: 'asset',                  function: 'value.asset'},
+                    {name: 'ident',                  function: 'value.ident'}
+                ],
+                values: [
+                    {name: 'ident_entries'},
+                    {name: 'bytes',                 function: 'value.bytes'},
+                ],
+                code: {
+                    text: <<-JS
+                      var ident_entries = 1;
+                    JS
+                },
+                options: {
+                }
+            },
+
+            reduce: {
+                values: [
+                    {name: 'ident_entries'},
+                    {name: 'bytes'}
+                ],
+                code: {
+                    text:  <<-JS
+                    var ident_entries = 0;
+                    var bytes = 0;
+
+                    values.forEach(function(v){
+                      ident_entries += v.ident_entries;
+                      bytes += v.bytes;
+                    })
+                    JS
+                }
+            },
+
+            finalize: {
+                values: [
+                    {name: 'ident_entries',                 function: 'value.ident_entries'},
+                    {name: 'bytes',                         function: 'value.bytes'}
+                ],
+
+                code: {
+                    text:  <<-JS
+                    JS
+                }
+            },
+
+            misc: {
+                database: 'vidibus',
+                input_collection: 'server_stats',
+                output_collection: 'asset_views_step1',
+                id: 'av1'
+            },
+
+            query: {
+                datetime_fields: ['server_time']
+            }
+        },
+
+            VIDIBUS_SERVER_ASSET_VIEWS_2 = {
+                map: {
+                    keys: [
+                        {name: 'realm',                  function: 'id.realm'},
+                        {name: 'asset',                  function: 'id.asset'}
+                    ],
+                    values: [
+                        {name: 'views'},
+                        {name: 'bytes',                  function: 'value.bytes'},
+                        {name: 'ident_entries',          function: 'value.ident_entries'}
+                    ],
+                    code: {
+                        text: <<-JS
+                        var views = 1;
+                        JS
+                    },
+                    options: {
+                    }
+                },
+
+                reduce: {
+                    values: [
+                        {name: 'views'},
+                        {name: 'ident_entries'},
+                        {name: 'bytes'}
+                    ],
+                    code: {
+                        text:  <<-JS
+                        var views = 0;
+                        var ident_entries = 0;
+                        var bytes = 0;
+
+                        values.forEach(function(v){
+                          views += v.views;
+                          ident_entries += v.ident_entries;
+                          bytes += v.bytes;
+                        })
+                        JS
+                    }
+                },
+
+                finalize: {
+                    values: [
+                        {name: 'views',                 function: 'value.views'},
+                        {name: 'ident_entries',          function: 'value.ident_entries'},
+                        {name: 'mega_bytes'}
+                    ],
+
+                    code: {
+                        text:  <<-JS
+                          var mega_bytes = value.bytes / (1024*1024);
+                        JS
+                    }
+                },
+
+                misc: {
+                    database: 'vidibus',
+                    input_collection: 'asset_views_step1',
+                    output_collection: 'asset_views_mr',
+                    id: 'av2'
+                },
+
+                query: {
+                }
+            }
       end
     end
   end

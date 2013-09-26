@@ -82,6 +82,12 @@ module Qed
             :mapreduce => [
                 Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_TRAFFIC
             ]
+          },
+          :server_views =>{
+            :mapreduce => [
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_ASSET_VIEWS_1,
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_ASSET_VIEWS_2,
+            ]
           }
         }
       }
