@@ -1889,6 +1889,7 @@ module Qed
                 ],
                 values: [
                     {name: 'ident_entries'},
+                    {name: 'realm',                  function: 'value.realm'},
                     {name: 'bytes',                 function: 'value.bytes'},
                 ],
                 code: {
@@ -1902,6 +1903,7 @@ module Qed
 
             reduce: {
                 values: [
+                    {name: 'realm',                  function: 'value.realm'},
                     {name: 'ident_entries'},
                     {name: 'bytes'}
                 ],
@@ -1920,6 +1922,7 @@ module Qed
 
             finalize: {
                 values: [
+                    {name: 'realm',                  function: 'value.realm'},
                     {name: 'ident_entries',                 function: 'value.ident_entries'},
                     {name: 'bytes',                         function: 'value.bytes'}
                 ],
