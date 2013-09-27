@@ -1989,7 +1989,7 @@ module Qed
                 finalize: {
                     values: [
                         {name: 'views',                 function: 'value.views'},
-                        #{name: 'ident_entries',          function: 'value.ident_entries'},
+                        {name: 'ident_entries',          function: 'value.ident_entries'},
                         {name: 'mega_bytes'}
                     ],
 

@@ -27,6 +27,7 @@ module Qed
           end
 
           set_map_emit_keys(mapreduce_configuration, filter_model)
+          set_finalize_return_values(mapreduce_configuration, filter_model)
         end
 
         return mapreduce_configurations
@@ -37,9 +38,9 @@ module Qed
         #mrm = set_map_emit_keys_legacy(mrm,fm)
 
         # pimped version
-        if fm.mapreduceaggregation.values.size > 0
+        if fm.mapreduceaggregationkeys.values.size > 0
           # do we have params for this mr-id?
-          map_reduce_aggregation_keys = fm.mapreduceaggregation.values.select{|key_value|key_value.key.eql?(mrm.misc.id.to_sym)}.first
+          map_reduce_aggregation_keys = fm.mapreduceaggregationkeys.values.select{|key_value|key_value.key.eql?(mrm.misc.id.to_sym)}.first
 
           if map_reduce_aggregation_keys.present?
             map_obj = mrm.map
@@ -53,6 +54,22 @@ module Qed
         end
 
         mrm
+      end
+
+      def self.set_finalize_return_values(mrm, fm)
+        if fm.mapreduceaggregationvalues.values.size > 0
+          map_reduce_aggregation_values = fm.mapreduceaggregationvalues.values.select{|key_value|key_value.key.eql?(mrm.misc.id.to_sym)}.first
+
+          if map_reduce_aggregation_values.present?
+            map_obj = mrm.finalize
+            # first delete all currently defined emit keys, because we have some shinier ones
+            map_obj.values = []
+
+            map_reduce_aggregation_values.value.each do |return_value|
+              map_obj.add_value(return_value.to_s)
+            end
+          end
+        end
       end
 
       #def self.set_map_emit_keys_legacy(mrm,fm)
