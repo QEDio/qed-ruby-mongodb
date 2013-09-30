@@ -2053,7 +2053,7 @@ module Qed
                     code: {
                         text:  <<-JS
                           // mean for added bytes that are no cumullative
-                          giga_bytes = (value.bytes / v.entries) / (1024*1024*1024);
+                          giga_bytes = (value.bytes / value.entries) / (1024*1024*1024);
                         JS
                     }
                 },
