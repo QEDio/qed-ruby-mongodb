@@ -2015,9 +2015,11 @@ module Qed
                     ],
                     values: [
                         {name: 'bytes',                 function: 'value.bytes'},
+                        {name: 'entries'}
                     ],
                     code: {
                         text: <<-JS
+                          var entries = 1;
                         JS
                     },
                     options: {
@@ -2026,15 +2028,19 @@ module Qed
 
                 reduce: {
                     values: [
-                        {name: 'bytes'}
+                        {name: 'bytes'},
+                        {name: 'entries'}
+
                     ],
                     code: {
                         text:  <<-JS
-                                            var bytes = 0;
+                            var bytes = 0;
+                            var entries = 0;
 
-                                            values.forEach(function(v){
-                                              bytes += v.bytes;
-                                            })
+                            values.forEach(function(v){
+                              bytes += v.bytes;
+                              entries += v.entries;
+                            })
                         JS
                     }
                 },
@@ -2046,7 +2052,8 @@ module Qed
 
                     code: {
                         text:  <<-JS
-                          giga_bytes = value.bytes / (1024*1024*1024);
+                          // mean for added bytes that are no cumullative
+                          giga_bytes = (value.bytes / v.entries) / (1024*1024*1024);
                         JS
                     }
                 },
