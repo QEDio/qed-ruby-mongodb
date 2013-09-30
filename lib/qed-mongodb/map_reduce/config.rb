@@ -2006,6 +2006,61 @@ module Qed
 
                 query: {
                 }
+            },
+
+            VIDIBUS_SERVER_STORAGE = {
+                map: {
+                    keys: [
+                        {name: 'realm',                  function: 'value.realm'}
+                    ],
+                    values: [
+                        {name: 'bytes',                 function: 'value.bytes'},
+                    ],
+                    code: {
+                        text: <<-JS
+                        JS
+                    },
+                    options: {
+                    }
+                },
+
+                reduce: {
+                    values: [
+                        {name: 'bytes'}
+                    ],
+                    code: {
+                        text:  <<-JS
+                                            var bytes = 0;
+
+                                            values.forEach(function(v){
+                                              bytes += v.bytes;
+                                            })
+                        JS
+                    }
+                },
+
+                finalize: {
+                    values: [
+                        {name: 'giga_bytes'}
+                    ],
+
+                    code: {
+                        text:  <<-JS
+                          giga_bytes = value.bytes / (1024*1024*1024);
+                        JS
+                    }
+                },
+
+                misc: {
+                    database: 'vidibus',
+                    input_collection: 'server_storage',
+                    output_collection: 'server_storage_mr',
+                    id: 'sst1'
+                },
+
+                query: {
+                    datetime_fields: ['server_time']
+                }
             }
       end
     end

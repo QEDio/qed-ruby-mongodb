@@ -88,6 +88,11 @@ module Qed
               Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_ASSET_VIEWS_1,
               Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_ASSET_VIEWS_2,
             ]
+          },
+          :server_storage => {
+            :mapreduce => [
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_STORAGE
+            ]
           }
         }
       }
