@@ -2072,7 +2072,7 @@ module Qed
             VIDIBUS_SERVER_STORAGE_2 = {
               map: {
                 keys: [
-                  {name: 'realm',                   function: 'value.realm'}
+                  {name: 'realm',                   function: 'id.realm'}
                 ],
                 values: [
                   {name: 'bytes',                   function: 'value.bytes'},
