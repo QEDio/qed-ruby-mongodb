@@ -34,10 +34,6 @@ module Qed
       end
 
       def self.set_map_emit_keys(mrm, fm)
-        # legacy                                                      mapreduceaggregation
-        #mrm = set_map_emit_keys_legacy(mrm,fm)
-
-        # pimped version
         if fm.mapreduceaggregationkeys.values.size > 0
           # do we have params for this mr-id?
           map_reduce_aggregation_keys = fm.mapreduceaggregationkeys.values.select{|key_value|key_value.key.eql?(mrm.misc.id.to_sym)}.first
@@ -71,19 +67,6 @@ module Qed
           end
         end
       end
-
-      #def self.set_map_emit_keys_legacy(mrm,fm)
-      #  if fm.mapreduce.values.size > 0
-      #    map_obj = mrm.map
-      #    # first delete all currently defined emit keys, because we have some shinier ones
-      #    map_obj.keys = []
-      #
-      #    fm.mapreduce.values.each do |emit_key|
-      #      map_obj.add_key(emit_key.key)
-      #    end
-      #  end
-      #  mrm
-      #end
 
       # Todo: this is a bad shortcut, but for now I just need it to work
       def self.get_config(config, filter_model)

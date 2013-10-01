@@ -11,7 +11,7 @@ module Qed
           db              = options[:database]
           fm              = options[:filter_model]
           mapreduce_model = options[:mapreduce_models].last
-          query           = Qed::Mongodb::MongoidModel.where(:digest_with_date => fm.digest())
+          query           = Qed::Mongodb::MongoidModel.new().where(:digest_with_date => fm.digest())
           cursor          = db.collection(COLLECTION_PREFIX+mapreduce_model.misc.output_collection).find(query.selector)
           
           if cursor.count > 0
