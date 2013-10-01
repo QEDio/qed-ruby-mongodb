@@ -2008,10 +2008,11 @@ module Qed
                 }
             },
 
-            VIDIBUS_SERVER_STORAGE = {
+            VIDIBUS_SERVER_STORAGE_1 = {
                 map: {
                     keys: [
-                        {name: 'realm',                  function: 'value.realm'}
+                        {name: 'realm',                   function: 'value.realm'},
+                        {name: 'type',                    function: 'value.type'}
                     ],
                     values: [
                         {name: 'bytes',                 function: 'value.bytes'},
@@ -2047,13 +2048,13 @@ module Qed
 
                 finalize: {
                     values: [
-                        {name: 'giga_bytes'}
+                        {name: 'bytes'}
                     ],
 
                     code: {
                         text:  <<-JS
                           // mean for added bytes that are no cumullative
-                          giga_bytes = (value.bytes / value.entries) / (1024*1024*1024);
+                          bytes = value.bytes / value.entries;
                         JS
                     }
                 },
@@ -2061,12 +2062,71 @@ module Qed
                 misc: {
                     database: 'vidibus',
                     input_collection: 'server_storage',
-                    output_collection: 'server_storage_mr',
-                    id: 'sst1'
+                    output_collection: 'server_storage_1'
                 },
 
                 query: {
                     datetime_fields: ['server_time']
+                }
+            },
+            VIDIBUS_SERVER_STORAGE_2 = {
+              map: {
+                keys: [
+                  {name: 'realm',                   function: 'value.realm'}
+                ],
+                values: [
+                  {name: 'bytes',                   function: 'value.bytes'},
+                  {name: 'entries'}
+                ],
+                    code: {
+                        text: <<-JS
+                          var entries = 1;
+                        JS
+                    },
+                    options: {
+                    }
+                },
+
+                reduce: {
+                    values: [
+                        {name: 'bytes'},
+                        {name: 'entries'}
+
+                    ],
+                    code: {
+                        text:  <<-JS
+                        var bytes = 0;
+                        var entries = 0;
+
+                        values.forEach(function(v){
+                          bytes += v.bytes;
+                          entries += v.entries;
+                        })
+                        JS
+                    }
+                },
+
+                finalize: {
+                    values: [
+                        {name: 'giga_bytes'}
+                    ],
+
+                    code: {
+                        text:  <<-JS
+                        // mean for added bytes that are no cumullative
+                          giga_bytes = (value.bytes / value.entries)/(1024*1024*1024);
+                        JS
+                    }
+                },
+
+                misc: {
+                    database: 'vidibus',
+                    input_collection: 'server_storage_1',
+                    output_collection: 'server_storage_mr',
+                    id: 'sst2'
+                },
+
+                query: {
                 }
             }
       end
