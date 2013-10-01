@@ -2123,7 +2123,7 @@ module Qed
                     database: 'vidibus',
                     input_collection: 'server_storage_1',
                     output_collection: 'server_storage_mr',
-                    id: 'sst'
+                    id: 'sst1'
                 },
 
                 query: {
