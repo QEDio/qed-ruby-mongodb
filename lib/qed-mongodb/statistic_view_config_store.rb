@@ -91,7 +91,8 @@ module Qed
           },
           :server_storage => {
             :mapreduce => [
-              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_STORAGE
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_STORAGE_1,
+              Qed::Mongodb::MapReduce::Config::VIDIBUS_SERVER_STORAGE_2
             ]
           }
         }
