@@ -31,12 +31,12 @@ module Qed
           db                  = options[:database]
           fm                  = options[:filter_model]
           mapreduce_model     = options[:mapreduce_models].last
-          cursor              = options[:cursor]
+          results             = options[:result]
 
           collection = db.collection(COLLECTION_PREFIX + mapreduce_model.misc.output_collection)
           digest = fm.digest()
 
-          cursor.find().each do |result_to_cache|
+          results.each do |result_to_cache|
             data = {
               :digest_with_date       => digest,
               :result                 => result_to_cache

@@ -53,18 +53,23 @@ module Qed
           elsif Qstate::Plugin::Db::CACHE_VALUE_RENEW.include?(cache)
             data_hsh = mapreduce_cache_save
           else
-            query = Qed::Mongodb::MongoidModel.new()
-            query = Qed::Mongodb::QueryBuilder.build_from_query(query, @filter_model.query, :mr_id => 'final')
-
-            # this didn't work within the hash,
-            res_coll, created_collections = int_mapreduce()
-            res = res_coll.find(query.selector).to_a
-            cleanup_mr_collections(created_collections)
-            data_hsh = {:cached => false, :result => res, :created_collections => created_collections}
+            data_hsh = mapreduce_cool
           end
 
-
           return data_hsh
+        end
+
+        def mapreduce_cool
+          query = Qed::Mongodb::MongoidModel.new()
+          query = Qed::Mongodb::QueryBuilder.build_from_query(query, @filter_model.query, :mr_id => 'final')
+
+          # this didn't work within the hash,
+          res_coll, created_collections = int_mapreduce()
+
+          res = res_coll.find(query.selector).to_a
+
+          cleanup_mr_collections(created_collections)
+          {:cached => false, :result => res, :created_collections => created_collections}
         end
 
         def cleanup_mr_collections(created_collections)
@@ -87,7 +92,7 @@ module Qed
           def mapreduce_cache_save()
             Qed::Mongodb::MapReduce::Cache.save(
               {
-                :cursor             => int_mapreduce,
+                :result             => mapreduce_cool[:result],
                 :filter_model       => @filter_model,
                 :mapreduce_models   => @mapreduce_models,
                 :database           => @db
