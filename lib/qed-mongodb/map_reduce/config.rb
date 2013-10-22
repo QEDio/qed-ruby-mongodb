@@ -1724,36 +1724,38 @@ module Qed
                       total_seconds_watched   = 0;
 
                       value.timeline.forEach(function(p){
-                        i             = 0;
-                        mega_byterate = p.byterate / (1024*1024);
-                        duration      = p.till_head - p.from_head;
+                        if( p.from_type == "watch" || p.from_type == "play" ){
+                          i             = 0;
+                          mega_byterate = p.byterate / (1024*1024);
+                          duration      = p.till_head - p.from_head;
 
-                        if( isNaN(duration) || duration < 0.0001 ){
-                          duration = 0;
-                        }
+                          if( isNaN(duration) || duration < 0.0001 ){
+                            duration = 0;
+                          }
 
-                        if (isNaN(mega_byterate) || mega_byterate < 0.0001 ){
-                          mega_byterate = 0;
-                        }
+                          if (isNaN(mega_byterate) || mega_byterate < 0.0001 ){
+                            mega_byterate = 0;
+                          }
 
-                        mega_traffic              += mega_byterate * duration;
-                        total_seconds_watched     += duration;
+                          mega_traffic              += mega_byterate * duration;
+                          total_seconds_watched     += duration;
 
-                        from_head_percent = p.from_head_percent * 100.0;
-                        till_head_percent = p.till_head_percent * 100.0;
+                          from_head_percent = p.from_head_percent * 100.0;
+                          till_head_percent = p.till_head_percent * 100.0;
 
-                        //livestreams are still a problem, such a problem as having byterate == 1 and duration == 1
-                        // which leads to from_head_percentage > 100 and this in turn produces bson-Objects that are above
-                        // the max bson Document size
-                        if( from_head_percent <= 100 && till_head_percent <= 100){
-                          // on the first run i = 0
-                          percent               = till_head_percent - from_head_percent;
-                          seconds_per_percent   = duration / percent;
+                          //livestreams are still a problem, such a problem as having byterate == 1 and duration == 1
+                          // which leads to from_head_percentage > 100 and this in turn produces bson-Objects that are above
+                          // the max bson Document size
+                          if( from_head_percent <= 100 && till_head_percent <= 100){
+                            // on the first run i = 0
+                            percent               = till_head_percent - from_head_percent;
+                            seconds_per_percent   = duration / percent;
 
-                          while(from_head_percent + i < till_head_percent){
-                            histo_id = Math.floor(from_head_percent + i);
-                            histogram[histo_id] = {watched: 1, i: histo_id, duration: seconds_per_percent, mega_byterate: mega_byterate};
-                            i += step_size;
+                            while(from_head_percent + i < till_head_percent){
+                              histo_id = Math.floor(from_head_percent + i);
+                              histogram[histo_id] = {watched: 1, i: histo_id, duration: seconds_per_percent, mega_byterate: mega_byterate};
+                              i += step_size;
+                            }
                           }
                         }
                       });
@@ -1820,7 +1822,7 @@ module Qed
             },
 
             query: {
-                datetime_fields: ['created_at']
+                datetime_fields: ['started_at']
             }
         },
 
@@ -1883,13 +1885,17 @@ module Qed
         VIDIBUS_SERVER_ASSET_VIEWS_1 = {
             map: {
                 keys: [
-                    {name: 'realm',                  function: 'value.realm'},
-                    {name: 'asset',                  function: 'value.asset'},
-                    {name: 'ident',                  function: 'value.ident'}
+                    {name: 'realm',                   function: 'value.realm'},
+                    {name: 'asset',                   function: 'value.asset'},
+                    {name: 'ident',                   function: 'value.ident'}
                 ],
                 values: [
                     {name: 'ident_entries'},
-                    {name: 'bytes',                 function: 'value.bytes'},
+                    {name: 'bytes',                   function: 'value.bytes'},
+                    {name: 'ip',                      function: 'value.ip'},
+                    {name: 'host',                    function: 'value.host'},
+                    {name: 'user_agent',              function: 'value.user_agent'},
+                    {name: 'server_time',             function: 'value.server_time'}
                 ],
                 code: {
                     text: <<-JS
@@ -1903,7 +1909,11 @@ module Qed
             reduce: {
                 values: [
                     {name: 'ident_entries'},
-                    {name: 'bytes'}
+                    {name: 'bytes'},
+                    {name: 'ip',                      function: 'value.ip'},
+                    {name: 'host',                    function: 'value.host'},
+                    {name: 'user_agent',              function: 'value.user_agent'},
+                    {name: 'server_time',             function: 'value.server_time'}
                 ],
                 code: {
                     text:  <<-JS
@@ -1920,8 +1930,12 @@ module Qed
 
             finalize: {
                 values: [
-                    {name: 'ident_entries',                 function: 'value.ident_entries'},
-                    {name: 'bytes',                         function: 'value.bytes'}
+                    {name: 'ident_entries',           function: 'value.ident_entries'},
+                    {name: 'bytes',                   function: 'value.bytes'},
+                    {name: 'ip',                      function: 'value.ip'},
+                    {name: 'host',                    function: 'value.host'},
+                    {name: 'user_agent',              function: 'value.user_agent'},
+                    {name: 'server_time',             function: 'value.server_time'}
                 ],
 
                 code: {
@@ -1945,13 +1959,17 @@ module Qed
             VIDIBUS_SERVER_ASSET_VIEWS_2 = {
                 map: {
                     keys: [
-                        {name: 'realm',                  function: 'id.realm'},
-                        {name: 'asset',                  function: 'id.asset'}
+                        {name: 'realm',                   function: 'id.realm'},
+                        {name: 'asset',                   function: 'id.asset'}
                     ],
                     values: [
                         {name: 'views'},
-                        {name: 'bytes',                  function: 'value.bytes'},
-                        {name: 'ident_entries',          function: 'value.ident_entries'}
+                        {name: 'bytes',                   function: 'value.bytes'},
+                        {name: 'ident_entries',           function: 'value.ident_entries'},
+                        {name: 'host',                    function: 'value.host'},
+                        {name: 'user_agent',              function: 'value.user_agent'},
+                        {name: 'server_time',             function: 'value.server_time'}
+
                     ],
                     code: {
                         text: <<-JS
@@ -1966,7 +1984,10 @@ module Qed
                     values: [
                         {name: 'views'},
                         {name: 'ident_entries'},
-                        {name: 'bytes'}
+                        {name: 'bytes'},
+                        {name: 'host',                    function: 'value.host'},
+                        {name: 'user_agent',              function: 'value.user_agent'},
+                        {name: 'server_time',             function: 'value.server_time'}
                     ],
                     code: {
                         text:  <<-JS
@@ -1985,9 +2006,12 @@ module Qed
 
                 finalize: {
                     values: [
-                        {name: 'views',                 function: 'value.views'},
-                        {name: 'ident_entries',          function: 'value.ident_entries'},
-                        {name: 'mega_bytes'}
+                        {name: 'views',                   function: 'value.views'},
+                        {name: 'ident_entries',           function: 'value.ident_entries'},
+                        {name: 'mega_bytes'},
+                        {name: 'host',                    function: 'value.host'},
+                        {name: 'user_agent',              function: 'value.user_agent'},
+                        {name: 'server_time',             function: 'value.server_time'}
                     ],
 
                     code: {
@@ -2001,7 +2025,8 @@ module Qed
                     database: 'vidibus',
                     input_collection: 'asset_views_step1',
                     output_collection: 'asset_views_mr',
-                    id: 'av2'
+                    id: 'av2',
+                    filter_data:        true
                 },
 
                 query: {
