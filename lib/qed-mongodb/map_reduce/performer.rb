@@ -53,11 +53,24 @@ module Qed
           elsif Qstate::Plugin::Db::CACHE_VALUE_RENEW.include?(cache)
             data_hsh = mapreduce_cache_save
           else
-            data_hsh = {:cached => false, :result => int_mapreduce.find().to_a }
+            query = Qed::Mongodb::MongoidModel.new()
+            query = Qed::Mongodb::QueryBuilder.build_from_query(query, @filter_model.query, :mr_id => 'final')
+
+            # this didn't work within the hash,
+            res_coll, created_collections = int_mapreduce()
+            res = res_coll.find(query.selector).to_a
+            cleanup_mr_collections(created_collections)
+            data_hsh = {:cached => false, :result => res, :created_collections => created_collections}
           end
 
 
           return data_hsh
+        end
+
+        def cleanup_mr_collections(created_collections)
+          created_collections.each do |coll|
+            @db.collection(coll).drop
+          end
         end
 
         private
@@ -83,23 +96,32 @@ module Qed
           end
 
           def int_mapreduce(options = {})
-            coll                       = nil
-            created_output_collections = []
+            input_coll                 = nil
+            coll_rand                  = "_" + rand(0..100000).to_s
+            created_collections        = []
             
-            @mapreduce_models.each do |mrm|
+            @mapreduce_models.each_with_index do |mrm, i|
               retries = 0
               max_retries = 10
 
               begin
-                coll = @db.collection(mrm.misc.input_collection)
+                input_coll_str  = mrm.misc.input_collection
+                input_coll_str  += coll_rand if (i > 0 && !mrm.misc.input_collection_is_source)
+                input_coll      = @db.collection(input_coll_str)
+
+                output_coll = mrm.misc.output_collection + coll_rand
+                created_collections << output_coll
+
                 builder = @builder_klass.new(mrm)
 
+                Rails.logger.info("#### input_coll: #{input_coll_str}")
+                Rails.logger.info("#### output coll: #{output_coll}")
                 log(Rails.logger, builder, mrm)
 
-                coll = coll.map_reduce(
+                input_coll = input_coll.map_reduce(
                   builder.map, builder.reduce,
                   {
-                    :query => builder.query, :out => {mrm.misc.output_operation.to_sym => mrm.misc.output_collection},
+                    :query => builder.query, :out => {mrm.misc.output_operation.to_sym => output_coll },
                     :finalize => builder.finalize
                   }
                 )
@@ -114,7 +136,7 @@ module Qed
               end
             end
 
-            return coll
+            return input_coll, created_collections
           end
 
           def log(logger, builder, mrm)
