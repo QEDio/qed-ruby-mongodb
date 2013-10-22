@@ -23,7 +23,7 @@ module Qed
           # for every other configuration that has misc.filter_data == true
           if i == 0 || mapreduce_configuration.misc.filter_data
             mapreduce_configuration.query.condition =
-              Qed::Mongodb::QueryBuilder.selector(filter_model, :query => mapreduce_configuration.query )
+              Qed::Mongodb::QueryBuilder.selector(filter_model, :mapreduce_configuration => mapreduce_configuration, :enforce_match => (i == 0) )
           end
 
           set_map_emit_keys(mapreduce_configuration, filter_model)
