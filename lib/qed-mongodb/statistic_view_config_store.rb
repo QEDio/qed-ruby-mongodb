@@ -73,7 +73,7 @@ module Qed
         #},
 
         :vidibus => {
-          :vidibus_test => {
+          :vidibus_histogram => {
             :mapreduce => [
               Qed::Mongodb::MapReduce::Config::VIDIBUS_VIDEO_HISTOGRAM
             ]

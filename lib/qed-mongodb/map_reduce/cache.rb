@@ -37,10 +37,11 @@ module Qed
           digest = fm.digest()
 
           cursor.find().each do |result_to_cache|
-           data = {
-            :digest_with_date       => digest,
-            :result                 => result_to_cache
+            data = {
+              :digest_with_date       => digest,
+              :result                 => result_to_cache
             }
+
             collection.insert(data)
           end
 
