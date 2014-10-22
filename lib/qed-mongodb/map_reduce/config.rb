@@ -1726,7 +1726,7 @@ module Qed
                       value.timeline.forEach(function(p){
                         if( p.from_type == "watch" || p.from_type == "play" ){
                           i             = 0;
-                          mega_byterate = p.byterate / (1024*1024);
+                          mega_byterate = p.byterate / (1000*1000);
                           duration      = p.till_head - p.from_head;
 
                           if( isNaN(duration) || duration < 0.0001 ){
@@ -1864,7 +1864,7 @@ module Qed
 
               code: {
                   text:  <<-JS
-                    var giga_bytes = value.bytes / (1024*1024*1024);
+                    var giga_bytes = value.bytes / (1000*1000*1000);
 
                   JS
               }
@@ -2016,7 +2016,7 @@ module Qed
 
                     code: {
                         text:  <<-JS
-                          var mega_bytes = value.bytes / (1024*1024);
+                          var mega_bytes = value.bytes / (1000*1000);
                         JS
                     }
                 },
@@ -2133,7 +2133,7 @@ module Qed
                     code: {
                         text:  <<-JS
                         // mean for added bytes that are no cumullative
-                          giga_bytes = value.bytes / (1024*1024*1024);
+                          giga_bytes = value.bytes / (1000*1000*1000);
                         JS
                     }
                 },
